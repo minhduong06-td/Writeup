@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Automation",
+    "level": "easy",
+    "slug": "automation",
+    "path": "easy/automation/writeup.md"
+  },
+  {
+    "title": "Chase",
+    "level": "easy",
+    "slug": "chase",
+    "path": "easy/chase/writeup.md"
+  },
+  {
+    "title": "Emo",
+    "level": "easy",
+    "slug": "emo",
+    "path": "easy/emo/writeup.md"
+  },
+  {
+    "title": "Endpoint",
+    "level": "easy",
+    "slug": "endpoint",
+    "path": "easy/endpoint/writeup.md"
+  },
+  {
+    "title": "Export",
+    "level": "easy",
+    "slug": "export",
+    "path": "easy/export/writeup.md"
+  },
+  {
+    "title": "Free Services",
+    "level": "easy",
+    "slug": "free-services",
+    "path": "easy/free-services/writeup.md"
+  },
+  {
+    "title": "No Place To Hide",
+    "level": "easy",
+    "slug": "no-place-to-hide",
+    "path": "easy/no-place-to-hide/writeup.md"
+  },
+  {
+    "title": "Obscure",
+    "level": "easy",
+    "slug": "obscure",
+    "path": "easy/obscure/writeup.md"
+  },
+  {
+    "title": "Alien Cradle",
+    "level": "very-easy",
+    "slug": "alien-cradle",
+    "path": "very-easy/alien-cradle/writeup.md"
+  },
+  {
+    "title": "An Unsual Sighting",
+    "level": "very-easy",
+    "slug": "an-unsual-sighting",
+    "path": "very-easy/an-unsual-sighting/writeup.md"
+  },
+  {
+    "title": "Extraterrestrial Ersistence",
+    "level": "very-easy",
+    "slug": "extraterrestrial-ersistence",
+    "path": "very-easy/extraterrestrial-ersistence/writeup.md"
+  },
+  {
+    "title": "Red Miner",
+    "level": "very-easy",
+    "slug": "red-miner",
+    "path": "very-easy/red-miner/writeup.md"
+  },
+  {
+    "title": "Sp00ky Theme",
+    "level": "very-easy",
+    "slug": "sp00ky-theme",
+    "path": "very-easy/sp00ky-theme/writeup.md"
+  },
+  {
+    "title": "Urgent",
+    "level": "very-easy",
+    "slug": "urgent",
+    "path": "very-easy/urgent/writeup.md"
+  },
+  {
+    "title": "Wrong Spooky Season",
+    "level": "very-easy",
+    "slug": "wrong-spooky-season",
+    "path": "very-easy/wrong-spooky-season/writeup.md"
+  }
+]

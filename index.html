@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Writeups</title>
+  <meta name="description" content="Writeups by difficulty level">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="pixel-grid-bg"></div>
+
+  <main class="shell">
+
+    <div id="home-view">
+      <header class="hero">
+        <div class="hero-title-wrap">
+          <div class="pixel-icon">📁</div>
+          <h1 class="pixel-title">WRITEUP<br><span class="green">FORENSICS</span></h1>
+        </div>
+
+        <div class="level-switch">
+          <button class="level-btn easy-btn" data-level="easy">
+            <span class="btn-icon">🗂️</span>
+            <span class="btn-label">EASY</span>
+            <span class="btn-sub">[ 8 FILES ]</span>
+          </button>
+          <button class="level-btn veryeasy-btn" data-level="very-easy">
+            <span class="btn-icon">📂</span>
+            <span class="btn-label">VERY EASY</span>
+            <span class="btn-sub">[ 7 FILES ]</span>
+          </button>
+        </div>
+
+        <div class="search-box-wrap">
+          <div class="search-label">🔍 SEARCH BY NAME</div>
+          <div class="search-row">
+            <input type="text" id="search-input" class="search-input" placeholder="" autocomplete="off" spellcheck="false">
+            <button id="search-btn" class="search-btn">GO</button>
+          </div>
+          <div id="search-results" class="search-results hidden"></div>
+        </div>
+      </header>
+    </div>
+
+    <section id="list-view" class="hidden">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="breadcrumb">
+            <span class="bc-root" id="back-home-bc">[ ROOT ]</span>
+            <span class="bc-sep">▶</span>
+            <span id="list-title" class="bc-current">EASY</span>
+          </div>
+          <button id="back-home" class="ghost-btn">⬅ HOME</button>
+        </div>
+        <div id="post-grid" class="post-grid"></div>
+      </div>
+    </section>
+
+    <section id="post-view" class="hidden">
+      <div class="panel">
+        <div class="panel-head panel-head-post">
+          <div class="breadcrumb">
+            <span class="bc-root" id="back-home-bc2">[ ROOT ]</span>
+            <span class="bc-sep">▶</span>
+            <span id="post-level-bc" class="bc-mid"></span>
+            <span class="bc-sep">▶</span>
+            <span id="post-title-bc" class="bc-current"></span>
+          </div>
+          <div class="post-actions">
+            <button id="back-list" class="ghost-btn">⬅ LIST</button>
+            <a id="open-raw" class="ghost-btn" target="_blank" rel="noreferrer">📄 RAW</a>
+          </div>
+        </div>
+        <div class="post-header-info">
+          <span id="post-level" class="level-badge"></span>
+          <h2 id="post-title" class="post-title-display"></h2>
+        </div>
+        <div class="divider-pixel"></div>
+        <article id="markdown" class="markdown-body"></article>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/powershell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/php.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/json.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

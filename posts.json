@@ -11,12 +11,6 @@
     "slug": "chase",
     "path": "easy/chase/writeup.md"
   },
-  {    
-    "title": "TrueSecrets",
-    "level": "easy",
-    "slug": "truesecrets",
-    "path": "easy/truesecrets/writeup.md"
-  },
   {
     "title": "Emo",
     "level": "easy",
@@ -36,10 +30,34 @@
     "path": "easy/export/writeup.md"
   },
   {
+    "title": "Fake News",
+    "level": "easy",
+    "slug": "fake-news",
+    "path": "easy/fake-news/writeup.md"
+  },
+  {
+    "title": "Fishy HTTP",
+    "level": "easy",
+    "slug": "fishy-http",
+    "path": "easy/fishy-http/writeup.md"
+  },
+  {
     "title": "Free Services",
     "level": "easy",
     "slug": "free-services",
     "path": "easy/free-services/writeup.md"
+  },
+  {
+    "title": "Insider",
+    "level": "easy",
+    "slug": "insider",
+    "path": "easy/insider/writeup.md"
+  },
+  {
+    "title": "Lure",
+    "level": "easy",
+    "slug": "lure",
+    "path": "easy/lure/writeup.md"
   },
   {
     "title": "No Place To Hide",
@@ -52,6 +70,12 @@
     "level": "easy",
     "slug": "obscure",
     "path": "easy/obscure/writeup.md"
+  },
+  {    
+    "title": "TrueSecrets",
+    "level": "easy",
+    "slug": "truesecrets",
+    "path": "easy/truesecrets/writeup.md"
   },
   {
     "title": "Alien Cradle",

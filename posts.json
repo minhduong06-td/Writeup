@@ -11,6 +11,12 @@
     "slug": "chase",
     "path": "easy/chase/writeup.md"
   },
+  {    
+    "title": "TrueSecrets",
+    "level": "easy",
+    "slug": "truesecrets",
+    "path": "easy/truesecrets/writeup.md"
+  },
   {
     "title": "Emo",
     "level": "easy",

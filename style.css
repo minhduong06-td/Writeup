@@ -86,30 +86,31 @@
 /* ── Theme toggle button ── */
 .theme-toggle {
   position: fixed;
-  top: 18px;
-  right: 18px;
-  z-index: 900;
+  top: 16px;
+  right: 16px;
+  z-index: 1100;
   border: 2px solid var(--border);
   background: var(--panel2);
   color: var(--text);
-  width: 44px;
-  height: 44px;
-  font-size: 18px;
+  width: 52px;
+  height: 52px;
+  font-size: 22px;
   cursor: pointer;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-px);
   transition: transform .1s, box-shadow .1s, background .2s, border-color .2s;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: all;
 }
 
 .theme-toggle:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px var(--border);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--border);
 }
 
 .theme-toggle:active {
-  transform: translate(1px, 1px);
+  transform: translate(2px, 2px);
   box-shadow: none;
 }
 
@@ -867,6 +868,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   color: var(--muted);
   margin-bottom: 14px;
   letter-spacing: .06em;
+  text-align: center;
 }
 
 .pagination-controls {
@@ -874,6 +876,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .page-btn {

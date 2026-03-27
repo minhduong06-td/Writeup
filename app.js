@@ -16,6 +16,12 @@ const els = {
   searchInput: document.getElementById('search-input'),
   searchBtn:   document.getElementById('search-btn'),
   searchResults: document.getElementById('search-results'),
+  // Post-view search
+  postSearchInput:   document.getElementById('post-search-input'),
+  postSearchBtn:     document.getElementById('post-search-btn'),
+  postSearchResults: document.getElementById('post-search-results'),
+  // Pagination
+  postPagination: document.getElementById('post-pagination'),
 };
 
 document.getElementById('back-home-bc').addEventListener('click', () => { location.hash = '#'; });
@@ -54,7 +60,6 @@ function navigate(hash) {
   }
 }
 
-
 function isExternal(url) {
   return /^(https?:)?\/\//i.test(url) || url.startsWith('mailto:') || url.startsWith('#');
 }
@@ -66,7 +71,6 @@ function absolutizeAsset(baseDir, relativePath) {
 async function loadPosts() {
   const res = await fetch('posts.json', { cache: 'no-store' });
   if (!res.ok) throw new Error('Cannot load posts.json');
-
   const posts = await res.json();
   return posts.map(post => ({
     ...post,
@@ -90,7 +94,6 @@ function showHome() {
   const veBtn   = document.querySelector('.veryeasy-btn .btn-sub');
   if (easyBtn)  easyBtn.textContent  = `[ ${easy} FILES ]`;
   if (veBtn)    veBtn.textContent    = `[ ${veryEasy} FILES ]`;
-
 }
 
 function renderLevel(level) {
@@ -116,6 +119,114 @@ function renderLevel(level) {
   });
 }
 
+/* ── Post-view search ── */
+function doPostSearch() {
+  const query = els.postSearchInput.value.trim().toLowerCase();
+  els.postSearchResults.classList.remove('hidden');
+
+  if (!query) {
+    els.postSearchResults.innerHTML = '';
+    els.postSearchResults.classList.add('hidden');
+    return;
+  }
+
+  const matches = state.posts.filter(post =>
+    post.title.toLowerCase().includes(query) ||
+    post.slug.toLowerCase().includes(query)
+  );
+
+  if (matches.length === 0) {
+    els.postSearchResults.innerHTML = `<div class="search-no-result">[ NO MATCH ] — "${query}"</div>`;
+    return;
+  }
+
+  els.postSearchResults.innerHTML = matches.map(post => `
+    <div class="search-result-item" data-slug="${post.slug}" data-level="${post.level}">
+      <span class="sri-icon">${post.level === 'very-easy' ? '📗' : '📘'}</span>
+      <span class="sri-title">${post.title}</span>
+      <span class="sri-level">${formatLevel(post.level)}</span>
+    </div>
+  `).join('');
+
+  els.postSearchResults.querySelectorAll('.search-result-item').forEach(item => {
+    item.addEventListener('click', () => {
+      els.postSearchResults.classList.add('hidden');
+      els.postSearchInput.value = '';
+      navigate(`#post/${item.dataset.level}/${item.dataset.slug}`);
+    });
+  });
+}
+
+/* ── Pagination ── */
+function renderPagination(level, currentSlug) {
+  const levelPosts = state.posts.filter(p => p.level === level);
+  const currentIdx = levelPosts.findIndex(p => p.slug === currentSlug);
+
+  if (levelPosts.length <= 1) {
+    els.postPagination.classList.add('hidden');
+    return;
+  }
+
+  els.postPagination.classList.remove('hidden');
+
+  const prevPost = currentIdx > 0 ? levelPosts[currentIdx - 1] : null;
+  const nextPost = currentIdx < levelPosts.length - 1 ? levelPosts[currentIdx + 1] : null;
+
+  // Build page numbers (show all if ≤ 9, else show windowed)
+  const total = levelPosts.length;
+  let pageNums = [];
+  if (total <= 9) {
+    pageNums = levelPosts.map((_, i) => i);
+  } else {
+    // Always show first, last, current, and 1 on each side of current
+    const set = new Set([0, total - 1, currentIdx,
+      Math.max(0, currentIdx - 1), Math.min(total - 1, currentIdx + 1)]);
+    pageNums = [...set].sort((a, b) => a - b);
+  }
+
+  // Insert ellipsis markers
+  const pages = [];
+  for (let i = 0; i < pageNums.length; i++) {
+    if (i > 0 && pageNums[i] - pageNums[i - 1] > 1) {
+      pages.push({ type: 'ellipsis' });
+    }
+    pages.push({ type: 'page', idx: pageNums[i] });
+  }
+
+  const levelLabel = formatLevel(level);
+
+  els.postPagination.innerHTML = `
+    <div class="pagination-label">📄 ${levelLabel} — ${currentIdx + 1} / ${total}</div>
+    <div class="pagination-controls">
+      <button class="page-btn page-prev ${!prevPost ? 'disabled' : ''}"
+        ${prevPost ? `data-slug="${prevPost.slug}" data-level="${prevPost.level}"` : ''}
+        ${!prevPost ? 'disabled' : ''}>⬅ PREV</button>
+
+      <div class="page-numbers">
+        ${pages.map(p => {
+          if (p.type === 'ellipsis') return `<span class="page-ellipsis">…</span>`;
+          const post = levelPosts[p.idx];
+          const isActive = p.idx === currentIdx;
+          return `<button class="page-num ${isActive ? 'active' : ''}"
+            data-slug="${post.slug}" data-level="${post.level}"
+            title="${post.title}">${p.idx + 1}</button>`;
+        }).join('')}
+      </div>
+
+      <button class="page-btn page-next ${!nextPost ? 'disabled' : ''}"
+        ${nextPost ? `data-slug="${nextPost.slug}" data-level="${nextPost.level}"` : ''}
+        ${!nextPost ? 'disabled' : ''}>NEXT ➡</button>
+    </div>
+  `;
+
+  els.postPagination.querySelectorAll('[data-slug]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      navigate(`#post/${btn.dataset.level}/${btn.dataset.slug}`);
+    });
+  });
+}
+
 async function renderPost(level, slug) {
   const post = state.posts.find(p => p.level === level && p.slug === slug);
   if (!post) { setStatus('Post not found.'); showHome(); return; }
@@ -129,6 +240,14 @@ async function renderPost(level, slug) {
   els.postLevelBc.textContent    = formatLevel(post.level);
   els.openRaw.href               = encodePath(post.path);
   els.markdown.innerHTML         = '<p style="font-family:var(--mono-font);font-size:18px;color:var(--muted)">▮ Loading...</p>';
+
+  // Reset post search
+  els.postSearchInput.value = '';
+  els.postSearchResults.classList.add('hidden');
+  els.postSearchResults.innerHTML = '';
+
+  // Render pagination immediately
+  renderPagination(level, slug);
 
   showView('post');
 
@@ -247,6 +366,7 @@ async function init() {
       if (state.currentLevel) navigate(`#level/${state.currentLevel}`);
     });
 
+    // Home search
     els.searchBtn.addEventListener('click', doSearch);
     els.searchInput.addEventListener('input', doSearch);
     els.searchInput.addEventListener('keydown', e => {
@@ -256,9 +376,24 @@ async function init() {
       }
     });
 
+    // Post-view search
+    els.postSearchBtn.addEventListener('click', doPostSearch);
+    els.postSearchInput.addEventListener('input', doPostSearch);
+    els.postSearchInput.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        els.postSearchResults.classList.add('hidden');
+        els.postSearchInput.value = '';
+      }
+    });
+
     document.addEventListener('click', e => {
+      // Close home search
       if (!els.searchResults.contains(e.target) && e.target !== els.searchInput && e.target !== els.searchBtn) {
         els.searchResults.classList.add('hidden');
+      }
+      // Close post search
+      if (!els.postSearchResults.contains(e.target) && e.target !== els.postSearchInput && e.target !== els.postSearchBtn) {
+        els.postSearchResults.classList.add('hidden');
       }
     });
 

@@ -1,3 +1,21 @@
+/* ── Dark / Light mode ── */
+(function initTheme() {
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('theme-toggle');
+  if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+})();
+
+document.getElementById('theme-toggle')?.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('theme-toggle').textContent = next === 'dark' ? '☀️' : '🌙';
+});
+
 const els = {
   homeView:    document.getElementById('home-view'),
   homeStatus:  document.getElementById('home-status'),
@@ -240,15 +258,11 @@ async function renderPost(level, slug) {
   els.postLevelBc.textContent    = formatLevel(post.level);
   els.openRaw.href               = encodePath(post.path);
   els.markdown.innerHTML         = '<p style="font-family:var(--mono-font);font-size:18px;color:var(--muted)">▮ Loading...</p>';
-
-  // Reset post search
   els.postSearchInput.value = '';
   els.postSearchResults.classList.add('hidden');
   els.postSearchResults.innerHTML = '';
 
-  // Render pagination immediately
   renderPagination(level, slug);
-
   showView('post');
 
   const res = await fetch(encodePath(post.path));
@@ -387,11 +401,9 @@ async function init() {
     });
 
     document.addEventListener('click', e => {
-      // Close home search
       if (!els.searchResults.contains(e.target) && e.target !== els.searchInput && e.target !== els.searchBtn) {
         els.searchResults.classList.add('hidden');
       }
-      // Close post search
       if (!els.postSearchResults.contains(e.target) && e.target !== els.postSearchInput && e.target !== els.postSearchBtn) {
         els.postSearchResults.classList.add('hidden');
       }

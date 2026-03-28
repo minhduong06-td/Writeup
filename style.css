@@ -969,3 +969,63 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   .page-num  { min-width: 30px; height: 30px; font-size: 8px; }
   .pagination-controls { gap: 6px; }
 }
+
+/* ── Category buttons (Home: TRAINING / TEXSAW) ── */
+.category-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 3px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  padding: 20px 32px;
+  font-family: var(--pixel-font);
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: var(--shadow-px);
+  transition: transform .1s, box-shadow .1s;
+  min-width: 180px;
+}
+
+.category-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--border);
+}
+
+.category-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--border);
+}
+
+.training-btn { border-color: var(--green-dark); }
+.training-btn:hover { background: #f0fff0; }
+.texsaw-btn { border-color: #92400e; }
+.texsaw-btn:hover { background: #fffbeb; }
+.texsaw-btn .btn-label { color: #92400e; }
+
+[data-theme="dark"] .category-btn:hover { background: #1a2e1a !important; }
+[data-theme="dark"] .texsaw-btn { border-color: #b45309; }
+[data-theme="dark"] .texsaw-btn:hover { background: #1c1608 !important; }
+[data-theme="dark"] .texsaw-btn .btn-label { color: #fbbf24; }
+
+.post-card-texsaw::before {
+  background: #f59e0b !important;
+}
+
+.training-level-switch {
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.list-title-bar {
+  font-family: var(--mono-font);
+  font-size: 18px;
+  color: var(--muted);
+  letter-spacing: .06em;
+  margin-bottom: 20px;
+}
+
+.level-badge-texsaw {
+  background: #92400e;
+}

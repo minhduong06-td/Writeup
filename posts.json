@@ -1,122 +1,156 @@
 [
   {
     "title": "Automation",
+    "category": "training",
     "level": "easy",
     "slug": "automation",
-    "path": "easy/automation/writeup.md"
+    "path": "trainning/easy/automation/writeup.md"
   },
   {
     "title": "Chase",
+    "category": "training",
     "level": "easy",
     "slug": "chase",
-    "path": "easy/chase/writeup.md"
+    "path": "trainning/easy/chase/writeup.md"
   },
   {
     "title": "Emo",
+    "category": "training",
     "level": "easy",
     "slug": "emo",
-    "path": "easy/emo/writeup.md"
+    "path": "trainning/easy/emo/writeup.md"
   },
   {
     "title": "Endpoint",
+    "category": "training",
     "level": "easy",
     "slug": "endpoint",
-    "path": "easy/endpoint/writeup.md"
+    "path": "trainning/easy/endpoint/writeup.md"
   },
   {
     "title": "Export",
+    "category": "training",
     "level": "easy",
     "slug": "export",
-    "path": "easy/export/writeup.md"
+    "path": "trainning/easy/export/writeup.md"
   },
   {
     "title": "Fake News",
+    "category": "training",
     "level": "easy",
     "slug": "fake-news",
-    "path": "easy/fake-news/writeup.md"
+    "path": "trainning/easy/fake-news/writeup.md"
   },
   {
     "title": "Fishy HTTP",
+    "category": "training",
     "level": "easy",
     "slug": "fishy-http",
-    "path": "easy/fishy-http/writeup.md"
+    "path": "trainning/easy/fishy-http/writeup.md"
   },
   {
     "title": "Free Services",
+    "category": "training",
     "level": "easy",
     "slug": "free-services",
-    "path": "easy/free-services/writeup.md"
+    "path": "trainning/easy/free-services/writeup.md"
   },
   {
     "title": "Insider",
+    "category": "training",
     "level": "easy",
     "slug": "insider",
-    "path": "easy/insider/writeup.md"
+    "path": "trainning/easy/insider/writeup.md"
   },
   {
     "title": "Lure",
+    "category": "training",
     "level": "easy",
     "slug": "lure",
-    "path": "easy/lure/writeup.md"
+    "path": "trainning/easy/lure/writeup.md"
   },
   {
     "title": "No Place To Hide",
+    "category": "training",
     "level": "easy",
     "slug": "no-place-to-hide",
-    "path": "easy/no-place-to-hide/writeup.md"
+    "path": "trainning/easy/no-place-to-hide/writeup.md"
   },
   {
     "title": "Obscure",
+    "category": "training",
     "level": "easy",
     "slug": "obscure",
-    "path": "easy/obscure/writeup.md"
+    "path": "trainning/easy/obscure/writeup.md"
   },
-  {    
+  {
+    "title": "Reminiscent",
+    "category": "training",
+    "level": "easy",
+    "slug": "reminiscent",
+    "path": "trainning/easy/reminiscent/writeup.md"
+  },
+  {
     "title": "TrueSecrets",
+    "category": "training",
     "level": "easy",
     "slug": "truesecrets",
-    "path": "easy/truesecrets/writeup.md"
+    "path": "trainning/easy/truesecrets/writeup.md"
   },
   {
     "title": "Alien Cradle",
+    "category": "training",
     "level": "very-easy",
     "slug": "alien-cradle",
-    "path": "very-easy/alien-cradle/writeup.md"
+    "path": "trainning/very-easy/alien-cradle/writeup.md"
   },
   {
     "title": "An Unsual Sighting",
+    "category": "training",
     "level": "very-easy",
     "slug": "an-unsual-sighting",
-    "path": "very-easy/an-unsual-sighting/writeup.md"
+    "path": "trainning/very-easy/an-unsual-sighting/writeup.md"
   },
   {
     "title": "Extraterrestrial Ersistence",
+    "category": "training",
     "level": "very-easy",
     "slug": "extraterrestrial-ersistence",
-    "path": "very-easy/extraterrestrial-ersistence/writeup.md"
+    "path": "trainning/very-easy/extraterrestrial-ersistence/writeup.md"
   },
   {
     "title": "Red Miner",
+    "category": "training",
     "level": "very-easy",
     "slug": "red-miner",
-    "path": "very-easy/red-miner/writeup.md"
+    "path": "trainning/very-easy/red-miner/writeup.md"
   },
   {
     "title": "Sp00ky Theme",
+    "category": "training",
     "level": "very-easy",
     "slug": "sp00ky-theme",
-    "path": "very-easy/sp00ky-theme/writeup.md"
+    "path": "trainning/very-easy/sp00ky-theme/writeup.md"
   },
   {
     "title": "Urgent",
+    "category": "training",
     "level": "very-easy",
     "slug": "urgent",
-    "path": "very-easy/urgent/writeup.md"
+    "path": "trainning/very-easy/urgent/writeup.md"
   },
   {
     "title": "Wrong Spooky Season",
+    "category": "training",
     "level": "very-easy",
     "slug": "wrong-spooky-season",
-    "path": "very-easy/wrong-spooky-season/writeup.md"
+    "path": "trainning/very-easy/wrong-spooky-season/writeup.md"
+  },
+  {
+    "title": "Journaling",
+    "category": "texsaw",
+    "level": "texsaw",
+    "slug": "journaling",
+    "path": "texsaw/journaling/writeup.md"
   }
 ]

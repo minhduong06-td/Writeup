@@ -152,5 +152,12 @@
     "level": "texsaw",
     "slug": "journaling",
     "path": "texsaw/journaling/writeup.md"
+  },
+  {
+    "title": "A Different Side Channel",
+    "category": "texsaw",
+    "level": "texsaw",
+    "slug": "a-different-side-channel",
+    "path": "texsaw/a-different-side-channel/writeup.md"
   }
 ]

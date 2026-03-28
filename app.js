@@ -460,6 +460,38 @@ async function init() {
   try {
     state.posts = await loadPosts();
 
+    // Sidebar toggle (list view)
+    const sidebarContent = document.getElementById('sidebar-content');
+    const sidebarToggle  = document.getElementById('sidebar-toggle');
+    const sidebarReopen  = document.getElementById('sidebar-reopen');
+
+    let sidebarOpen = localStorage.getItem('sidebar') !== 'closed';
+
+    function applySidebar() {
+      if (sidebarOpen) {
+        sidebarContent.classList.remove('collapsed');
+        sidebarToggle.textContent = '◀ HIDE';
+        sidebarReopen.classList.add('hidden');
+      } else {
+        sidebarContent.classList.add('collapsed');
+        sidebarToggle.textContent = '▶ SHOW';
+        sidebarReopen.classList.remove('hidden');
+      }
+      localStorage.setItem('sidebar', sidebarOpen ? 'open' : 'closed');
+    }
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebarOpen = !sidebarOpen;
+      applySidebar();
+    });
+
+    sidebarReopen.addEventListener('click', () => {
+      sidebarOpen = true;
+      applySidebar();
+    });
+
+    applySidebar();
+
     // Home: category buttons
     document.querySelectorAll('.category-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -532,7 +564,6 @@ async function init() {
     state.posts = [];
     showView('home');
     if (els.searchResults) els.searchResults.classList.add('hidden');
-    alert('Không tải được posts.json. Hãy chạy site qua local server hoặc kiểm tra file deploy.');
   }
 }
 

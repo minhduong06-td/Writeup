@@ -63,6 +63,13 @@
     "path": "trainning/easy/insider/writeup.md"
   },
   {
+    "title": "Logger",
+    "category": "training",
+    "level": "easy",
+    "slug": "logger",
+    "path": "trainning/easy/logger/writeup.md"
+  },
+  {
     "title": "Lure",
     "category": "training",
     "level": "easy",

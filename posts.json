@@ -166,5 +166,12 @@
     "level": "texsaw",
     "slug": "a-different-side-channel",
     "path": "texsaw/a-different-side-channel/writeup.md"
+  },
+  {
+    "title": "Lost My Keys",
+    "category": "texsaw",
+    "level": "texsaw",
+    "slug": "alost-my-keys",
+    "path": "texsaw/lost-my-keys/writeup.md"
   }
 ]

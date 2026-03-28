@@ -18,6 +18,7 @@
 
   <main class="shell">
 
+    <!-- ── HOME VIEW ── -->
     <div id="home-view">
       <header class="hero">
         <div class="hero-title-wrap">
@@ -26,15 +27,15 @@
         </div>
 
         <div class="level-switch">
-          <button class="level-btn easy-btn" data-level="easy">
+          <button class="category-btn training-btn" data-category="training">
             <span class="btn-icon">🗂️</span>
-            <span class="btn-label">EASY</span>
-            <span class="btn-sub">[ 8 FILES ]</span>
+            <span class="btn-label">TRAINING</span>
+            <span class="btn-sub" id="training-count">[ — FILES ]</span>
           </button>
-          <button class="level-btn veryeasy-btn" data-level="very-easy">
-            <span class="btn-icon">📂</span>
-            <span class="btn-label">VERY EASY</span>
-            <span class="btn-sub">[ 7 FILES ]</span>
+          <button class="category-btn texsaw-btn" data-category="texsaw">
+            <span class="btn-icon">🏆</span>
+            <span class="btn-label">TEXSAW</span>
+            <span class="btn-sub" id="texsaw-count">[ — FILES ]</span>
           </button>
         </div>
 
@@ -49,29 +50,52 @@
       </header>
     </div>
 
+    <!-- ── TRAINING VIEW (easy / very-easy selection) ── -->
+    <section id="training-view" class="hidden">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="breadcrumb" id="training-breadcrumb">
+            <span class="bc-root" id="back-home-bc-tr">[ ROOT ]</span>
+            <span class="bc-sep">▶</span>
+            <span class="bc-current">TRAINING</span>
+          </div>
+          <button id="back-home-from-training" class="ghost-btn">⬅ HOME</button>
+        </div>
+        <div class="level-switch training-level-switch">
+          <button class="level-btn easy-btn" data-level="easy">
+            <span class="btn-icon">🗂️</span>
+            <span class="btn-label">EASY</span>
+            <span class="btn-sub" id="easy-count">[ — FILES ]</span>
+          </button>
+          <button class="level-btn veryeasy-btn" data-level="very-easy">
+            <span class="btn-icon">📂</span>
+            <span class="btn-label">VERY EASY</span>
+            <span class="btn-sub" id="veryeasy-count">[ — FILES ]</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── LIST VIEW ── -->
     <section id="list-view" class="hidden">
       <div class="panel">
         <div class="panel-head">
-          <div class="breadcrumb">
-            <span class="bc-root" id="back-home-bc">[ ROOT ]</span>
-            <span class="bc-sep">▶</span>
-            <span id="list-title" class="bc-current">EASY</span>
+          <div class="breadcrumb" id="list-breadcrumb">
+            <!-- built dynamically -->
           </div>
-          <button id="back-home" class="ghost-btn">⬅ HOME</button>
+          <button id="back-home" class="ghost-btn">⬅ BACK</button>
         </div>
+        <div id="list-title" class="list-title-bar"></div>
         <div id="post-grid" class="post-grid"></div>
       </div>
     </section>
 
+    <!-- ── POST VIEW ── -->
     <section id="post-view" class="hidden">
       <div class="panel">
         <div class="panel-head panel-head-post">
-          <div class="breadcrumb">
-            <span class="bc-root" id="back-home-bc2">[ ROOT ]</span>
-            <span class="bc-sep">▶</span>
-            <span id="post-level-bc" class="bc-mid"></span>
-            <span class="bc-sep">▶</span>
-            <span id="post-title-bc" class="bc-current"></span>
+          <div class="breadcrumb" id="post-breadcrumb">
+            <!-- built dynamically -->
           </div>
           <div class="post-actions">
             <button id="back-list" class="ghost-btn">⬅ LIST</button>

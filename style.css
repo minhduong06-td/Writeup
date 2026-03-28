@@ -442,6 +442,25 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 20px;
+  overflow-y: auto;
+  max-height: 62vh;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-lite) transparent;
+}
+
+.post-grid::-webkit-scrollbar {
+  width: 8px;
+}
+.post-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+.post-grid::-webkit-scrollbar-thumb {
+  background: var(--border-lite);
+  border-radius: 4px;
+}
+.post-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
 }
 
 .post-card {
@@ -703,7 +722,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   .panel { padding: 16px; }
   .pixel-title { font-size: 18px; }
   .level-btn { min-width: 140px; padding: 16px 20px; }
-  .post-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+  .post-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; max-height: 55vh; }
   .folder-icon { font-size: 36px; }
   .folder-name { font-size: 8px; }
   .markdown-body { font-size: 16px; }
@@ -998,34 +1017,130 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   box-shadow: 1px 1px 0px var(--border);
 }
 
+/* Training button — keeps the existing green feel */
 .training-btn { border-color: var(--green-dark); }
 .training-btn:hover { background: #f0fff0; }
+
+/* Texsaw button — amber/trophy accent */
 .texsaw-btn { border-color: #92400e; }
 .texsaw-btn:hover { background: #fffbeb; }
 .texsaw-btn .btn-label { color: #92400e; }
 
+/* Dark mode overrides for category buttons */
 [data-theme="dark"] .category-btn:hover { background: #1a2e1a !important; }
 [data-theme="dark"] .texsaw-btn { border-color: #b45309; }
 [data-theme="dark"] .texsaw-btn:hover { background: #1c1608 !important; }
 [data-theme="dark"] .texsaw-btn .btn-label { color: #fbbf24; }
 
+/* Texsaw post-card accent stripe */
 .post-card-texsaw::before {
   background: #f59e0b !important;
 }
 
+/* Training level-switch inside training-view panel */
 .training-level-switch {
   margin-top: 12px;
   margin-bottom: 8px;
 }
 
+/* ── Sidebar wrapper & toggle ── */
+.sidebar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.sidebar-panel {
+  flex: 1;
+  transition: opacity .2s, transform .2s;
+  min-width: 0;
+}
+
+.panel-head-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.sidebar-toggle-btn {
+  border-color: var(--border-lite);
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.sidebar-toggle-btn:hover {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+/* Sidebar content area - smoothly collapsible */
+.sidebar-content {
+  overflow: hidden;
+  transition: max-height .3s ease, opacity .25s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.sidebar-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Reopen tab button (shown when sidebar is hidden) */
+.sidebar-reopen-btn {
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+  margin-left: 10px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  border: 3px solid var(--border);
+  background: var(--panel);
+  color: var(--green-dark);
+  font-family: var(--pixel-font);
+  font-size: 9px;
+  padding: 14px 8px;
+  cursor: pointer;
+  box-shadow: var(--shadow-px);
+  transition: transform .1s, box-shadow .1s, background .15s;
+  letter-spacing: .1em;
+  white-space: nowrap;
+}
+
+.sidebar-reopen-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--border);
+  background: var(--panel2);
+}
+
+.sidebar-reopen-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+[data-theme="dark"] .sidebar-reopen-btn {
+  color: var(--green2);
+}
+
+/* List title bar stays visible above scroll grid */
 .list-title-bar {
   font-family: var(--mono-font);
   font-size: 18px;
   color: var(--muted);
   letter-spacing: .06em;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border-lite);
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+  z-index: 2;
 }
 
+/* Level-badge color for texsaw */
 .level-badge-texsaw {
   background: #92400e;
 }

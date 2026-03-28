@@ -63,6 +63,13 @@
     "path": "trainning/easy/insider/writeup.md"
   },
   {
+    "title": "Intergalactic Recovery",
+    "category": "training",
+    "level": "easy",
+    "slug": "intergalactic-recovery",
+    "path": "trainning/intergalactic-recovery/logger/writeup.md"
+  },
+  {
     "title": "Logger",
     "category": "training",
     "level": "easy",

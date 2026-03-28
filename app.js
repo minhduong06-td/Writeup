@@ -17,48 +17,57 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
 });
 
 const els = {
-  homeView:    document.getElementById('home-view'),
-  homeStatus:  document.getElementById('home-status'),
-  listView:    document.getElementById('list-view'),
-  postView:    document.getElementById('post-view'),
-  listTitle:   document.getElementById('list-title'),
-  postGrid:    document.getElementById('post-grid'),
-  postTitle:   document.getElementById('post-title'),
-  postTitleBc: document.getElementById('post-title-bc'),
-  postLevel:   document.getElementById('post-level'),
-  postLevelBc: document.getElementById('post-level-bc'),
-  markdown:    document.getElementById('markdown'),
-  openRaw:     document.getElementById('open-raw'),
-  backHome:    document.getElementById('back-home'),
-  backList:    document.getElementById('back-list'),
-  searchInput: document.getElementById('search-input'),
-  searchBtn:   document.getElementById('search-btn'),
-  searchResults: document.getElementById('search-results'),
-  // Post-view search
+  homeView:          document.getElementById('home-view'),
+  trainingView:      document.getElementById('training-view'),
+  listView:          document.getElementById('list-view'),
+  postView:          document.getElementById('post-view'),
+  // List view
+  listBreadcrumb:    document.getElementById('list-breadcrumb'),
+  listTitle:         document.getElementById('list-title'),
+  postGrid:          document.getElementById('post-grid'),
+  // Post view
+  postBreadcrumb:    document.getElementById('post-breadcrumb'),
+  postTitle:         document.getElementById('post-title'),
+  postLevel:         document.getElementById('post-level'),
+  markdown:          document.getElementById('markdown'),
+  openRaw:           document.getElementById('open-raw'),
+  backHome:          document.getElementById('back-home'),
+  backList:          document.getElementById('back-list'),
+  // Search (home)
+  searchInput:       document.getElementById('search-input'),
+  searchBtn:         document.getElementById('search-btn'),
+  searchResults:     document.getElementById('search-results'),
+  // Search (post view)
   postSearchInput:   document.getElementById('post-search-input'),
   postSearchBtn:     document.getElementById('post-search-btn'),
   postSearchResults: document.getElementById('post-search-results'),
   // Pagination
-  postPagination: document.getElementById('post-pagination'),
+  postPagination:    document.getElementById('post-pagination'),
+  // Home counts
+  trainingCount:     document.getElementById('training-count'),
+  texsawCount:       document.getElementById('texsaw-count'),
+  easyCount:         document.getElementById('easy-count'),
+  veryEasyCount:     document.getElementById('veryeasy-count'),
 };
-
-document.getElementById('back-home-bc').addEventListener('click', () => { location.hash = '#'; });
-document.getElementById('back-home-bc2').addEventListener('click', () => { location.hash = '#'; });
 
 const state = {
   posts: [],
-  currentLevel: null,
+  currentCategory: null,   // 'training' | 'texsaw'
+  currentLevel: null,       // 'easy' | 'very-easy' | 'texsaw'
   currentPost: null
 };
 
 marked.setOptions({ gfm: true, breaks: false, langPrefix: 'language-' });
 
-function setStatus(text) {
-  if (els.homeStatus) els.homeStatus.textContent = text ? '> ' + text : '';
+function formatLevel(level) {
+  if (level === 'very-easy') return 'VERY EASY';
+  if (level === 'texsaw')    return 'TEXSAW';
+  return 'EASY';
 }
 
-function formatLevel(level) {
-  return level === 'very-easy' ? 'VERY EASY' : 'EASY';
+function postIcon(post) {
+  if (post.category === 'texsaw') return '🏆';
+  return post.level === 'very-easy' ? '📗' : '📘';
 }
 
 function slugFromPath(path) {
@@ -71,11 +80,8 @@ function encodePath(path) {
 }
 
 function navigate(hash) {
-  if (location.hash === hash) {
-    router();
-  } else {
-    location.hash = hash;
-  }
+  if (location.hash === hash) router();
+  else location.hash = hash;
 }
 
 function isExternal(url) {
@@ -97,37 +103,106 @@ async function loadPosts() {
 }
 
 function showView(which) {
-  els.homeView.classList.toggle('hidden', which !== 'home');
-  els.listView.classList.toggle('hidden', which !== 'list');
-  els.postView.classList.toggle('hidden', which !== 'post');
+  els.homeView.classList.toggle('hidden',     which !== 'home');
+  els.trainingView.classList.toggle('hidden', which !== 'training');
+  els.listView.classList.toggle('hidden',     which !== 'list');
+  els.postView.classList.toggle('hidden',     which !== 'post');
 }
 
+/* ── Home view ── */
 function showHome() {
-  state.currentLevel = null;
-  state.currentPost = null;
+  state.currentCategory = null;
+  state.currentLevel    = null;
+  state.currentPost     = null;
   showView('home');
-  const easy = state.posts.filter(p => p.level === 'easy').length;
-  const veryEasy = state.posts.filter(p => p.level === 'very-easy').length;
-  const easyBtn = document.querySelector('.easy-btn .btn-sub');
-  const veBtn   = document.querySelector('.veryeasy-btn .btn-sub');
-  if (easyBtn)  easyBtn.textContent  = `[ ${easy} FILES ]`;
-  if (veBtn)    veBtn.textContent    = `[ ${veryEasy} FILES ]`;
+
+  const trainingPosts = state.posts.filter(p => p.category === 'training');
+  const texsawPosts   = state.posts.filter(p => p.category === 'texsaw');
+
+  if (els.trainingCount) els.trainingCount.textContent = `[ ${trainingPosts.length} FILES ]`;
+  if (els.texsawCount)   els.texsawCount.textContent   = `[ ${texsawPosts.length} FILES ]`;
 }
 
+/* ── Training sub-level selection view ── */
+function showTrainingView() {
+  state.currentCategory = 'training';
+  state.currentLevel    = null;
+  state.currentPost     = null;
+  showView('training');
+
+  const easy     = state.posts.filter(p => p.category === 'training' && p.level === 'easy').length;
+  const veryEasy = state.posts.filter(p => p.category === 'training' && p.level === 'very-easy').length;
+
+  if (els.easyCount)     els.easyCount.textContent     = `[ ${easy} FILES ]`;
+  if (els.veryEasyCount) els.veryEasyCount.textContent = `[ ${veryEasy} FILES ]`;
+}
+
+/* ── Level list view (training: easy / very-easy) ── */
 function renderLevel(level) {
-  state.currentLevel = level;
-  state.currentPost = null;
-  const items = state.posts.filter(post => post.level === level);
+  state.currentCategory = 'training';
+  state.currentLevel    = level;
+  state.currentPost     = null;
+
+  const items = state.posts.filter(p => p.category === 'training' && p.level === level);
+
+  // Breadcrumb: ROOT ▶ TRAINING ▶ EASY/VERY EASY — N FILES
+  els.listBreadcrumb.innerHTML = `
+    <span class="bc-root" id="bc-list-root">[ ROOT ]</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-mid" id="bc-list-training">TRAINING</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-current">${formatLevel(level)}</span>
+  `;
+  document.getElementById('bc-list-root').addEventListener('click', () => navigate('#'));
+  document.getElementById('bc-list-training').addEventListener('click', () => navigate('#training'));
 
   els.listTitle.textContent = `${formatLevel(level)} — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card" data-slug="${post.slug}" data-level="${post.level}" title="${post.title}">
-      <div class="folder-icon">${post.level === 'very-easy' ? '📗' : '📘'}</div>
+      <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
     </article>
   `).join('');
 
+  // Back button → training view
+  els.backHome.textContent = '⬅ TRAINING';
+  showView('list');
+
+  document.querySelectorAll('.post-card').forEach(card => {
+    card.addEventListener('click', () => {
+      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
+    });
+  });
+}
+
+/* ── Texsaw list view (flat challenge list) ── */
+function renderTexsaw() {
+  state.currentCategory = 'texsaw';
+  state.currentLevel    = 'texsaw';
+  state.currentPost     = null;
+
+  const items = state.posts.filter(p => p.category === 'texsaw');
+
+  // Breadcrumb: ROOT ▶ TEXSAW — N FILES
+  els.listBreadcrumb.innerHTML = `
+    <span class="bc-root" id="bc-tx-root">[ ROOT ]</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-current">TEXSAW</span>
+  `;
+  document.getElementById('bc-tx-root').addEventListener('click', () => navigate('#'));
+
+  els.listTitle.textContent = `TEXSAW — ${items.length} FILES`;
+  els.postGrid.innerHTML = items.map(post => `
+    <article class="post-card post-card-texsaw" data-slug="${post.slug}" data-level="${post.level}" title="${post.title}">
+      <div class="folder-icon">${postIcon(post)}</div>
+      <div class="folder-name">${post.title}</div>
+      <div class="folder-slug">${post.slug}</div>
+    </article>
+  `).join('');
+
+  // Back button → home
+  els.backHome.textContent = '⬅ HOME';
   showView('list');
 
   document.querySelectorAll('.post-card').forEach(card => {
@@ -160,7 +235,7 @@ function doPostSearch() {
 
   els.postSearchResults.innerHTML = matches.map(post => `
     <div class="search-result-item" data-slug="${post.slug}" data-level="${post.level}">
-      <span class="sri-icon">${post.level === 'very-easy' ? '📗' : '📘'}</span>
+      <span class="sri-icon">${postIcon(post)}</span>
       <span class="sri-title">${post.title}</span>
       <span class="sri-level">${formatLevel(post.level)}</span>
     </div>
@@ -177,6 +252,7 @@ function doPostSearch() {
 
 /* ── Pagination ── */
 function renderPagination(level, currentSlug) {
+  // For pagination, group by same level (works for easy, very-easy, texsaw)
   const levelPosts = state.posts.filter(p => p.level === level);
   const currentIdx = levelPosts.findIndex(p => p.slug === currentSlug);
 
@@ -190,24 +266,19 @@ function renderPagination(level, currentSlug) {
   const prevPost = currentIdx > 0 ? levelPosts[currentIdx - 1] : null;
   const nextPost = currentIdx < levelPosts.length - 1 ? levelPosts[currentIdx + 1] : null;
 
-  // Build page numbers (show all if ≤ 9, else show windowed)
   const total = levelPosts.length;
   let pageNums = [];
   if (total <= 9) {
     pageNums = levelPosts.map((_, i) => i);
   } else {
-    // Always show first, last, current, and 1 on each side of current
     const set = new Set([0, total - 1, currentIdx,
       Math.max(0, currentIdx - 1), Math.min(total - 1, currentIdx + 1)]);
     pageNums = [...set].sort((a, b) => a - b);
   }
 
-  // Insert ellipsis markers
   const pages = [];
   for (let i = 0; i < pageNums.length; i++) {
-    if (i > 0 && pageNums[i] - pageNums[i - 1] > 1) {
-      pages.push({ type: 'ellipsis' });
-    }
+    if (i > 0 && pageNums[i] - pageNums[i - 1] > 1) pages.push({ type: 'ellipsis' });
     pages.push({ type: 'page', idx: pageNums[i] });
   }
 
@@ -247,17 +318,42 @@ function renderPagination(level, currentSlug) {
 
 async function renderPost(level, slug) {
   const post = state.posts.find(p => p.level === level && p.slug === slug);
-  if (!post) { setStatus('Post not found.'); showHome(); return; }
+  if (!post) { showHome(); return; }
 
-  state.currentLevel = level;
-  state.currentPost = post;
+  state.currentCategory = post.category;
+  state.currentLevel    = level;
+  state.currentPost     = post;
 
-  els.postTitle.textContent      = post.title;
-  els.postTitleBc.textContent    = post.title;
-  els.postLevel.textContent      = formatLevel(post.level);
-  els.postLevelBc.textContent    = formatLevel(post.level);
-  els.openRaw.href               = encodePath(post.path);
-  els.markdown.innerHTML         = '<p style="font-family:var(--mono-font);font-size:18px;color:var(--muted)">▮ Loading...</p>';
+  // Build breadcrumb based on category
+  if (post.category === 'texsaw') {
+    els.postBreadcrumb.innerHTML = `
+      <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
+      <span class="bc-sep">▶</span>
+      <span class="bc-mid" id="bc-post-cat">TEXSAW</span>
+      <span class="bc-sep">▶</span>
+      <span class="bc-current" id="post-title-bc">${post.title}</span>
+    `;
+    document.getElementById('bc-post-root').addEventListener('click', () => navigate('#'));
+    document.getElementById('bc-post-cat').addEventListener('click', () => navigate('#texsaw'));
+  } else {
+    els.postBreadcrumb.innerHTML = `
+      <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
+      <span class="bc-sep">▶</span>
+      <span class="bc-mid" id="bc-post-cat">TRAINING</span>
+      <span class="bc-sep">▶</span>
+      <span class="bc-mid" id="bc-post-level">${formatLevel(level)}</span>
+      <span class="bc-sep">▶</span>
+      <span class="bc-current" id="post-title-bc">${post.title}</span>
+    `;
+    document.getElementById('bc-post-root').addEventListener('click', () => navigate('#'));
+    document.getElementById('bc-post-cat').addEventListener('click', () => navigate('#training'));
+    document.getElementById('bc-post-level').addEventListener('click', () => navigate(`#level/${level}`));
+  }
+
+  els.postTitle.textContent = post.title;
+  els.postLevel.textContent = formatLevel(post.level);
+  els.openRaw.href          = encodePath(post.path);
+  els.markdown.innerHTML    = '<p style="font-family:var(--mono-font);font-size:18px;color:var(--muted)">▮ Loading...</p>';
   els.postSearchInput.value = '';
   els.postSearchResults.classList.add('hidden');
   els.postSearchResults.innerHTML = '';
@@ -277,21 +373,15 @@ async function renderPost(level, slug) {
   if (window.hljs) {
     els.markdown.querySelectorAll('pre code').forEach(block => {
       const className = block.className || '';
-
       if (/\blanguage-(ps1|ps|pwsh)\b/i.test(className)) {
         block.classList.remove('language-ps1', 'language-ps', 'language-pwsh');
         block.classList.add('language-powershell');
       }
-
       if (/\blanguage-(sh|shellscript|zsh)\b/i.test(className)) {
         block.classList.remove('language-sh', 'language-shellscript', 'language-zsh');
         block.classList.add('language-bash');
       }
-
-      if (!/\blanguage-/.test(block.className)) {
-        block.classList.add('language-plaintext');
-      }
-
+      if (!/\blanguage-/.test(block.className)) block.classList.add('language-plaintext');
       window.hljs.highlightElement(block);
     });
   }
@@ -314,6 +404,7 @@ async function renderPost(level, slug) {
   });
 }
 
+/* ── Home search ── */
 function doSearch() {
   const query = els.searchInput.value.trim().toLowerCase();
   els.searchResults.classList.remove('hidden');
@@ -336,9 +427,9 @@ function doSearch() {
 
   els.searchResults.innerHTML = matches.map(post => `
     <div class="search-result-item" data-slug="${post.slug}" data-level="${post.level}">
-      <span class="sri-icon">${post.level === 'very-easy' ? '📗' : '📘'}</span>
+      <span class="sri-icon">${postIcon(post)}</span>
       <span class="sri-title">${post.title}</span>
-      <span class="sri-level">${formatLevel(post.level)}</span>
+      <span class="sri-level">${post.category === 'texsaw' ? 'TEXSAW' : formatLevel(post.level)}</span>
     </div>
   `).join('');
 
@@ -351,33 +442,58 @@ function doSearch() {
   });
 }
 
+/* ── Router ── */
 async function router() {
   const hash  = location.hash || '#';
   const parts = hash.slice(1).split('/').filter(Boolean);
 
-  if (parts.length === 0)                           { showHome(); return; }
-  if (parts[0] === 'level' && parts[1])             { renderLevel(parts[1]); return; }
-  if (parts[0] === 'post' && parts[1] && parts[2])  { await renderPost(parts[1], parts[2]); return; }
+  if (parts.length === 0)                          { showHome(); return; }
+  if (parts[0] === 'training')                     { showTrainingView(); return; }
+  if (parts[0] === 'texsaw')                       { renderTexsaw(); return; }
+  if (parts[0] === 'level' && parts[1])            { renderLevel(parts[1]); return; }
+  if (parts[0] === 'post' && parts[1] && parts[2]) { await renderPost(parts[1], parts[2]); return; }
   showHome();
 }
 
+/* ── Init ── */
 async function init() {
   try {
     state.posts = await loadPosts();
 
-    document.querySelectorAll('.level-btn').forEach(btn => {
+    // Home: category buttons
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cat = btn.dataset.category;
+        navigate(cat === 'texsaw' ? '#texsaw' : '#training');
+      });
+    });
+
+    // Training view: level buttons
+    document.querySelectorAll('#training-view .level-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         navigate(`#level/${btn.dataset.level}`);
       });
     });
 
-    els.backHome.addEventListener('click', () => { location.hash = '#'; });
-    els.backList.addEventListener('click', () => {
-      navigate(state.currentLevel ? `#level/${state.currentLevel}` : '#');
+    // Training view: back to home
+    document.getElementById('back-home-from-training').addEventListener('click', () => {
+      navigate('#');
+    });
+    document.getElementById('back-home-bc-tr').addEventListener('click', () => {
+      navigate('#');
     });
 
-    document.getElementById('post-level-bc').addEventListener('click', () => {
-      if (state.currentLevel) navigate(`#level/${state.currentLevel}`);
+    // List view: back button (dynamic target)
+    els.backHome.addEventListener('click', () => {
+      if (state.currentCategory === 'texsaw') navigate('#');
+      else navigate('#training');
+    });
+
+    // Post view: back to list
+    els.backList.addEventListener('click', () => {
+      if (state.currentCategory === 'texsaw') navigate('#texsaw');
+      else if (state.currentLevel) navigate(`#level/${state.currentLevel}`);
+      else navigate('#training');
     });
 
     // Home search
@@ -415,7 +531,6 @@ async function init() {
     console.error(err);
     state.posts = [];
     showView('home');
-    if (els.homeStatus) els.homeStatus.textContent = '';
     if (els.searchResults) els.searchResults.classList.add('hidden');
     alert('Không tải được posts.json. Hãy chạy site qua local server hoặc kiểm tra file deploy.');
   }

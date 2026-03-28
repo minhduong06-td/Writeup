@@ -78,15 +78,23 @@
 
     <!-- ── LIST VIEW ── -->
     <section id="list-view" class="hidden">
-      <div class="panel">
-        <div class="panel-head">
-          <div class="breadcrumb" id="list-breadcrumb">
-            <!-- built dynamically -->
+      <div class="sidebar-wrapper">
+        <div class="panel sidebar-panel" id="sidebar-panel">
+          <div class="panel-head">
+            <div class="breadcrumb" id="list-breadcrumb">
+              <!-- built dynamically -->
+            </div>
+            <div class="panel-head-actions">
+              <button id="sidebar-toggle" class="ghost-btn sidebar-toggle-btn" title="Toggle sidebar">◀ HIDE</button>
+              <button id="back-home" class="ghost-btn">⬅ BACK</button>
+            </div>
           </div>
-          <button id="back-home" class="ghost-btn">⬅ BACK</button>
+          <div id="sidebar-content" class="sidebar-content">
+            <div id="list-title" class="list-title-bar"></div>
+            <div id="post-grid" class="post-grid"></div>
+          </div>
         </div>
-        <div id="list-title" class="list-title-bar"></div>
-        <div id="post-grid" class="post-grid"></div>
+        <button id="sidebar-reopen" class="sidebar-reopen-btn hidden" title="Open sidebar">▶</button>
       </div>
     </section>
 

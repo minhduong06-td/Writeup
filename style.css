@@ -279,6 +279,11 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .veryeasy-btn { border-color: var(--accent); }
 .veryeasy-btn:hover { background: #f0fff4; }
 
+/* Texsaw 2026 button — amber/trophy accent */
+.texsaw2026-btn { border-color: #92400e; }
+.texsaw2026-btn:hover { background: #fffbeb; }
+.texsaw2026-btn .btn-label { color: #92400e; }
+
 .btn-icon { font-size: 32px; display: block; }
 .btn-label { font-size: 14px; font-weight: bold; color: var(--green-dark); }
 .btn-sub {
@@ -989,7 +994,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   .pagination-controls { gap: 6px; }
 }
 
-/* ── Category buttons (Home: TRAINING / TEXSAW) ── */
+/* ── Category buttons (Home: TRAINING / CTF-COMPETITIONS) ── */
 .category-btn {
   display: flex;
   flex-direction: column;
@@ -1021,24 +1026,35 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .training-btn { border-color: var(--green-dark); }
 .training-btn:hover { background: #f0fff0; }
 
-/* Texsaw button — amber/trophy accent */
-.texsaw-btn { border-color: #92400e; }
-.texsaw-btn:hover { background: #fffbeb; }
-.texsaw-btn .btn-label { color: #92400e; }
+/* CTF-Competitions button — amber/trophy accent */
+.ctf-btn { border-color: #92400e; }
+.ctf-btn:hover { background: #fffbeb; }
+.ctf-btn .btn-label { color: #92400e; }
 
 /* Dark mode overrides for category buttons */
 [data-theme="dark"] .category-btn:hover { background: #1a2e1a !important; }
-[data-theme="dark"] .texsaw-btn { border-color: #b45309; }
-[data-theme="dark"] .texsaw-btn:hover { background: #1c1608 !important; }
-[data-theme="dark"] .texsaw-btn .btn-label { color: #fbbf24; }
+[data-theme="dark"] .ctf-btn { border-color: #b45309; }
+[data-theme="dark"] .ctf-btn:hover { background: #1c1608 !important; }
+[data-theme="dark"] .ctf-btn .btn-label { color: #fbbf24; }
 
-/* Texsaw post-card accent stripe */
+/* Dark mode for texsaw2026 level btn */
+[data-theme="dark"] .texsaw2026-btn { border-color: #b45309; }
+[data-theme="dark"] .texsaw2026-btn:hover { background: #1c1608 !important; }
+[data-theme="dark"] .texsaw2026-btn .btn-label { color: #fbbf24; }
+
+/* CTF / texsaw post-card accent stripe */
 .post-card-texsaw::before {
   background: #f59e0b !important;
 }
 
 /* Training level-switch inside training-view panel */
 .training-level-switch {
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+/* CTF level-switch inside ctf-view panel */
+.ctf-level-switch {
   margin-top: 12px;
   margin-bottom: 8px;
 }
@@ -1140,7 +1156,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   z-index: 2;
 }
 
-/* Level-badge color for texsaw */
+/* Level-badge color for ctf/texsaw */
 .level-badge-texsaw {
   background: #92400e;
 }

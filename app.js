@@ -22,11 +22,9 @@ const els = {
   ctfView:           document.getElementById('ctf-view'),
   listView:          document.getElementById('list-view'),
   postView:          document.getElementById('post-view'),
-  // List view
   listBreadcrumb:    document.getElementById('list-breadcrumb'),
   listTitle:         document.getElementById('list-title'),
   postGrid:          document.getElementById('post-grid'),
-  // Post view
   postBreadcrumb:    document.getElementById('post-breadcrumb'),
   postTitle:         document.getElementById('post-title'),
   postLevel:         document.getElementById('post-level'),
@@ -34,17 +32,13 @@ const els = {
   openRaw:           document.getElementById('open-raw'),
   backHome:          document.getElementById('back-home'),
   backList:          document.getElementById('back-list'),
-  // Search (home)
   searchInput:       document.getElementById('search-input'),
   searchBtn:         document.getElementById('search-btn'),
   searchResults:     document.getElementById('search-results'),
-  // Search (post view)
   postSearchInput:   document.getElementById('post-search-input'),
   postSearchBtn:     document.getElementById('post-search-btn'),
   postSearchResults: document.getElementById('post-search-results'),
-  // Pagination
   postPagination:    document.getElementById('post-pagination'),
-  // Home counts
   trainingCount:     document.getElementById('training-count'),
   ctfCount:          document.getElementById('ctf-count'),
   easyCount:         document.getElementById('easy-count'),
@@ -54,8 +48,8 @@ const els = {
 
 const state = {
   posts: [],
-  currentCategory: null,   // 'training' | 'ctf-competitions'
-  currentLevel: null,       // 'easy' | 'very-easy' | 'texsaw-2026'
+  currentCategory: null,  
+  currentLevel: null,       
   currentPost: null
 };
 
@@ -95,7 +89,7 @@ function absolutizeAsset(baseDir, relativePath) {
 }
 
 async function loadPosts() {
-  const res = await fetch('posts.json', { cache: 'no-store' });
+  const res = await fetch('/api/posts', { cache: 'no-store' });
   if (!res.ok) throw new Error('Cannot load posts.json');
   const posts = await res.json();
   return posts.map(post => ({
@@ -112,7 +106,6 @@ function showView(which) {
   els.postView.classList.toggle('hidden',     which !== 'post');
 }
 
-/* ── Home view ── */
 function showHome() {
   state.currentCategory = null;
   state.currentLevel    = null;
@@ -126,7 +119,6 @@ function showHome() {
   if (els.ctfCount)      els.ctfCount.textContent      = `[ ${ctfPosts.length} FILES ]`;
 }
 
-/* ── Training sub-level selection view ── */
 function showTrainingView() {
   state.currentCategory = 'training';
   state.currentLevel    = null;
@@ -140,7 +132,6 @@ function showTrainingView() {
   if (els.veryEasyCount) els.veryEasyCount.textContent = `[ ${veryEasy} FILES ]`;
 }
 
-/* ── CTF-Competitions sub-competition selection view ── */
 function showCtfView() {
   state.currentCategory = 'ctf-competitions';
   state.currentLevel    = null;
@@ -152,15 +143,12 @@ function showCtfView() {
   if (els.texsaw2026Count) els.texsaw2026Count.textContent = `[ ${texsaw2026} FILES ]`;
 }
 
-/* ── Level list view (training: easy / very-easy) ── */
 function renderLevel(level) {
   state.currentCategory = 'training';
   state.currentLevel    = level;
   state.currentPost     = null;
 
   const items = state.posts.filter(p => p.category === 'training' && p.level === level);
-
-  // Breadcrumb: ROOT ▶ TRAINING ▶ EASY/VERY EASY — N FILES
   els.listBreadcrumb.innerHTML = `
     <span class="bc-root" id="bc-list-root">[ ROOT ]</span>
     <span class="bc-sep">▶</span>
@@ -180,7 +168,6 @@ function renderLevel(level) {
     </article>
   `).join('');
 
-  // Back button → training view
   els.backHome.textContent = '⬅ TRAINING';
   showView('list');
 
@@ -191,15 +178,12 @@ function renderLevel(level) {
   });
 }
 
-/* ── Texsaw 2026 list view ── */
 function renderTexsaw2026() {
   state.currentCategory = 'ctf-competitions';
   state.currentLevel    = 'texsaw-2026';
   state.currentPost     = null;
 
   const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'texsaw-2026');
-
-  // Breadcrumb: ROOT ▶ CTF-COMPETITIONS ▶ TEXSAW 2026 — N FILES
   els.listBreadcrumb.innerHTML = `
     <span class="bc-root" id="bc-tx-root">[ ROOT ]</span>
     <span class="bc-sep">▶</span>
@@ -219,7 +203,6 @@ function renderTexsaw2026() {
     </article>
   `).join('');
 
-  // Back button → ctf-competitions view
   els.backHome.textContent = '⬅ CTF';
   showView('list');
 
@@ -230,7 +213,6 @@ function renderTexsaw2026() {
   });
 }
 
-/* ── Post-view search ── */
 function doPostSearch() {
   const query = els.postSearchInput.value.trim().toLowerCase();
   els.postSearchResults.classList.remove('hidden');
@@ -268,7 +250,6 @@ function doPostSearch() {
   });
 }
 
-/* ── Pagination ── */
 function renderPagination(level, currentSlug) {
   const levelPosts = state.posts.filter(p => p.level === level);
   const currentIdx = levelPosts.findIndex(p => p.slug === currentSlug);
@@ -341,7 +322,6 @@ async function renderPost(level, slug) {
   state.currentLevel    = level;
   state.currentPost     = post;
 
-  // Build breadcrumb based on category
   if (post.category === 'ctf-competitions') {
     els.postBreadcrumb.innerHTML = `
       <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
@@ -372,7 +352,7 @@ async function renderPost(level, slug) {
 
   els.postTitle.textContent = post.title;
   els.postLevel.textContent = formatLevel(post.level);
-  els.openRaw.href          = encodePath(post.path);
+  els.openRaw.href          = `/api/post/${encodeURIComponent(post.slug)}`;
   els.markdown.innerHTML    = '<p style="font-family:var(--mono-font);font-size:18px;color:var(--muted)">▮ Loading...</p>';
   els.postSearchInput.value = '';
   els.postSearchResults.classList.add('hidden');
@@ -381,13 +361,14 @@ async function renderPost(level, slug) {
   renderPagination(level, slug);
   showView('post');
 
-  const res = await fetch(encodePath(post.path));
+  const res = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, { cache: 'no-store' });
   if (!res.ok) {
-    els.markdown.innerHTML = '<p style="color:#b00">ERROR: Cannot read markdown file.</p>';
+    els.markdown.innerHTML = '<p style="color:#b00">ERROR: Cannot read post data.</p>';
     return;
   }
 
-  const markdownText = await res.text();
+  const postData = await res.json();
+  const markdownText = postData.content;
   els.markdown.innerHTML = marked.parse(markdownText);
 
   if (window.hljs) {
@@ -406,7 +387,7 @@ async function renderPost(level, slug) {
     });
   }
 
-  const baseDir = post.path.slice(0, post.path.lastIndexOf('/') + 1);
+  const baseDir = postData.path.slice(0, postData.path.lastIndexOf('/') + 1);
 
   els.markdown.querySelectorAll('img').forEach(img => {
     const src = img.getAttribute('src') || '';
@@ -424,7 +405,6 @@ async function renderPost(level, slug) {
   });
 }
 
-/* ── Home search ── */
 function doSearch() {
   const query = els.searchInput.value.trim().toLowerCase();
   els.searchResults.classList.remove('hidden');
@@ -462,7 +442,6 @@ function doSearch() {
   });
 }
 
-/* ── Router ── */
 async function router() {
   const hash  = location.hash || '#';
   const parts = hash.slice(1).split('/').filter(Boolean);
@@ -479,12 +458,10 @@ async function router() {
   showHome();
 }
 
-/* ── Init ── */
 async function init() {
   try {
     state.posts = await loadPosts();
 
-    // Sidebar toggle (list view)
     const sidebarContent = document.getElementById('sidebar-content');
     const sidebarToggle  = document.getElementById('sidebar-toggle');
     const sidebarReopen  = document.getElementById('sidebar-reopen');
@@ -516,7 +493,6 @@ async function init() {
 
     applySidebar();
 
-    // Home: category buttons
     document.querySelectorAll('.category-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const cat = btn.dataset.category;
@@ -525,21 +501,18 @@ async function init() {
       });
     });
 
-    // Training view: level buttons
     document.querySelectorAll('#training-view .level-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         navigate(`#level/${btn.dataset.level}`);
       });
     });
 
-    // CTF view: competition buttons
     document.querySelectorAll('#ctf-view .level-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         navigate(`#level/${btn.dataset.level}`);
       });
     });
 
-    // Training view: back to home
     document.getElementById('back-home-from-training').addEventListener('click', () => {
       navigate('#');
     });
@@ -547,7 +520,6 @@ async function init() {
       navigate('#');
     });
 
-    // CTF view: back to home
     document.getElementById('back-home-from-ctf').addEventListener('click', () => {
       navigate('#');
     });
@@ -555,13 +527,11 @@ async function init() {
       navigate('#');
     });
 
-    // List view: back button (dynamic target)
     els.backHome.addEventListener('click', () => {
       if (state.currentCategory === 'ctf-competitions') navigate('#ctf-competitions');
       else navigate('#training');
     });
 
-    // Post view: back to list
     els.backList.addEventListener('click', () => {
       if (state.currentCategory === 'ctf-competitions') {
         navigate(`#level/${state.currentLevel}`);
@@ -572,7 +542,6 @@ async function init() {
       }
     });
 
-    // Home search
     els.searchBtn.addEventListener('click', doSearch);
     els.searchInput.addEventListener('input', doSearch);
     els.searchInput.addEventListener('keydown', e => {
@@ -582,7 +551,6 @@ async function init() {
       }
     });
 
-    // Post-view search
     els.postSearchBtn.addEventListener('click', doPostSearch);
     els.postSearchInput.addEventListener('input', doPostSearch);
     els.postSearchInput.addEventListener('keydown', e => {

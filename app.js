@@ -1,4 +1,3 @@
-/* ── Dark / Light mode ── */
 (function initTheme() {
   const saved = localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -89,7 +88,7 @@ function absolutizeAsset(baseDir, relativePath) {
 }
 
 async function loadPosts() {
-  const res = await fetch('/api/posts', { cache: 'no-store' });
+  const res = await fetch('posts.json', { cache: 'no-store' });
   if (!res.ok) throw new Error('Cannot load posts.json');
   const posts = await res.json();
   return posts.map(post => ({
@@ -98,7 +97,19 @@ async function loadPosts() {
   }));
 }
 
+function clearPostContent() {
+  els.markdown.innerHTML = '';
+  els.postTitle.textContent = '';
+  els.postLevel.textContent = '';
+  els.postBreadcrumb.innerHTML = '';
+  els.openRaw.removeAttribute('href');
+}
+
 function showView(which) {
+  if (which !== 'post') {
+    clearPostContent();
+  }
+
   els.homeView.classList.toggle('hidden',     which !== 'home');
   els.trainingView.classList.toggle('hidden', which !== 'training');
   els.ctfView.classList.toggle('hidden',      which !== 'ctf');

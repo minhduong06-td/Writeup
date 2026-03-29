@@ -28,18 +28,18 @@
     "path": "trainning/easy/endpoint/writeup.md"
   },
   {
-    "title": "Fake Boost",
-    "category": "training",
-    "level": "easy",
-    "slug": "fake-boost",
-    "path": "trainning/easy/fake-boost/writeup.md"
-  },
-  {
     "title": "Export",
     "category": "training",
     "level": "easy",
     "slug": "export",
     "path": "trainning/easy/export/writeup.md"
+  },
+  {
+    "title": "Fake Boost",
+    "category": "training",
+    "level": "easy",
+    "slug": "fake-boost",
+    "path": "trainning/easy/fake-boost/writeup.md"
   },
   {
     "title": "Fake News",

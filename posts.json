@@ -175,6 +175,13 @@
     "path": "texsaw/a-different-side-channel/writeup.md"
   },
   {
+    "title": "Layers",
+    "category": "texsaw",
+    "level": "texsaw",
+    "slug": "layers",
+    "path": "texsaw/layers/writeup.md"
+  },
+  {
     "title": "Lost My Keys",
     "category": "texsaw",
     "level": "texsaw",

@@ -19,6 +19,7 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
 const els = {
   homeView:          document.getElementById('home-view'),
   trainingView:      document.getElementById('training-view'),
+  ctfView:           document.getElementById('ctf-view'),
   listView:          document.getElementById('list-view'),
   postView:          document.getElementById('post-view'),
   // List view
@@ -45,28 +46,29 @@ const els = {
   postPagination:    document.getElementById('post-pagination'),
   // Home counts
   trainingCount:     document.getElementById('training-count'),
-  texsawCount:       document.getElementById('texsaw-count'),
+  ctfCount:          document.getElementById('ctf-count'),
   easyCount:         document.getElementById('easy-count'),
   veryEasyCount:     document.getElementById('veryeasy-count'),
+  texsaw2026Count:   document.getElementById('texsaw2026-count'),
 };
 
 const state = {
   posts: [],
-  currentCategory: null,   // 'training' | 'texsaw'
-  currentLevel: null,       // 'easy' | 'very-easy' | 'texsaw'
+  currentCategory: null,   // 'training' | 'ctf-competitions'
+  currentLevel: null,       // 'easy' | 'very-easy' | 'texsaw-2026'
   currentPost: null
 };
 
 marked.setOptions({ gfm: true, breaks: false, langPrefix: 'language-' });
 
 function formatLevel(level) {
-  if (level === 'very-easy') return 'VERY EASY';
-  if (level === 'texsaw')    return 'TEXSAW';
+  if (level === 'very-easy')   return 'VERY EASY';
+  if (level === 'texsaw-2026') return 'TEXSAW 2026';
   return 'EASY';
 }
 
 function postIcon(post) {
-  if (post.category === 'texsaw') return '🏆';
+  if (post.category === 'ctf-competitions') return '🏆';
   return post.level === 'very-easy' ? '📗' : '📘';
 }
 
@@ -105,6 +107,7 @@ async function loadPosts() {
 function showView(which) {
   els.homeView.classList.toggle('hidden',     which !== 'home');
   els.trainingView.classList.toggle('hidden', which !== 'training');
+  els.ctfView.classList.toggle('hidden',      which !== 'ctf');
   els.listView.classList.toggle('hidden',     which !== 'list');
   els.postView.classList.toggle('hidden',     which !== 'post');
 }
@@ -117,10 +120,10 @@ function showHome() {
   showView('home');
 
   const trainingPosts = state.posts.filter(p => p.category === 'training');
-  const texsawPosts   = state.posts.filter(p => p.category === 'texsaw');
+  const ctfPosts      = state.posts.filter(p => p.category === 'ctf-competitions');
 
   if (els.trainingCount) els.trainingCount.textContent = `[ ${trainingPosts.length} FILES ]`;
-  if (els.texsawCount)   els.texsawCount.textContent   = `[ ${texsawPosts.length} FILES ]`;
+  if (els.ctfCount)      els.ctfCount.textContent      = `[ ${ctfPosts.length} FILES ]`;
 }
 
 /* ── Training sub-level selection view ── */
@@ -135,6 +138,18 @@ function showTrainingView() {
 
   if (els.easyCount)     els.easyCount.textContent     = `[ ${easy} FILES ]`;
   if (els.veryEasyCount) els.veryEasyCount.textContent = `[ ${veryEasy} FILES ]`;
+}
+
+/* ── CTF-Competitions sub-competition selection view ── */
+function showCtfView() {
+  state.currentCategory = 'ctf-competitions';
+  state.currentLevel    = null;
+  state.currentPost     = null;
+  showView('ctf');
+
+  const texsaw2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'texsaw-2026').length;
+
+  if (els.texsaw2026Count) els.texsaw2026Count.textContent = `[ ${texsaw2026} FILES ]`;
 }
 
 /* ── Level list view (training: easy / very-easy) ── */
@@ -176,23 +191,26 @@ function renderLevel(level) {
   });
 }
 
-/* ── Texsaw list view (flat challenge list) ── */
-function renderTexsaw() {
-  state.currentCategory = 'texsaw';
-  state.currentLevel    = 'texsaw';
+/* ── Texsaw 2026 list view ── */
+function renderTexsaw2026() {
+  state.currentCategory = 'ctf-competitions';
+  state.currentLevel    = 'texsaw-2026';
   state.currentPost     = null;
 
-  const items = state.posts.filter(p => p.category === 'texsaw');
+  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'texsaw-2026');
 
-  // Breadcrumb: ROOT ▶ TEXSAW — N FILES
+  // Breadcrumb: ROOT ▶ CTF-COMPETITIONS ▶ TEXSAW 2026 — N FILES
   els.listBreadcrumb.innerHTML = `
     <span class="bc-root" id="bc-tx-root">[ ROOT ]</span>
     <span class="bc-sep">▶</span>
-    <span class="bc-current">TEXSAW</span>
+    <span class="bc-mid" id="bc-tx-ctf">CTF-COMPETITIONS</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-current">TEXSAW 2026</span>
   `;
   document.getElementById('bc-tx-root').addEventListener('click', () => navigate('#'));
+  document.getElementById('bc-tx-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
 
-  els.listTitle.textContent = `TEXSAW — ${items.length} FILES`;
+  els.listTitle.textContent = `TEXSAW 2026 — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-texsaw" data-slug="${post.slug}" data-level="${post.level}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
@@ -201,8 +219,8 @@ function renderTexsaw() {
     </article>
   `).join('');
 
-  // Back button → home
-  els.backHome.textContent = '⬅ HOME';
+  // Back button → ctf-competitions view
+  els.backHome.textContent = '⬅ CTF';
   showView('list');
 
   document.querySelectorAll('.post-card').forEach(card => {
@@ -252,7 +270,6 @@ function doPostSearch() {
 
 /* ── Pagination ── */
 function renderPagination(level, currentSlug) {
-  // For pagination, group by same level (works for easy, very-easy, texsaw)
   const levelPosts = state.posts.filter(p => p.level === level);
   const currentIdx = levelPosts.findIndex(p => p.slug === currentSlug);
 
@@ -325,16 +342,19 @@ async function renderPost(level, slug) {
   state.currentPost     = post;
 
   // Build breadcrumb based on category
-  if (post.category === 'texsaw') {
+  if (post.category === 'ctf-competitions') {
     els.postBreadcrumb.innerHTML = `
       <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
       <span class="bc-sep">▶</span>
-      <span class="bc-mid" id="bc-post-cat">TEXSAW</span>
+      <span class="bc-mid" id="bc-post-ctf">CTF-COMPETITIONS</span>
+      <span class="bc-sep">▶</span>
+      <span class="bc-mid" id="bc-post-level">${formatLevel(level)}</span>
       <span class="bc-sep">▶</span>
       <span class="bc-current" id="post-title-bc">${post.title}</span>
     `;
     document.getElementById('bc-post-root').addEventListener('click', () => navigate('#'));
-    document.getElementById('bc-post-cat').addEventListener('click', () => navigate('#texsaw'));
+    document.getElementById('bc-post-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
+    document.getElementById('bc-post-level').addEventListener('click', () => navigate(`#level/${level}`));
   } else {
     els.postBreadcrumb.innerHTML = `
       <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
@@ -429,7 +449,7 @@ function doSearch() {
     <div class="search-result-item" data-slug="${post.slug}" data-level="${post.level}">
       <span class="sri-icon">${postIcon(post)}</span>
       <span class="sri-title">${post.title}</span>
-      <span class="sri-level">${post.category === 'texsaw' ? 'TEXSAW' : formatLevel(post.level)}</span>
+      <span class="sri-level">${formatLevel(post.level)}</span>
     </div>
   `).join('');
 
@@ -449,8 +469,12 @@ async function router() {
 
   if (parts.length === 0)                          { showHome(); return; }
   if (parts[0] === 'training')                     { showTrainingView(); return; }
-  if (parts[0] === 'texsaw')                       { renderTexsaw(); return; }
-  if (parts[0] === 'level' && parts[1])            { renderLevel(parts[1]); return; }
+  if (parts[0] === 'ctf-competitions')             { showCtfView(); return; }
+  if (parts[0] === 'level' && parts[1])            {
+    // Route to the correct list renderer based on level
+    if (parts[1] === 'texsaw-2026') { renderTexsaw2026(); return; }
+    renderLevel(parts[1]); return;
+  }
   if (parts[0] === 'post' && parts[1] && parts[2]) { await renderPost(parts[1], parts[2]); return; }
   showHome();
 }
@@ -496,12 +520,20 @@ async function init() {
     document.querySelectorAll('.category-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const cat = btn.dataset.category;
-        navigate(cat === 'texsaw' ? '#texsaw' : '#training');
+        if (cat === 'ctf-competitions') navigate('#ctf-competitions');
+        else navigate('#training');
       });
     });
 
     // Training view: level buttons
     document.querySelectorAll('#training-view .level-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        navigate(`#level/${btn.dataset.level}`);
+      });
+    });
+
+    // CTF view: competition buttons
+    document.querySelectorAll('#ctf-view .level-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         navigate(`#level/${btn.dataset.level}`);
       });
@@ -515,17 +547,29 @@ async function init() {
       navigate('#');
     });
 
+    // CTF view: back to home
+    document.getElementById('back-home-from-ctf').addEventListener('click', () => {
+      navigate('#');
+    });
+    document.getElementById('back-home-bc-ctf').addEventListener('click', () => {
+      navigate('#');
+    });
+
     // List view: back button (dynamic target)
     els.backHome.addEventListener('click', () => {
-      if (state.currentCategory === 'texsaw') navigate('#');
+      if (state.currentCategory === 'ctf-competitions') navigate('#ctf-competitions');
       else navigate('#training');
     });
 
     // Post view: back to list
     els.backList.addEventListener('click', () => {
-      if (state.currentCategory === 'texsaw') navigate('#texsaw');
-      else if (state.currentLevel) navigate(`#level/${state.currentLevel}`);
-      else navigate('#training');
+      if (state.currentCategory === 'ctf-competitions') {
+        navigate(`#level/${state.currentLevel}`);
+      } else if (state.currentLevel) {
+        navigate(`#level/${state.currentLevel}`);
+      } else {
+        navigate('#training');
+      }
     });
 
     // Home search

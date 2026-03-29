@@ -161,31 +161,38 @@
     "path": "trainning/very-easy/wrong-spooky-season/writeup.md"
   },
   {
-    "title": "Journaling",
-    "category": "texsaw",
-    "level": "texsaw",
-    "slug": "journaling",
-    "path": "texsaw/journaling/writeup.md"
+    "title": "A Different Side Channel",
+    "category": "ctf-competitions",
+    "level": "texsaw-2026",
+    "slug": "a-different-side-channel",
+    "path": "texsaw-2026/a-different-side-channel/writeup.md"
   },
   {
-    "title": "A Different Side Channel",
-    "category": "texsaw",
-    "level": "texsaw",
-    "slug": "a-different-side-channel",
-    "path": "texsaw/a-different-side-channel/writeup.md"
+    "title": "Journaling",
+    "category": "ctf-competitions",
+    "level": "texsaw-2026",
+    "slug": "journaling",
+    "path": "texsaw-2026/journaling/writeup.md"
+  },
+  {
+    "title": "Jurrasic Parse",
+    "category": "ctf-competitions",
+    "level": "texsaw-2026",
+    "slug": "jurrasic-parse",
+    "path": "texsaw-2026/jurrasic-parse/writeup.md"
   },
   {
     "title": "Layers",
-    "category": "texsaw",
-    "level": "texsaw",
+    "category": "ctf-competitions",
+    "level": "texsaw-2026",
     "slug": "layers",
-    "path": "texsaw/layers/writeup.md"
+    "path": "texsaw-2026/layers/writeup.md"
   },
   {
     "title": "Lost My Keys",
-    "category": "texsaw",
-    "level": "texsaw",
+    "category": "ctf-competitions",
+    "level": "texsaw-2026",
     "slug": "alost-my-keys",
-    "path": "texsaw/lost-my-keys/writeup.md"
+    "path": "texsaw-2026/lost-my-keys/writeup.md"
   }
 ]

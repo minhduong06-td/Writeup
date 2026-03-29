@@ -172,34 +172,34 @@
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "a-different-side-channel",
-    "path": "texsaw-2026/a-different-side-channel/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/a-different-side-channel/writeup.md"
   },
   {
     "title": "Journaling",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "journaling",
-    "path": "texsaw-2026/journaling/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/journaling/writeup.md"
   },
   {
     "title": "Jurrasic Parse",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "jurrasic-parse",
-    "path": "texsaw-2026/jurrasic-parse/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/jurrasic-parse/writeup.md"
   },
   {
     "title": "Layers",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "layers",
-    "path": "texsaw-2026/layers/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/layers/writeup.md"
   },
   {
     "title": "Lost My Keys",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "alost-my-keys",
-    "path": "texsaw-2026/lost-my-keys/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/lost-my-keys/writeup.md"
   }
 ]

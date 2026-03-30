@@ -1,7 +1,5 @@
 # Challenge An unsual sighting
 
-## Flag: HTB{4n_unusual_s1ght1ng_1n_SSH_l0gs!}
-
 ## 1. Mô tả challenge
 
 Challenge cung cấp 1 file zip và khi extract thu được 2 file gồm:
@@ -116,17 +114,9 @@ Truy ngược lên file `sshd.log` thấy được trước khoảng thời gian
 
 ---
 
-## 4. Nhận xét 
+## 4. Flag 
+```text
+HTB{4n_unusual_s1ght1ng_1n_SSH_l0gs!}
+```
+---
 
-Bài này chủ yếu dựa vào việc đối chiếu giữa:
-
-- log xác thực trong `sshd.log`
-- lịch sử lệnh trong `bash_history.txt`
-
-Từ đó lần ra:
-
-- máy chủ SSH đích
-- thời điểm đăng nhập đầu tiên
-- thời điểm đăng nhập bất thường
-- fingerprint của key attacker
-- lệnh đầu tiên và lệnh cuối mà attacker thực hiện

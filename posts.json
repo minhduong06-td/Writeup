@@ -133,6 +133,13 @@
     "path": "trainning/easy/reminiscent/writeup.md"
   },
   {
+    "title": "Suspicious-Threat",
+    "category": "training",
+    "level": "easy",
+    "slug": "suspicious-threat",
+    "path": "trainning/easy/suspicious-threat/writeup.md"
+  },
+  {
     "title": "TrueSecrets",
     "category": "training",
     "level": "easy",

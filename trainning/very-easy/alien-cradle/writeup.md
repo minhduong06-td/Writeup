@@ -10,24 +10,15 @@ cat cradle.ps1
 
 ![](1.png)
 
-
 ---
 
-## 2. Flag
-
-```text
-HTB{p0w3rsh3ll_Cr4dl3s_c4n_g3t_th3_j0b_d0n3}
-```
-
----
-
-## 3. Phân tích tổng quan
+## 2. Phân tích tổng quan
 
 Cách thức tấn công của attacker là cố gắng lợi dụng chính các tính năng hợp pháp của PowerShell và .NET để tải payload về và thực thi payload ngay trong bộ nhớ.
 
 ---
 
-## 4. Phân tích từng command
+## 3. Phân tích từng command
 
 ### Command 1
 
@@ -140,6 +131,14 @@ IEX
 
 ---
 
+## 4. Flag
+
+```text
+HTB{p0w3rsh3ll_Cr4dl3s_c4n_g3t_th3_j0b_d0n3}
+```
+
+---
+
 ## 5. Flow hoạt động
 
 ```text
@@ -190,16 +189,7 @@ Giải nén gzip từ $s
 Thực thi text như mã PowerShell
 (IEX ...)
 ```
-
 ---
 
-## 6. Kết luận ngắn
-
-Bài này cho thấy attacker dùng kỹ thuật có thể tận dụng các thành phần hợp pháp có sẵn trong PowerShell và .NET để:
-
-- tải dữ liệu từ xa,
-- giải mã,
-- giải nén,
-- và thực thi trực tiếp trong bộ nhớ.
 
 

@@ -63,6 +63,13 @@
     "path": "trainning/easy/free-services/writeup.md"
   },
   {
+    "title": "Illumination",
+    "category": "training",
+    "level": "easy",
+    "slug": "illumination",
+    "path": "trainning/easy/illumination/writeup.md"
+  },
+  {
     "title": "Insider",
     "category": "training",
     "level": "easy",
@@ -89,6 +96,13 @@
     "level": "easy",
     "slug": "lure",
     "path": "trainning/easy/lure/writeup.md"
+  },
+  {
+    "title": "MarketDump",
+    "category": "training",
+    "level": "easy",
+    "slug": "marketdump",
+    "path": "trainning/easy/marketdump/writeup.md"
   },
   {
     "title": "No Place To Hide",

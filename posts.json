@@ -1,5 +1,12 @@
 [
   {
+    "title": "Artifact Of Dangerous Sighting",
+    "category": "training",
+    "level": "easy",
+    "slug": "artifact-of-dangerous-sighting",
+    "path": "trainning/easy/artifact-of-dangerous-sighting/writeup.md"
+  },
+  {
     "title": "Automation",
     "category": "training",
     "level": "easy",
@@ -131,6 +138,13 @@
     "level": "easy",
     "slug": "truesecrets",
     "path": "trainning/easy/truesecrets/writeup.md"
+  },
+  {
+    "title": "Wanted Alive",
+    "category": "training",
+    "level": "easy",
+    "slug": "wanted-alive",
+    "path": "trainning/easy/wanted-alive/writeup.md"
   },
   {
     "title": "Alien Cradle",

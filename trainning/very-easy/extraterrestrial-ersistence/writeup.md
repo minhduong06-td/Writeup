@@ -137,16 +137,20 @@ WantedBy=multi-user.target
 - Giúp service tự chạy lại sau mỗi lần khởi động máy.
 - Nếu không có phần `[Install]` hoặc không có `WantedBy=...`, lệnh `enable` sẽ không gắn service vào flow boot theo cách thông thường.
 
+## 4. Flag
 
+```text
+HTB{th3s3_4l13nS_4r3_s00000_b4s1c}
+```
 
 ---
 
-## 4. Nhận xét
-
-Flow chuẩn của bài là:
+## 5. Flow
 
 ```text
 check target -> download payload -> chmod -> create service -> enable persistence
 ```
 
 Đây là một ví dụ của việc kết hợp giữa **dropper** và **persistence mechanism** trên Linux.
+
+---

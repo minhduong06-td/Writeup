@@ -21,6 +21,13 @@
     "path": "trainning/easy/chase/writeup.md"
   },
   {
+    "title": "Diagnostic",
+    "category": "training",
+    "level": "easy",
+    "slug": "diagnostic",
+    "path": "trainning/easy/diagnostic/writeup.md"
+  },
+  {
     "title": "Emo",
     "category": "training",
     "level": "easy",

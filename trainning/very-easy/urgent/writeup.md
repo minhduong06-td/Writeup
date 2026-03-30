@@ -122,7 +122,14 @@ rồi gọi Start-Process để thực thi file vừa tải.
 
 ---
 
-## 6. Flow tấn công
+## 6. Flag
+
+```text
+HTB{4n0th3r_d4y_4n0th3r_ph1shi1ng_4tt3mpT}
+```
+---
+
+## 7. Flow tấn công
 
 ```text
 Email .eml
@@ -156,14 +163,6 @@ Tải form1.exe về %appdata%
    |
    v
 Thực thi payload
-```
-
----
-
-## 7. Flag
-
-```text
-HTB{4n0th3r_d4y_4n0th3r_ph1shi1ng_4tt3mpT}
 ```
 
 ---

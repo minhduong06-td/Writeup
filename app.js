@@ -28,7 +28,6 @@ const els = {
   postTitle:         document.getElementById('post-title'),
   postLevel:         document.getElementById('post-level'),
   markdown:          document.getElementById('markdown'),
-  openRaw:           document.getElementById('open-raw'),
   backHome:          document.getElementById('back-home'),
   backList:          document.getElementById('back-list'),
   searchInput:       document.getElementById('search-input'),
@@ -47,8 +46,8 @@ const els = {
 
 const state = {
   posts: [],
-  currentCategory: null,  
-  currentLevel: null,       
+  currentCategory: null,
+  currentLevel: null,
   currentPost: null
 };
 
@@ -102,7 +101,6 @@ function clearPostContent() {
   els.postTitle.textContent = '';
   els.postLevel.textContent = '';
   els.postBreadcrumb.innerHTML = '';
-  els.openRaw.removeAttribute('href');
 }
 
 function showView(which) {
@@ -363,7 +361,6 @@ async function renderPost(level, slug) {
 
   els.postTitle.textContent = post.title;
   els.postLevel.textContent = formatLevel(post.level);
-  els.openRaw.href          = `/api/post/${encodeURIComponent(post.slug)}`;
   els.markdown.innerHTML    = '<p style="font-family:var(--mono-font);font-size:18px;color:var(--muted)">▮ Loading...</p>';
   els.postSearchInput.value = '';
   els.postSearchResults.classList.add('hidden');
@@ -460,8 +457,7 @@ async function router() {
   if (parts.length === 0)                          { showHome(); return; }
   if (parts[0] === 'training')                     { showTrainingView(); return; }
   if (parts[0] === 'ctf-competitions')             { showCtfView(); return; }
-  if (parts[0] === 'level' && parts[1])            {
-    // Route to the correct list renderer based on level
+  if (parts[0] === 'level' && parts[1]) {
     if (parts[1] === 'texsaw-2026') { renderTexsaw2026(); return; }
     renderLevel(parts[1]); return;
   }

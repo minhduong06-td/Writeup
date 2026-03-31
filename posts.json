@@ -147,6 +147,13 @@
     "path": "trainning/easy/suspicious-threat/writeup.md"
   },
   {
+    "title": "Hangled Heist",
+    "category": "training",
+    "level": "easy",
+    "slug": "tangled-heist",
+    "path": "trainning/easy/tangled-heist/writeup.md"
+  },
+  {
     "title": "TrueSecrets",
     "category": "training",
     "level": "easy",

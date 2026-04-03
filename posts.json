@@ -70,11 +70,25 @@
     "path": "trainning/easy/fishy-http/writeup.md"
   },
   {
+    "title": "Foggy Intrusion",
+    "category": "training",
+    "level": "easy",
+    "slug": "foggy-intrusion",
+    "path": "trainning/easy/foggy-intrusion/writeup.md"
+  },
+  {
     "title": "Free Services",
     "category": "training",
     "level": "easy",
     "slug": "free-services",
     "path": "trainning/easy/free-services/writeup.md"
+  },
+  {
+    "title": "Halloween Invitation",
+    "category": "training",
+    "level": "easy",
+    "slug": "halloween-invitation",
+    "path": "trainning/easy/halloween-invitation/writeup.md"
   },
   {
     "title": "Illumination",
@@ -131,6 +145,13 @@
     "level": "easy",
     "slug": "obscure",
     "path": "trainning/easy/obscure/writeup.md"
+  },
+  {
+    "title": "Persistence",
+    "category": "training",
+    "level": "easy",
+    "slug": "persistence",
+    "path": "trainning/easy/persistence/writeup.md"
   },
   {
     "title": "Reminiscent",

@@ -154,11 +154,25 @@
     "path": "trainning/easy/persistence/writeup.md"
   },
   {
+    "title": "POOF",
+    "category": "training",
+    "level": "easy",
+    "slug": "poof",
+    "path": "trainning/easy/poof/writeup.md"
+  },
+  {
     "title": "Reminiscent",
     "category": "training",
     "level": "easy",
     "slug": "reminiscent",
     "path": "trainning/easy/reminiscent/writeup.md"
+  },
+  {
+    "title": "Scripts and Formulas",
+    "category": "training",
+    "level": "easy",
+    "slug": "scripts-and-formulas",
+    "path": "trainning/easy/scripts-and-formulas/writeup.md"
   },
   {
     "title": "Suspicious-Threat",

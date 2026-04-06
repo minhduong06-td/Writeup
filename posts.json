@@ -28,6 +28,13 @@
     "path": "trainning/easy/diagnostic/writeup.md"
   },
   {
+    "title": "Downgrade",
+    "category": "training",
+    "level": "easy",
+    "slug": "downgrade",
+    "path": "trainning/easy/downgrade/writeup.md"
+  },
+  {
     "title": "Emo",
     "category": "training",
     "level": "easy",
@@ -40,6 +47,13 @@
     "level": "easy",
     "slug": "endpoint",
     "path": "trainning/easy/endpoint/writeup.md"
+  },
+  {
+    "title": "Event Horizon",
+    "category": "training",
+    "level": "easy",
+    "slug": "event-horizon",
+    "path": "trainning/easy/event-horizon/writeup.md"
   },
   {
     "title": "Export",
@@ -133,6 +147,13 @@
     "path": "trainning/easy/marketdump/writeup.md"
   },
   {
+    "title": "Marshal in the Middle",
+    "category": "training",
+    "level": "easy",
+    "slug": "marshal-in-the-middle",
+    "path": "trainning/easy/marshal-in-the-middle/writeup.md"
+  },
+  {
     "title": "No Place To Hide",
     "category": "training",
     "level": "easy",
@@ -145,6 +166,13 @@
     "level": "easy",
     "slug": "obscure",
     "path": "trainning/easy/obscure/writeup.md"
+  },
+  {
+    "title": "perseverance",
+    "category": "training",
+    "level": "easy",
+    "slug": "perseverance",
+    "path": "trainning/easy/perseverance/writeup.md"
   },
   {
     "title": "Persistence",

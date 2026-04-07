@@ -224,6 +224,13 @@
     "path": "trainning/easy/truesecrets/writeup.md"
   },
   {
+    "title": "Valhalloween",
+    "category": "training",
+    "level": "easy",
+    "slug": "valhalloween",
+    "path": "trainning/easy/valhalloween/writeup.md"
+  },
+  {
     "title": "Wanted Alive",
     "category": "training",
     "level": "easy",

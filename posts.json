@@ -98,6 +98,13 @@
     "path": "trainning/easy/free-services/writeup.md"
   },
   {
+    "title": "Getting Closer",
+    "category": "training",
+    "level": "easy",
+    "slug": "getting-closer",
+    "path": "trainning/easy/getting-closer/writeup.md"
+  },
+  {
     "title": "Halloween Invitation",
     "category": "training",
     "level": "easy",
@@ -159,6 +166,13 @@
     "level": "easy",
     "slug": "no-place-to-hide",
     "path": "trainning/easy/no-place-to-hide/writeup.md"
+  },
+  {
+    "title": "Packet Cyclone",
+    "category": "training",
+    "level": "easy",
+    "slug": "packet-cyclone",
+    "path": "trainning/easy/packet-cyclone/writeup.md"
   },
   {
     "title": "Obscure",

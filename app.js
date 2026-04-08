@@ -41,6 +41,7 @@ const els = {
   ctfCount:          document.getElementById('ctf-count'),
   easyCount:         document.getElementById('easy-count'),
   veryEasyCount:     document.getElementById('veryeasy-count'),
+  mediumCount:   document.getElementById('medium-count'),
   texsaw2026Count:   document.getElementById('texsaw2026-count'),
 };
 
@@ -56,12 +57,15 @@ marked.setOptions({ gfm: true, breaks: false, langPrefix: 'language-' });
 function formatLevel(level) {
   if (level === 'very-easy')   return 'VERY EASY';
   if (level === 'texsaw-2026') return 'TEXSAW 2026';
+  if (level === 'medium')      return 'MEDIUM';
   return 'EASY';
 }
 
 function postIcon(post) {
   if (post.category === 'ctf-competitions') return '🏆';
-  return post.level === 'very-easy' ? '📗' : '📘';
+  if (post.level === 'very-easy') return '📗';
+  if (post.level === 'medium')    return '📙';
+  return '📘';
 }
 
 function slugFromPath(path) {
@@ -136,9 +140,11 @@ function showTrainingView() {
 
   const easy     = state.posts.filter(p => p.category === 'training' && p.level === 'easy').length;
   const veryEasy = state.posts.filter(p => p.category === 'training' && p.level === 'very-easy').length;
+  const medium   = state.posts.filter(p => p.category==='training' && p.level==='medium').length;
 
   if (els.easyCount)     els.easyCount.textContent     = `[ ${easy} FILES ]`;
   if (els.veryEasyCount) els.veryEasyCount.textContent = `[ ${veryEasy} FILES ]`;
+  if (els.mediumCount)   els.mediumCount.textContent   = `[ ${medium} FILES ]`;
 }
 
 function showCtfView() {

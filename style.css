@@ -287,6 +287,14 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 [data-theme="dark"] .medium-btn:hover { background: #0c1a2e !important; }
 [data-theme="dark"] .medium-btn .btn-label { color: #60a5fa; }
 
+.hard-btn { border-color: #dc2626; }
+.hard-btn:hover { background: #fff1f1; }
+.hard-btn .btn-label { color: #dc2626; }
+
+[data-theme="dark"] .hard-btn { border-color: #ef4444; }
+[data-theme="dark"] .hard-btn:hover { background: #2e0a0a !important; }
+[data-theme="dark"] .hard-btn .btn-label { color: #f87171; }
+
 /* Texsaw 2026 button — amber/trophy accent */
 .texsaw2026-btn { border-color: #92400e; }
 .texsaw2026-btn:hover { background: #fffbeb; }
@@ -521,7 +529,12 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   transition: transform .15s;
 }
 .post-card:hover .folder-icon { transform: scale(1.1); }
-
+.post-card[data-level="medium"] .folder-icon {
+  filter: hue-rotate(35deg) saturate(1.5) drop-shadow(1px 1px 0 rgba(234,179,8,0.3));
+}
+.post-card[data-level="hard"] .folder-icon {
+  filter: hue-rotate(300deg) saturate(2) drop-shadow(1px 1px 0 rgba(220,38,38,0.3));
+}
 .folder-name {
   font-family: var(--pixel-font);
   font-size: 9px;

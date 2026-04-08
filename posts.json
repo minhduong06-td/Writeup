@@ -224,6 +224,13 @@
     "path": "trainning/easy/scripts-and-formulas/writeup.md"
   },
   {
+    "title": "Silicon Data Sleuthing",
+    "category": "training",
+    "level": "easy",
+    "slug": "silicon-data-sleuthing",
+    "path": "trainning/easy/silicon-data-sleuthing/writeup.md"
+  },
+  {
     "title": "Suspicious-Threat",
     "category": "training",
     "level": "easy",

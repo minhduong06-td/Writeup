@@ -273,19 +273,20 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   box-shadow: 1px 1px 0px var(--border);
 }
 
-.easy-btn { border-color: var(--green-dark); }
-.easy-btn:hover { background: #f0fff0; }
+.easy-btn { border-color: #1d4ed8; }
+.easy-btn:hover { background: #eff6ff; }
+.easy-btn .btn-label { color: #1d4ed8; }
 
 .veryeasy-btn { border-color: var(--accent); }
 .veryeasy-btn:hover { background: #f0fff4; }
 
-.medium-btn { border-color: #1d4ed8; }
-.medium-btn:hover { background: #eff6ff; }
-.medium-btn .btn-label { color: #1d4ed8; }
+.medium-btn { border-color: #ca8a04; }
+.medium-btn:hover { background: #fefce8; }
+.medium-btn .btn-label { color: #ca8a04; }
 
-[data-theme="dark"] .medium-btn { border-color: #3b82f6; }
-[data-theme="dark"] .medium-btn:hover { background: #0c1a2e !important; }
-[data-theme="dark"] .medium-btn .btn-label { color: #60a5fa; }
+[data-theme="dark"] .medium-btn { border-color: #eab308; }
+[data-theme="dark"] .medium-btn:hover { background: #1a1500 !important; }
+[data-theme="dark"] .medium-btn .btn-label { color: #facc15; }
 
 .hard-btn { border-color: #dc2626; }
 .hard-btn:hover { background: #fff1f1; }

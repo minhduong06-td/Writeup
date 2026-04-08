@@ -279,6 +279,14 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .veryeasy-btn { border-color: var(--accent); }
 .veryeasy-btn:hover { background: #f0fff4; }
 
+.medium-btn { border-color: #1d4ed8; }
+.medium-btn:hover { background: #eff6ff; }
+.medium-btn .btn-label { color: #1d4ed8; }
+
+[data-theme="dark"] .medium-btn { border-color: #3b82f6; }
+[data-theme="dark"] .medium-btn:hover { background: #0c1a2e !important; }
+[data-theme="dark"] .medium-btn .btn-label { color: #60a5fa; }
+
 /* Texsaw 2026 button — amber/trophy accent */
 .texsaw2026-btn { border-color: #92400e; }
 .texsaw2026-btn:hover { background: #fffbeb; }

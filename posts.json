@@ -1,5 +1,12 @@
 [
   {
+    "title": "Binary Badresources",
+    "category": "training",
+    "level": "medium",
+    "slug": "binary-badresources",
+    "path": "trainning/medium/binary-badresources/writeup.md"
+  },
+  {
     "title": "PersistenceIsFutile",
     "category": "training",
     "level": "medium",

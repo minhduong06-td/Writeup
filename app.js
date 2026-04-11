@@ -43,6 +43,7 @@ const els = {
   veryEasyCount:     document.getElementById('veryeasy-count'),
   mediumCount:   document.getElementById('medium-count'),
   texsaw2026Count:   document.getElementById('texsaw2026-count'),
+  dawgctf2026Count: document.getElementById('dawgctf2026-count'),
 };
 
 const state = {
@@ -57,12 +58,14 @@ marked.setOptions({ gfm: true, breaks: false, langPrefix: 'language-' });
 function formatLevel(level) {
   if (level === 'very-easy')   return 'VERY EASY';
   if (level === 'texsaw-2026') return 'TEXSAW 2026';
+  if (level === 'dawgctf-2026') return 'DAWGCTF 2026';
   if (level === 'medium')      return 'MEDIUM';
   return 'EASY';
 }
 
 function postIcon(post) {
   if (post.category === 'ctf-competitions') return '🏆';
+  if (post.level === 'dawgctf-2026') return '🐾';
   if (post.level === 'very-easy') return '📗';
   if (post.level === 'medium')    return '📙';
   return '📘';
@@ -154,8 +157,9 @@ function showCtfView() {
   showView('ctf');
 
   const texsaw2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'texsaw-2026').length;
-
   if (els.texsaw2026Count) els.texsaw2026Count.textContent = `[ ${texsaw2026} FILES ]`;
+  const dawgctf2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'dawgctf-2026').length;
+  if (els.dawgctf2026Count) els.dawgctf2026Count.textContent = `[ ${dawgctf2026} FILES ]`;
 }
 
 function renderLevel(level) {
@@ -212,6 +216,41 @@ function renderTexsaw2026() {
   els.listTitle.textContent = `TEXSAW 2026 — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-texsaw" data-slug="${post.slug}" data-level="${post.level}" title="${post.title}">
+      <div class="folder-icon">${postIcon(post)}</div>
+      <div class="folder-name">${post.title}</div>
+      <div class="folder-slug">${post.slug}</div>
+    </article>
+  `).join('');
+
+  els.backHome.textContent = '⬅ CTF';
+  showView('list');
+
+  document.querySelectorAll('.post-card').forEach(card => {
+    card.addEventListener('click', () => {
+      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
+    });
+  });
+}
+
+function renderDawgctf2026() {
+  state.currentCategory = 'ctf-competitions';
+  state.currentLevel    = 'dawgctf-2026';
+  state.currentPost     = null;
+
+  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'dawgctf-2026');
+  els.listBreadcrumb.innerHTML = `
+    <span class="bc-root" id="bc-dg-root">[ ROOT ]</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-mid" id="bc-dg-ctf">CTF-COMPETITIONS</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-current">DAWGCTF 2026</span>
+  `;
+  document.getElementById('bc-dg-root').addEventListener('click', () => navigate('#'));
+  document.getElementById('bc-dg-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
+
+  els.listTitle.textContent = `DAWGCTF 2026 — ${items.length} FILES`;
+  els.postGrid.innerHTML = items.map(post => `
+    <article class="post-card post-card-dawgctf" data-slug="${post.slug}" data-level="${post.level}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
@@ -465,6 +504,7 @@ async function router() {
   if (parts[0] === 'ctf-competitions')             { showCtfView(); return; }
   if (parts[0] === 'level' && parts[1]) {
     if (parts[1] === 'texsaw-2026') { renderTexsaw2026(); return; }
+    if (parts[1] === 'dawgctf-2026') { renderDawgctf2026(); return; }
     renderLevel(parts[1]); return;
   }
   if (parts[0] === 'post' && parts[1] && parts[2]) { await renderPost(parts[1], parts[2]); return; }

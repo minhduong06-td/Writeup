@@ -362,5 +362,12 @@
     "level": "texsaw-2026",
     "slug": "alost-my-keys",
     "path": "ctf-competitions/texsaw-2026/lost-my-keys/writeup.md"
+  },
+  {
+    "title": "TeleLeak",
+    "category": "ctf-competitions",
+    "level": "dawgctf-2026",
+    "slug": "teleleak",
+    "path": "ctf-competitions/dawgctf-2026/teleleak/writeup.md"
   }
 ]

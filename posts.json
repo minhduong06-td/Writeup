@@ -371,6 +371,13 @@
     "path": "ctf-competitions/dawgctf-2026/stomach-bug/writeup.md"
   },
   {
+    "title": "Modem Metamorphosis",
+    "category": "ctf-competitions",
+    "level": "dawgctf-2026",
+    "slug": "modem-metamorphosis",
+    "path": "ctf-competitions/dawgctf-2026/modem-metamorphosis/writeup.md"
+  },
+  {
     "title": "TeleLeak",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",

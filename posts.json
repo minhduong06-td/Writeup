@@ -364,6 +364,13 @@
     "path": "ctf-competitions/texsaw-2026/lost-my-keys/writeup.md"
   },
   {
+    "title": "I Love Bacon!",
+    "category": "ctf-competitions",
+    "level": "dawgctf-2026",
+    "slug": "i-love-bacon!",
+    "path": "ctf-competitions/dawgctf-2026/i-love-bacon!/writeup.md"
+  },
+  {
     "title": "Stomach Bug",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",
@@ -383,5 +390,12 @@
     "level": "dawgctf-2026",
     "slug": "teleleak",
     "path": "ctf-competitions/dawgctf-2026/teleleak/writeup.md"
+  },
+  {
+    "title": "The Step After the PCAP",
+    "category": "ctf-competitions",
+    "level": "dawgctf-2026",
+    "slug": "the-step-after-the-pcap",
+    "path": "ctf-competitions/dawgctf-2026/the-step-after-the-pcap/writeup.md"
   }
 ]

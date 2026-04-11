@@ -364,6 +364,13 @@
     "path": "ctf-competitions/texsaw-2026/lost-my-keys/writeup.md"
   },
   {
+    "title": "Stomach Bug",
+    "category": "ctf-competitions",
+    "level": "dawgctf-2026",
+    "slug": "stomach-bug",
+    "path": "ctf-competitions/dawgctf-2026/stomach-bug/writeup.md"
+  }
+  {
     "title": "TeleLeak",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",

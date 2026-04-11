@@ -64,11 +64,17 @@ function formatLevel(level) {
 }
 
 function postIcon(post) {
-  if (post.category === 'ctf-competitions') return '🏆';
-  if (post.level === 'dawgctf-2026') return '🐾';
-  if (post.level === 'very-easy') return '📗';
-  if (post.level === 'medium')    return '📙';
-  return '📘';
+  const levelIcons = {
+    'dawgctf-2026': '🐾',
+    'texsaw-2026':  '🏆',
+    'very-easy':    '📗',
+    'medium':       '📙',
+    'easy':         '📘',
+  };
+
+  if (levelIcons[post.level]) return levelIcons[post.level];
+  if (post.category === 'ctf-competitions') return '🏆'; 
+  return '📘'; 
 }
 
 function slugFromPath(path) {

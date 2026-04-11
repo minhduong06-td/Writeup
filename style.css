@@ -1069,6 +1069,19 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   background: #f59e0b !important;
 }
 
+.dawgctf2026-btn { border-color: #4338ca; }
+.dawgctf2026-btn:hover { background: #eef2ff; }
+.dawgctf2026-btn .btn-label { color: #4338ca; }
+
+[data-theme="dark"] .dawgctf2026-btn { border-color: #6366f1; }
+[data-theme="dark"] .dawgctf2026-btn:hover { background: #0f0f2e !important; }
+[data-theme="dark"] .dawgctf2026-btn .btn-label { color: #a5b4fc; }
+
+/* DawgCTF post-card accent stripe */
+.post-card-dawgctf::before {
+  background: #6366f1 !important;
+}
+
 /* Training level-switch inside training-view panel */
 .training-level-switch {
   margin-top: 12px;

@@ -296,13 +296,13 @@ function renderUmassctf2026() {
   state.currentLevel    = 'umassctf-2026';
   state.currentPost     = null;
 
-  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'dawgctf-2026');
+  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'umassctf-2026');
   els.listBreadcrumb.innerHTML = `
     <span class="bc-root" id="bc-um-root">[ ROOT ]</span>
     <span class="bc-sep">▶</span>
     <span class="bc-mid" id="bc-um-ctf">CTF-COMPETITIONS</span>
     <span class="bc-sep">▶</span>
-    <span class="bc-current">DAWGCTF 2026</span>
+    <span class="bc-current">UMASSCTF 2026</span>
   `;
   document.getElementById('bc-um-root').addEventListener('click', () => navigate('#'));
   document.getElementById('bc-um-ctf').addEventListener('click', () => navigate('#ctf-competitions'));

@@ -55,6 +55,18 @@ const state = {
 
 marked.setOptions({ gfm: true, breaks: false, langPrefix: 'language-' });
 
+const levelColors = {
+  'easy':         '#1d4ed8',
+  'very-easy':    '#16a34a',
+  'medium':       '#ca8a04',
+  'texsaw-2026':  '#92400e',
+  'dawgctf-2026': '#4338ca',
+};
+
+function levelColor(level) {
+  return levelColors[level] || '#2d6a2d';
+}
+
 function formatLevel(level) {
   if (level === 'very-easy')   return 'VERY EASY';
   if (level === 'texsaw-2026') return 'TEXSAW 2026';
@@ -186,7 +198,7 @@ function renderLevel(level) {
 
   els.listTitle.textContent = `${formatLevel(level)} — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card" data-slug="${post.slug}" data-level="${post.level}" title="${post.title}">
+    <article class="post-card" data-slug="${post.slug}" data-level="${post.level}" style="--card-color: ${levelColor(post.level)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
@@ -221,7 +233,7 @@ function renderTexsaw2026() {
 
   els.listTitle.textContent = `TEXSAW 2026 — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-texsaw" data-slug="${post.slug}" data-level="${post.level}" title="${post.title}">
+    <article class="post-card post-card-texsaw" data-slug="${post.slug}" data-level="${post.level}" style="--card-color: ${levelColor(post.level)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
@@ -256,7 +268,7 @@ function renderDawgctf2026() {
 
   els.listTitle.textContent = `DAWGCTF 2026 — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-dawgctf" data-slug="${post.slug}" data-level="${post.level}" title="${post.title}">
+    <article class="post-card post-card-dawgctf" data-slug="${post.slug}" data-level="${post.level}" style="--card-color: ${levelColor(post.level)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>

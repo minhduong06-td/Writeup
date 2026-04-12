@@ -370,6 +370,13 @@
     "slug": "i-love-bacon!",
     "path": "ctf-competitions/dawgctf-2026/i-love-bacon!/writeup.md"
   },
+   {
+    "title": "Gen-Z Found My Registry",
+    "category": "ctf-competitions",
+    "level": "dawgctf-2026",
+    "slug": "gen-z-found-my-registry",
+    "path": "ctf-competitions/dawgctf-2026/gen-z-found-my-registry/writeup.md"
+  },
   {
     "title": "Stomach Bug",
     "category": "ctf-competitions",

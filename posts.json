@@ -418,5 +418,12 @@
     "level": "umassctf-2026",
     "slug": "lost-and-found",
     "path": "ctf-competitions/umassctf-2026/lost-and-found/writeup.md"
+  },
+  {
+    "title": "Ninja-Nerds",
+    "category": "ctf-competitions",
+    "level": "umassctf-2026",
+    "slug": "ninja-nerds",
+    "path": "ctf-competitions/umassctf-2026/ninja-nerds/writeup.md"
   }
 ]

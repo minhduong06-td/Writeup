@@ -469,6 +469,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   padding-right: 6px;
   scrollbar-width: thin;
   scrollbar-color: var(--border-lite) transparent;
+  padding: 4px;
 }
 
 .post-grid::-webkit-scrollbar {
@@ -505,15 +506,16 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: var(--green);
+  background: var(--card-color, var(--green));
   opacity: 0;
   transition: opacity .15s;
+  border-color: var(--card-color, var(--border-lite));
 }
 
 .post-card:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0px var(--border);
-  border-color: var(--border);
+  box-shadow: 4px 4px 0px var(--card-color, var(--border));
+  border-color: var(--card-color, var(--border)); 
 }
 .post-card:hover::before { opacity: 1; }
 
@@ -1196,28 +1198,3 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   background: #92400e;
 }
 
-/* ── Post card border by level ── */
-.post-card[data-level="easy"]       { border-color: #1d4ed8; }
-.post-card[data-level="easy"]:hover { border-color: #1d4ed8; box-shadow: 4px 4px 0px #1d4ed8; }
-
-.post-card[data-level="very-easy"]       { border-color: var(--accent); }
-.post-card[data-level="very-easy"]:hover { border-color: var(--accent); box-shadow: 4px 4px 0px var(--accent); }
-
-.post-card[data-level="medium"]       { border-color: #ca8a04; }
-.post-card[data-level="medium"]:hover { border-color: #ca8a04; box-shadow: 4px 4px 0px #ca8a04; }
-
-.post-card[data-level="texsaw-2026"]       { border-color: #92400e; }
-.post-card[data-level="texsaw-2026"]:hover { border-color: #92400e; box-shadow: 4px 4px 0px #92400e; }
-
-.post-card[data-level="dawgctf-2026"]       { border-color: #4338ca; }
-.post-card[data-level="dawgctf-2026"]:hover { border-color: #4338ca; box-shadow: 4px 4px 0px #4338ca; }
-
-/* Dark mode adjustments */
-[data-theme="dark"] .post-card[data-level="medium"]       { border-color: #eab308; }
-[data-theme="dark"] .post-card[data-level="medium"]:hover { border-color: #eab308; box-shadow: 4px 4px 0px #eab308; }
-
-[data-theme="dark"] .post-card[data-level="texsaw-2026"]       { border-color: #b45309; }
-[data-theme="dark"] .post-card[data-level="texsaw-2026"]:hover { border-color: #b45309; box-shadow: 4px 4px 0px #b45309; }
-
-[data-theme="dark"] .post-card[data-level="dawgctf-2026"]       { border-color: #6366f1; }
-[data-theme="dark"] .post-card[data-level="dawgctf-2026"]:hover { border-color: #6366f1; box-shadow: 4px 4px 0px #6366f1; }

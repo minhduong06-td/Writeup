@@ -44,6 +44,7 @@ const els = {
   mediumCount:   document.getElementById('medium-count'),
   texsaw2026Count:   document.getElementById('texsaw2026-count'),
   dawgctf2026Count: document.getElementById('dawgctf2026-count'),
+  umassctf2026Count: document.getElementById('umassctf2026-count'),
 };
 
 const state = {
@@ -61,6 +62,7 @@ const levelColors = {
   'medium':       '#ca8a04',
   'texsaw-2026':  '#92400e',
   'dawgctf-2026': '#4338ca',
+  'umassctf-2026': '#7f1d1d',
 };
 
 function levelColor(level) {
@@ -71,6 +73,7 @@ function formatLevel(level) {
   if (level === 'very-easy')   return 'VERY EASY';
   if (level === 'texsaw-2026') return 'TEXSAW 2026';
   if (level === 'dawgctf-2026') return 'DAWGCTF 2026';
+  if (level === 'umassctf-2026') return 'UMASSCTF 2026';
   if (level === 'medium')      return 'MEDIUM';
   return 'EASY';
 }
@@ -82,6 +85,7 @@ function postIcon(post) {
     'very-easy':    '📗',
     'medium':       '📙',
     'easy':         '📘',
+    'umassctf-2026': '🎓',
   };
 
   if (levelIcons[post.level]) return levelIcons[post.level];
@@ -178,6 +182,8 @@ function showCtfView() {
   if (els.texsaw2026Count) els.texsaw2026Count.textContent = `[ ${texsaw2026} FILES ]`;
   const dawgctf2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'dawgctf-2026').length;
   if (els.dawgctf2026Count) els.dawgctf2026Count.textContent = `[ ${dawgctf2026} FILES ]`;
+  const umassctf2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'umassctf-2026').length;
+  if (els.umassctf2026Count) els.umassctf2026Count.textContent = `[ ${umassctf2026} FILES ]`;
 }
 
 function renderLevel(level) {
@@ -269,6 +275,41 @@ function renderDawgctf2026() {
   els.listTitle.textContent = `DAWGCTF 2026 — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-dawgctf" data-slug="${post.slug}" data-level="${post.level}" style="--card-color: ${levelColor(post.level)}" title="${post.title}">
+      <div class="folder-icon">${postIcon(post)}</div>
+      <div class="folder-name">${post.title}</div>
+      <div class="folder-slug">${post.slug}</div>
+    </article>
+  `).join('');
+
+  els.backHome.textContent = '⬅ CTF';
+  showView('list');
+
+  document.querySelectorAll('.post-card').forEach(card => {
+    card.addEventListener('click', () => {
+      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
+    });
+  });
+}
+
+function renderUmassctf2026() {
+  state.currentCategory = 'ctf-competitions';
+  state.currentLevel    = 'umassctf-2026';
+  state.currentPost     = null;
+
+  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'dawgctf-2026');
+  els.listBreadcrumb.innerHTML = `
+    <span class="bc-root" id="bc-um-root">[ ROOT ]</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-mid" id="bc-um-ctf">CTF-COMPETITIONS</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-current">DAWGCTF 2026</span>
+  `;
+  document.getElementById('bc-um-root').addEventListener('click', () => navigate('#'));
+  document.getElementById('bc-um-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
+
+  els.listTitle.textContent = `UMASSCTF 2026 — ${items.length} FILES`;
+  els.postGrid.innerHTML = items.map(post => `
+    <article class="post-card post-card-umassctf" data-slug="${post.slug}" data-level="${post.level}" style="--card-color: ${levelColor(post.level)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
@@ -523,6 +564,7 @@ async function router() {
   if (parts[0] === 'level' && parts[1]) {
     if (parts[1] === 'texsaw-2026') { renderTexsaw2026(); return; }
     if (parts[1] === 'dawgctf-2026') { renderDawgctf2026(); return; }
+    if (parts[1] === 'umassctf-2026') { renderUmassctf2026(); return; }
     renderLevel(parts[1]); return;
   }
   if (parts[0] === 'post' && parts[1] && parts[2]) { await renderPost(parts[1], parts[2]); return; }

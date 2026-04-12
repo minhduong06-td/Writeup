@@ -404,5 +404,12 @@
     "level": "dawgctf-2026",
     "slug": "the-step-after-the-pcap",
     "path": "ctf-competitions/dawgctf-2026/the-step-after-the-pcap/writeup.md"
+  },
+  {
+    "title": "Click Here For Free Bricks",
+    "category": "ctf-competitions",
+    "level": "umassctf-2026",
+    "slug": "click-here-for-free-bricks",
+    "path": "ctf-competitions/umassctf-2026/click-here-for-free-bricks/writeup.md"
   }
 ]

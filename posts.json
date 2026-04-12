@@ -411,5 +411,12 @@
     "level": "umassctf-2026",
     "slug": "click-here-for-free-bricks",
     "path": "ctf-competitions/umassctf-2026/click-here-for-free-bricks/writeup.md"
+  },
+  {
+    "title": "Lost and Found",
+    "category": "ctf-competitions",
+    "level": "umassctf-2026",
+    "slug": "lost-and-found",
+    "path": "ctf-competitions/umassctf-2026/lost-and-found/writeup.md"
   }
 ]

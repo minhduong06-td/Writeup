@@ -146,12 +146,9 @@ function showView(which) {
   els.homeView.classList.toggle('hidden',     which !== 'home');
   els.trainingView.classList.toggle('hidden', which !== 'training');
   els.ctfView.classList.toggle('hidden',      which !== 'ctf');
+  els.taskView.classList.toggle('hidden',     which !== 'task');
   els.listView.classList.toggle('hidden',     which !== 'list');
   els.postView.classList.toggle('hidden',     which !== 'post');
-  ls.homeView.classList.toggle('hidden',     which !== 'home');
-  els.trainingView.classList.toggle('hidden', which !== 'training');
-  els.ctfView.classList.toggle('hidden',      which !== 'ctf');
-  els.taskView.classList.toggle('hidden',     which !== 'task');
 }
 
 function showHome() {
@@ -638,7 +635,7 @@ async function router() {
   if (parts.length === 0)                          { showHome(); return; }
   if (parts[0] === 'training')                     { showTrainingView(); return; }
   if (parts[0] === 'ctf-competitions')             { showCtfView(); return; }
-  if (parts[0] === 'task') 
+  if (parts[0] === 'task')                         { showTaskView(); return; } 
   if (parts[0] === 'level' && parts[1]) {
     if (parts[1] === 'texsaw-2026') { renderTexsaw2026(); return; }
     if (parts[1] === 'dawgctf-2026') { renderDawgctf2026(); return; }
@@ -686,12 +683,13 @@ async function init() {
     applySidebar();
 
     document.querySelectorAll('.category-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const cat = btn.dataset.category;
-        if (cat === 'ctf-competitions') navigate('#ctf-competitions');
-        else navigate('#training');
+        btn.addEventListener('click', () => {
+          const cat = btn.dataset.category;
+          if (cat === 'ctf-competitions') navigate('#ctf-competitions');
+          else if (cat === 'task') navigate('#task');
+          else navigate('#training');
+        });
       });
-    });
 
     document.querySelectorAll('#training-view .level-btn').forEach(btn => {
       btn.addEventListener('click', () => {

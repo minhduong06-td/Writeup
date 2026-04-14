@@ -1,3 +1,10 @@
+if (window.mermaid) {
+  window.mermaid.initialize({
+    startOnLoad: false,   
+    theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+  });
+}
+
 (function initTheme() {
   const saved = localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -13,6 +20,12 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
   document.getElementById('theme-toggle').textContent = next === 'dark' ? '☀️' : '🌙';
+  if (window.mermaid) {
+    window.mermaid.initialize({
+      startOnLoad: false,
+      theme: next === 'dark' ? 'dark' : 'default'
+    });
+  }
 });
 
 const els = {
@@ -558,20 +571,36 @@ async function renderPost(level, slug) {
   els.markdown.innerHTML = marked.parse(markdownText);
 
   if (window.hljs) {
-    els.markdown.querySelectorAll('pre code').forEach(block => {
-      const className = block.className || '';
-      if (/\blanguage-(ps1|ps|pwsh)\b/i.test(className)) {
-        block.classList.remove('language-ps1', 'language-ps', 'language-pwsh');
-        block.classList.add('language-powershell');
-      }
-      if (/\blanguage-(sh|shellscript|zsh)\b/i.test(className)) {
-        block.classList.remove('language-sh', 'language-shellscript', 'language-zsh');
-        block.classList.add('language-bash');
-      }
-      if (!/\blanguage-/.test(block.className)) block.classList.add('language-plaintext');
-      window.hljs.highlightElement(block);
-    });
-  }
+  els.markdown.querySelectorAll('pre code').forEach(block => {
+    if (block.classList.contains('language-mermaid')) return;
+
+    const className = block.className || '';
+    if (/\blanguage-(ps1|ps|pwsh)\b/i.test(className)) {
+      block.classList.remove('language-ps1', 'language-ps', 'language-pwsh');
+      block.classList.add('language-powershell');
+    }
+    if (/\blanguage-(sh|shellscript|zsh)\b/i.test(className)) {
+      block.classList.remove('language-sh', 'language-shellscript', 'language-zsh');
+      block.classList.add('language-bash');
+    }
+    if (!/\blanguage-/.test(block.className)) block.classList.add('language-plaintext');
+    window.hljs.highlightElement(block);
+  });
+}
+  
+  if (window.mermaid) {
+  els.markdown.querySelectorAll('pre code.language-mermaid').forEach((block, i) => {
+    const source = block.textContent;
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.id = `mermaid-${Date.now()}-${i}`;
+    container.textContent = source;
+    block.parentElement.replaceWith(container);
+  });
+  await window.mermaid.run({
+    nodes: els.markdown.querySelectorAll('.mermaid')
+  });
+}
 
   const baseDir = postData.path.slice(0, postData.path.lastIndexOf('/') + 1);
 

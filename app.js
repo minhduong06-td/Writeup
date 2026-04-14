@@ -1,7 +1,7 @@
 if (window.mermaid) {
   window.mermaid.initialize({
-    startOnLoad: false,   
-    theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+    startOnLoad: false,
+    theme: 'dark'
   });
 }
 
@@ -23,7 +23,7 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
   if (window.mermaid) {
     window.mermaid.initialize({
       startOnLoad: false,
-      theme: next === 'dark' ? 'dark' : 'default'
+      theme: 'dark'
     });
   }
 });

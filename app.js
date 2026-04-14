@@ -45,6 +45,9 @@ const els = {
   texsaw2026Count:   document.getElementById('texsaw2026-count'),
   dawgctf2026Count: document.getElementById('dawgctf2026-count'),
   umassctf2026Count: document.getElementById('umassctf2026-count'),
+  taskCount:              document.getElementById('task-count'),
+  taskView:               document.getElementById('task-view'),
+  persistenceUbuntuCount: document.getElementById('persistence-ubuntu-count'),
 };
 
 const state = {
@@ -63,6 +66,7 @@ const levelColors = {
   'texsaw-2026':  '#92400e',
   'dawgctf-2026': '#4338ca',
   'umassctf-2026': '#7f1d1d',
+  'persistence-ubuntu': '#0369a1',
 };
 
 function levelColor(level) {
@@ -74,6 +78,7 @@ function formatLevel(level) {
   if (level === 'texsaw-2026') return 'TEXSAW 2026';
   if (level === 'dawgctf-2026') return 'DAWGCTF 2026';
   if (level === 'umassctf-2026') return 'UMASSCTF 2026';
+  if (level === 'persistence-ubuntu') return 'PERSISTENCE UBUNTU';
   if (level === 'medium')      return 'MEDIUM';
   return 'EASY';
 }
@@ -86,6 +91,7 @@ function postIcon(post) {
     'medium':       '📙',
     'easy':         '📘',
     'umassctf-2026': '🎓',
+    'persistence-ubuntu': '🐧',
   };
 
   if (levelIcons[post.level]) return levelIcons[post.level];
@@ -142,6 +148,10 @@ function showView(which) {
   els.ctfView.classList.toggle('hidden',      which !== 'ctf');
   els.listView.classList.toggle('hidden',     which !== 'list');
   els.postView.classList.toggle('hidden',     which !== 'post');
+  ls.homeView.classList.toggle('hidden',     which !== 'home');
+  els.trainingView.classList.toggle('hidden', which !== 'training');
+  els.ctfView.classList.toggle('hidden',      which !== 'ctf');
+  els.taskView.classList.toggle('hidden',     which !== 'task');
 }
 
 function showHome() {
@@ -155,6 +165,8 @@ function showHome() {
 
   if (els.trainingCount) els.trainingCount.textContent = `[ ${trainingPosts.length} FILES ]`;
   if (els.ctfCount)      els.ctfCount.textContent      = `[ ${ctfPosts.length} FILES ]`;
+  const taskPosts = state.posts.filter(p => p.category === 'task');
+  if (els.taskCount) els.taskCount.textContent = `[ ${taskPosts.length} FILES ]`;
 }
 
 function showTrainingView() {
@@ -184,6 +196,58 @@ function showCtfView() {
   if (els.dawgctf2026Count) els.dawgctf2026Count.textContent = `[ ${dawgctf2026} FILES ]`;
   const umassctf2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'umassctf-2026').length;
   if (els.umassctf2026Count) els.umassctf2026Count.textContent = `[ ${umassctf2026} FILES ]`;
+}
+
+function showTaskView() {
+  state.currentCategory = 'task';
+  state.currentLevel    = null;
+  state.currentPost     = null;
+  showView('task');
+
+  const persistenceUbuntu = state.posts.filter(
+    p => p.category === 'task' && p.level === 'persistence-ubuntu'
+  ).length;
+  if (els.persistenceUbuntuCount)
+    els.persistenceUbuntuCount.textContent = `[ ${persistenceUbuntu} FILES ]`;
+}
+
+function renderPersistenceUbuntu() {
+  state.currentCategory = 'task';
+  state.currentLevel    = 'persistence-ubuntu';
+  state.currentPost     = null;
+
+  const items = state.posts.filter(
+    p => p.category === 'task' && p.level === 'persistence-ubuntu'
+  );
+  els.listBreadcrumb.innerHTML = `
+    <span class="bc-root" id="bc-pu-root">[ ROOT ]</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-mid" id="bc-pu-task">TASK</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-current">PERSISTENCE UBUNTU</span>
+  `;
+  document.getElementById('bc-pu-root').addEventListener('click', () => navigate('#'));
+  document.getElementById('bc-pu-task').addEventListener('click', () => navigate('#task'));
+
+  els.listTitle.textContent = `PERSISTENCE UBUNTU — ${items.length} FILES`;
+  els.postGrid.innerHTML = items.map(post => `
+    <article class="post-card post-card-persistence-ubuntu"
+      data-slug="${post.slug}" data-level="${post.level}"
+      style="--card-color: ${levelColor(post.level)}" title="${post.title}">
+      <div class="folder-icon">${postIcon(post)}</div>
+      <div class="folder-name">${post.title}</div>
+      <div class="folder-slug">${post.slug}</div>
+    </article>
+  `).join('');
+
+  els.backHome.textContent = '⬅ TASK';
+  showView('list');
+
+  document.querySelectorAll('.post-card').forEach(card => {
+    card.addEventListener('click', () => {
+      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
+    });
+  });
 }
 
 function renderLevel(level) {
@@ -435,7 +499,20 @@ async function renderPost(level, slug) {
   state.currentLevel    = level;
   state.currentPost     = post;
 
-  if (post.category === 'ctf-competitions') {
+  if (post.category === 'task') {
+    els.postBreadcrumb.innerHTML = `
+      <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
+      <span class="bc-sep">▶</span>
+      <span class="bc-mid" id="bc-post-task">TASK</span>
+      <span class="bc-sep">▶</span>
+      <span class="bc-mid" id="bc-post-level">${formatLevel(level)}</span>
+      <span class="bc-sep">▶</span>
+      <span class="bc-current">${post.title}</span>
+    `;
+    document.getElementById('bc-post-root').addEventListener('click', () => navigate('#'));
+    document.getElementById('bc-post-task').addEventListener('click', () => navigate('#task'));
+    document.getElementById('bc-post-level').addEventListener('click', () => navigate(`#level/${level}`));
+  } else if (post.category === 'ctf-competitions') {
     els.postBreadcrumb.innerHTML = `
       <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
       <span class="bc-sep">▶</span>
@@ -561,10 +638,12 @@ async function router() {
   if (parts.length === 0)                          { showHome(); return; }
   if (parts[0] === 'training')                     { showTrainingView(); return; }
   if (parts[0] === 'ctf-competitions')             { showCtfView(); return; }
+  if (parts[0] === 'task') 
   if (parts[0] === 'level' && parts[1]) {
     if (parts[1] === 'texsaw-2026') { renderTexsaw2026(); return; }
     if (parts[1] === 'dawgctf-2026') { renderDawgctf2026(); return; }
     if (parts[1] === 'umassctf-2026') { renderUmassctf2026(); return; }
+    if (parts[1] === 'persistence-ubuntu') { renderPersistenceUbuntu(); return; }
     renderLevel(parts[1]); return;
   }
   if (parts[0] === 'post' && parts[1] && parts[2]) { await renderPost(parts[1], parts[2]); return; }
@@ -625,6 +704,11 @@ async function init() {
         navigate(`#level/${btn.dataset.level}`);
       });
     });
+    document.querySelectorAll('#task-view .level-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        navigate(`#level/${btn.dataset.level}`);
+      });
+    });
 
     document.getElementById('back-home-from-training').addEventListener('click', () => {
       navigate('#');
@@ -639,9 +723,16 @@ async function init() {
     document.getElementById('back-home-bc-ctf').addEventListener('click', () => {
       navigate('#');
     });
+    document.getElementById('back-home-from-task').addEventListener('click', () => {
+      navigate('#');
+    });
+    document.getElementById('back-home-bc-task').addEventListener('click', () => {
+      navigate('#');
+    });
 
     els.backHome.addEventListener('click', () => {
       if (state.currentCategory === 'ctf-competitions') navigate('#ctf-competitions');
+      else if (state.currentCategory === 'task') navigate('#task');
       else navigate('#training');
     });
 

@@ -1233,4 +1233,133 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   background: #0369a1 !important;
 }
 
+/* ── Mermaid dark-theme wrapper ── */
+/* Bọc mermaid diagram trong khối nền tối bất kể light/dark mode tổng */
+
+.markdown-body .mermaid {
+  background: #1e1e2e;
+  border: 1px solid #313244;
+  border-radius: 12px;
+  padding: 24px 20px;
+  margin: 24px auto;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  overflow-x: auto;
+}
+
+/* Các phần tử SVG bên trong mermaid */
+.markdown-body .mermaid svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* Node/box labels */
+.markdown-body .mermaid .label,
+.markdown-body .mermaid .nodeLabel,
+.markdown-body .mermaid text,
+.markdown-body .mermaid tspan {
+  color: #cdd6f4 !important;
+  fill: #cdd6f4 !important;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+  font-size: 13px !important;
+}
+
+/* Default node box background */
+.markdown-body .mermaid .node rect,
+.markdown-body .mermaid .node circle,
+.markdown-body .mermaid .node ellipse,
+.markdown-body .mermaid .node polygon,
+.markdown-body .mermaid .node path {
+  fill: #313244 !important;
+  stroke: #6c7086 !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Cluster / subgraph background */
+.markdown-body .mermaid .cluster rect {
+  fill: #181825 !important;
+  stroke: #45475a !important;
+  stroke-width: 1.5px !important;
+  stroke-dasharray: 5 3 !important;
+}
+
+.markdown-body .mermaid .cluster text {
+  fill: #a6adc8 !important;
+  font-size: 12px !important;
+}
+
+/* Edges / arrows */
+.markdown-body .mermaid .edgePath .path {
+  stroke: #6c7086 !important;
+  stroke-width: 1.5px !important;
+}
+
+.markdown-body .mermaid .arrowheadPath {
+  fill: #6c7086 !important;
+  stroke: none !important;
+}
+
+/* Edge labels */
+.markdown-body .mermaid .edgeLabel,
+.markdown-body .mermaid .edgeLabel rect {
+  background: #1e1e2e !important;
+  fill: #1e1e2e !important;
+  color: #a6adc8 !important;
+}
+
+.markdown-body .mermaid .edgeLabel span {
+  color: #a6adc8 !important;
+  background: transparent !important;
+  font-size: 12px !important;
+}
+
+/* Active/highlighted node */
+.markdown-body .mermaid .node.active rect,
+.markdown-body .mermaid .node:hover rect {
+  fill: #45475a !important;
+}
+
+/* Section titles in sequence diagrams */
+.markdown-body .mermaid .actor {
+  fill: #313244 !important;
+  stroke: #6c7086 !important;
+}
+
+.markdown-body .mermaid .actor-line {
+  stroke: #45475a !important;
+}
+
+/* Sequence diagram messages */
+.markdown-body .mermaid .messageLine0,
+.markdown-body .mermaid .messageLine1 {
+  stroke: #6c7086 !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Note boxes in sequence diagrams */
+.markdown-body .mermaid .note rect {
+  fill: #2a2a3e !important;
+  stroke: #7f849c !important;
+}
+
+/* Gantt / other */
+.markdown-body .mermaid .mermaid-main-font {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* Scrollbar style for wide diagrams */
+.markdown-body .mermaid::-webkit-scrollbar {
+  height: 8px;
+}
+.markdown-body .mermaid::-webkit-scrollbar-track {
+  background: #181825;
+}
+.markdown-body .mermaid::-webkit-scrollbar-thumb {
+  background: #45475a;
+  border-radius: 4px;
+}
+.markdown-body .mermaid::-webkit-scrollbar-thumb:hover {
+  background: #6c7086;
+}
+
 

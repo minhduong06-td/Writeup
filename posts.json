@@ -425,5 +425,12 @@
     "level": "umassctf-2026",
     "slug": "ninja-nerds",
     "path": "ctf-competitions/umassctf-2026/ninja-nerds/writeup.md"
+  },
+  {
+    "title": "Persistence Ubuntu",
+    "category": "task",
+    "level": "persistence-ubuntu",
+    "slug": "persistence-ubuntu",
+    "path": "task/persistence-ubuntu/writeup.md"
   }
 ]

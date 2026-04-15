@@ -7,6 +7,13 @@
     "path": "trainning/medium/binary-badresources/writeup.md"
   },
   {
+    "title": "Data Siege",
+    "category": "training",
+    "level": "medium",
+    "slug": "data-siege",
+    "path": "trainning/medium/data-siege/writeup.md"
+  },
+  {
     "title": "PersistenceIsFutile",
     "category": "training",
     "level": "medium",

@@ -14,6 +14,20 @@
     "path": "trainning/medium/data-siege/writeup.md"
   },
   {
+    "title": "Deadly Arthropod",
+    "category": "training",
+    "level": "medium",
+    "slug": "deadly-arthropod",
+    "path": "trainning/medium/deadly-arthropod/writeup.md"
+  },
+  {
+    "title": "Interstellar C2",
+    "category": "training",
+    "level": "medium",
+    "slug": "interstellar-c2",
+    "path": "trainning/medium/interstellar-c2/writeup.md"
+  },
+  {
     "title": "PersistenceIsFutile",
     "category": "training",
     "level": "medium",

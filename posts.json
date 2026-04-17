@@ -35,6 +35,13 @@
     "path": "trainning/medium/interstellar-c2/writeup.md"
   },
   {
+    "title": "Keep Tryin'",
+    "category": "training",
+    "level": "medium",
+    "slug": "keep-tryin'",
+    "path": "trainning/medium/keep-tryin'/writeup.md"
+  },
+  {
     "title": "PersistenceIsFutile",
     "category": "training",
     "level": "medium",
@@ -453,6 +460,20 @@
     "level": "umassctf-2026",
     "slug": "ninja-nerds",
     "path": "ctf-competitions/umassctf-2026/ninja-nerds/writeup.md"
+  },
+  {
+    "title": "Larping 101",
+    "category": "ctf-competitions",
+    "level": "cit-2026",
+    "slug": "larping-101",
+    "path": "ctf-competitions/cit-2026/larping-101/writeup.md"
+  },
+  {
+    "title": "The Evil Files",
+    "category": "ctf-competitions",
+    "level": "cit-2026",
+    "slug": "the-evil-files",
+    "path": "ctf-competitions/cit-2026/the-evil-files/writeup.md"
   },
   {
     "title": "Persistence Ubuntu",

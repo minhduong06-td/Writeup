@@ -1096,6 +1096,19 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   background: #7f1d1d !important;
 }
 
+/* ── CIT-2026 ── */
+.cit2026-btn { border-color: #0284c7; }
+.cit2026-btn:hover { background: #f0f9ff; }
+.cit2026-btn .btn-label { color: #0284c7; }
+
+[data-theme="dark"] .cit2026-btn { border-color: #0ea5e9; }
+[data-theme="dark"] .cit2026-btn:hover { background: #0a1f2e !important; }
+[data-theme="dark"] .cit2026-btn .btn-label { color: #38bdf8; }
+
+.post-card-cit::before {
+  background: #0284c7 !important;
+}
+
 /* Training level-switch inside training-view panel */
 .training-level-switch {
   margin-top: 12px;

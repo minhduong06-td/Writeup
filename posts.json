@@ -21,6 +21,13 @@
     "path": "trainning/medium/deadly-arthropod/writeup.md"
   },
   {
+    "title": "Hypercraft",
+    "category": "training",
+    "level": "medium",
+    "slug": "hypercraft",
+    "path": "trainning/medium/hypercraft/writeup.md"
+  },
+  {
     "title": "Interstellar C2",
     "category": "training",
     "level": "medium",

@@ -405,7 +405,7 @@
     "slug": "i-love-bacon!",
     "path": "ctf-competitions/dawgctf-2026/i-love-bacon!/writeup.md"
   },
-   {
+  {
     "title": "Gen-Z Found My Registry",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",
@@ -476,6 +476,13 @@
     "path": "ctf-competitions/cit-2026/the-evil-files/writeup.md"
   },
   {
+    "title": "Persistence Ubuntu",
+    "category": "task",
+    "level": "persistence-ubuntu",
+    "slug": "persistence-ubuntu",
+    "path": "task/persistence-ubuntu/writeup.md"
+  },
+  {
     "title": "awk...wardddd",
     "category": "ctf-competitions",
     "level": "bluehensctf-2026",
@@ -483,10 +490,24 @@
     "path": "ctf-competitions/bluehensctf-2026/awk_wardddd/writeup.md"
   },
   {
-    "title": "Persistence Ubuntu",
-    "category": "task",
-    "level": "persistence-ubuntu",
-    "slug": "persistence-ubuntu",
-    "path": "task/persistence-ubuntu/writeup.md"
+    "title": "Blue Hens Telemetry",
+    "category": "ctf-competitions",
+    "level": "bluehensctf-2026",
+    "slug": "blue-hens-telemetry",
+    "path": "ctf-competitions/bluehensctf-2026/blue-hens-telemetry/writeup.md"
+  },
+  {
+    "title": "Freakquency",
+    "category": "ctf-competitions",
+    "level": "bluehensctf-2026",
+    "slug": "freakquency",
+    "path": "ctf-competitions/bluehensctf-2026/freakquency/writeup.md"
+  },
+  {
+    "title": "Hens Can Type",
+    "category": "ctf-competitions",
+    "level": "bluehensctf-2026",
+    "slug": "hens-can-type",
+    "path": "ctf-competitions/bluehensctf-2026/hens-can-type/writeup.md"
   }
 ]

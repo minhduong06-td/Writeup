@@ -1374,5 +1374,15 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .markdown-body .mermaid::-webkit-scrollbar-thumb:hover {
   background: #6c7086;
 }
+/* ── BLUEHENSCTF 2026 ── */
+.bluehensctf2026-btn { border-color: #00509d; }
+.bluehensctf2026-btn:hover { background: #ebf1f7; }
+.bluehensctf2026-btn .btn-label { color: #00509d; }
 
+[data-theme="dark"] .bluehensctf2026-btn { border-color: #00509d; }
+[data-theme="dark"] .bluehensctf2026-btn:hover { background: #000e1c !important; }
+[data-theme="dark"] .bluehensctf2026-btn .btn-label { color: #6696c4; }
 
+.post-card-bluehensctf2026::before {
+  background: #00509d !important;
+}

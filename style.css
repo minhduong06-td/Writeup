@@ -1119,6 +1119,15 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .ctf-level-switch {
   margin-top: 12px;
   margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 280px));
+  justify-content: center;
+  gap: 24px;
+}
+
+.ctf-level-switch .level-btn {
+  width: 100%;
+  min-width: unset;
 }
 
 /* ── Sidebar wrapper & toggle ── */

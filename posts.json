@@ -509,5 +509,19 @@
     "level": "bluehensctf-2026",
     "slug": "hens-can-type",
     "path": "ctf-competitions/bluehensctf-2026/hens-can-type/writeup.md"
+  },
+  {
+    "title": "Name Calling",
+    "category": "ctf-competitions",
+    "level": "bluehensctf-2026",
+    "slug": "name-calling",
+    "path": "ctf-competitions/bluehensctf-2026/name-calling/writeup.md"
+  },
+  {
+    "title": "🔴👂ing",
+    "category": "ctf-competitions",
+    "level": "bluehensctf-2026",
+    "slug": "🔴👂ing",
+    "path": "ctf-competitions/bluehensctf-2026/🔴👂ing/writeup.md"
   }
 ]

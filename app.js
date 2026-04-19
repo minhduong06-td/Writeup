@@ -62,6 +62,7 @@ const els = {
   taskView:               document.getElementById('task-view'),
   persistenceUbuntuCount: document.getElementById('persistence-ubuntu-count'),
   cit2026Count: document.getElementById('cit2026-count'),
+  bluehensctf2026Count: document.getElementById('bluehensctf2026-count'),
 };
 
 const state = {
@@ -82,6 +83,7 @@ const levelColors = {
   'umassctf-2026': '#7f1d1d',
   'persistence-ubuntu': '#0369a1',
   'cit-2026': '#0284c7',
+  'bluehensctf-2026': '#00509d',
 };
 
 function levelColor(level) {
@@ -96,6 +98,7 @@ function formatLevel(level) {
   if (level === 'cit-2026') return 'CIT 2026';
   if (level === 'persistence-ubuntu') return 'PERSISTENCE UBUNTU';
   if (level === 'medium')      return 'MEDIUM';
+  if (level === 'bluehensctf-2026') return 'BLUEHENSCTF 2026';
   return 'EASY';
 }
 
@@ -109,6 +112,7 @@ function postIcon(post) {
     'umassctf-2026': '🎓',
     'cit-2026': '💻',
     'persistence-ubuntu': '🐧',
+    'bluehensctf-2026': '🐳',
   };
 
   if (levelIcons[post.level]) return levelIcons[post.level];
@@ -212,6 +216,8 @@ function showCtfView() {
   if (els.umassctf2026Count) els.umassctf2026Count.textContent = `[ ${umassctf2026} FILES ]`;
   const cit2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'cit-2026').length;
   if (els.cit2026Count) els.cit2026Count.textContent = `[ ${cit2026} FILES ]`;
+  const bluehensctf2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'bluehensctf-2026').length;
+  if (els.bluehensctf2026Count) els.bluehensctf2026Count.textContent = `[ ${bluehensctf2026} FILES ]`;
 }
 
 function showTaskView() {
@@ -425,6 +431,42 @@ function renderCit2026() {
   els.listTitle.textContent = `CIT 2026 — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-cit" data-slug="${post.slug}" data-level="${post.level}"
+      style="--card-color: ${levelColor(post.level)}" title="${post.title}">
+      <div class="folder-icon">${postIcon(post)}</div>
+      <div class="folder-name">${post.title}</div>
+      <div class="folder-slug">${post.slug}</div>
+    </article>
+  `).join('');
+
+  els.backHome.textContent = '⬅ CTF';
+  showView('list');
+
+  document.querySelectorAll('.post-card').forEach(card => {
+    card.addEventListener('click', () => {
+      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
+    });
+  });
+}
+
+function renderBluehensctf2026() {
+  state.currentCategory = 'ctf-competitions';
+  state.currentLevel    = 'bluehensctf-2026';
+  state.currentPost     = null;
+
+  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'bluehensctf-2026');
+  els.listBreadcrumb.innerHTML = `
+    <span class="bc-root" id="bc-b2-root">[ ROOT ]</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-mid" id="bc-b2-ctf">CTF-COMPETITIONS</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-current">BLUEHENSCTF 2026</span>
+  `;
+  document.getElementById('bc-b2-root').addEventListener('click', () => navigate('#'));
+  document.getElementById('bc-b2-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
+
+  els.listTitle.textContent = `BLUEHENSCTF 2026 — ${items.length} FILES`;
+  els.postGrid.innerHTML = items.map(post => `
+    <article class="post-card post-card-bluehensctf2026" data-slug="${post.slug}" data-level="${post.level}"
       style="--card-color: ${levelColor(post.level)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
@@ -712,6 +754,7 @@ async function router() {
     if (parts[1] === 'dawgctf-2026') { renderDawgctf2026(); return; }
     if (parts[1] === 'umassctf-2026') { renderUmassctf2026(); return; }
     if (parts[1] === 'cit-2026') { renderCit2026(); return; }
+    if (parts[1] === 'bluehensctf-2026') { renderBluehensctf2026(); return; }
     if (parts[1] === 'persistence-ubuntu') { renderPersistenceUbuntu(); return; }
     renderLevel(parts[1]); return;
   }

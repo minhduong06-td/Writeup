@@ -1387,6 +1387,9 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .bluehensctf2026-btn { border-color: #00509d; }
 .bluehensctf2026-btn:hover { background: #ebf1f7; }
 .bluehensctf2026-btn .btn-label { color: #00509d; }
+.bluehensctf2026-btn .btn-icon {
+  filter: hue-rotate(200deg) saturate(2);
+}
 
 [data-theme="dark"] .bluehensctf2026-btn { border-color: #00509d; }
 [data-theme="dark"] .bluehensctf2026-btn:hover { background: #000e1c !important; }
@@ -1394,4 +1397,8 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 
 .post-card-bluehensctf2026::before {
   background: #00509d !important;
+}
+
+.post-card[data-level="bluehensctf-2026"] .folder-icon {
+  filter: hue-rotate(200deg) saturate(2) drop-shadow(1px 1px 0 rgba(0,80,157,0.3));
 }

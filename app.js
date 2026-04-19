@@ -130,8 +130,11 @@ function encodePath(path) {
 }
 
 function navigate(hash) {
-  if (location.hash === hash) router();
-  else location.hash = hash;
+  const encoded = hash.replace(/#/, '#').split('/').map((seg, i) =>
+    i === 0 ? seg : encodeURIComponent(seg)
+  ).join('/');
+  if (location.hash === encoded) router();
+  else location.hash = encoded;
 }
 
 function isExternal(url) {
@@ -743,7 +746,9 @@ function doSearch() {
 
 async function router() {
   const hash  = location.hash || '#';
-  const parts = hash.slice(1).split('/').filter(Boolean);
+  const parts = hash.slice(1).split('/').filter(Boolean).map(p => {
+    try { return decodeURIComponent(p); } catch { return p; }
+  });
 
   if (parts.length === 0)                          { showHome(); return; }
   if (parts[0] === 'training')                     { showTrainingView(); return; }

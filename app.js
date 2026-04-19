@@ -112,7 +112,7 @@ function postIcon(post) {
     'umassctf-2026': '🎓',
     'cit-2026': '💻',
     'persistence-ubuntu': '🐧',
-    'bluehensctf-2026': '🐳',
+    'bluehensctf-2026': '🐔',
   };
 
   if (levelIcons[post.level]) return levelIcons[post.level];

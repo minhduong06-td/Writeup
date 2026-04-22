@@ -93,6 +93,7 @@ const levelColors = {
   'persistence-ubuntu': '#0369a1',
   'cit-2026': '#0284c7',
   'bluehensctf-2026': '#00509d',
+  'sherlock': '#6d28d9',
 };
 
 function levelColor(level) {
@@ -108,6 +109,7 @@ function formatLevel(level) {
   if (level === 'persistence-ubuntu') return 'PERSISTENCE UBUNTU';
   if (level === 'medium')      return 'MEDIUM';
   if (level === 'bluehensctf-2026') return 'BLUEHENSCTF 2026';
+  if (level === 'sherlock') return 'SHERLOCK';
   return 'EASY';
 }
 
@@ -122,6 +124,9 @@ function postIcon(post) {
     'cit-2026': '💻',
     'persistence-ubuntu': '🐧',
     'bluehensctf-2026': '🐔',
+  };
+  const slugIcons = {
+    'easy-money': '💵',
   };
 
   if (levelIcons[post.level]) return levelIcons[post.level];
@@ -248,6 +253,11 @@ function showTaskView() {
   ).length;
   if (els.persistenceUbuntuCount)
     els.persistenceUbuntuCount.textContent = `[ ${persistenceUbuntu} FILES ]`;
+  const sherlock = state.posts.filter(
+    p => p.category === 'task' && p.level === 'sherlock'
+  ).length;
+  if (els.sherlockCount)
+    els.sherlockCount.textContent = `[ ${sherlock} FILES ]`;
 }
 
 
@@ -350,6 +360,46 @@ function renderPersistenceUbuntu() {
   els.listTitle.textContent = `PERSISTENCE UBUNTU — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-persistence-ubuntu ${post.password_required ? 'post-card-locked' : ''}"
+      data-slug="${post.slug}" data-level="${post.level}"
+      style="--card-color: ${levelColor(post.level)}" title="${post.title}">
+      <div class="folder-icon">${postIcon(post)}</div>
+      <div class="folder-name">${post.title}</div>
+      <div class="folder-slug">${post.slug}</div>
+      ${post.password_required ? '<div class="lock-badge">🔒</div>' : ''}
+    </article>
+  `).join('');
+
+  els.backHome.textContent = '⬅ TASK';
+  showView('list');
+
+  document.querySelectorAll('.post-card').forEach(card => {
+    card.addEventListener('click', () => {
+      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
+    });
+  });
+}
+
+function renderSherlock() {
+  state.currentCategory = 'task';
+  state.currentLevel    = 'sherlock';
+  state.currentPost     = null;
+
+  const items = state.posts.filter(
+    p => p.category === 'task' && p.level === 'sherlock'
+  );
+  els.listBreadcrumb.innerHTML = `
+    <span class="bc-root" id="bc-sh-root">[ ROOT ]</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-mid" id="bc-sh-task">TASK</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-current">SHERLOCK</span>
+  `;
+  document.getElementById('bc-sh-root').addEventListener('click', () => navigate('#'));
+  document.getElementById('bc-sh-task').addEventListener('click', () => navigate('#task'));
+
+  els.listTitle.textContent = `SHERLOCK — ${items.length} FILES`;
+  els.postGrid.innerHTML = items.map(post => `
+    <article class="post-card post-card-sherlock ${post.password_required ? 'post-card-locked' : ''}"
       data-slug="${post.slug}" data-level="${post.level}"
       style="--card-color: ${levelColor(post.level)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
@@ -898,6 +948,7 @@ async function router() {
     if (parts[1] === 'cit-2026') { renderCit2026(); return; }
     if (parts[1] === 'bluehensctf-2026') { renderBluehensctf2026(); return; }
     if (parts[1] === 'persistence-ubuntu') { renderPersistenceUbuntu(); return; }
+    if (parts[1] === 'sherlock') { renderSherlock(); return; }
     renderLevel(parts[1]); return;
   }
   if (parts[0] === 'post' && parts[1] && parts[2]) { await renderPost(parts[1], parts[2]); return; }

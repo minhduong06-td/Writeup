@@ -552,6 +552,14 @@
     "password_required": true
   },
   {
+    "title": "Easy Money",
+    "category": "task",
+    "level": "sherlock",
+    "slug": "easy-money",
+    "path": "task/sherlock/easy-money/writeup.md",
+    "password_required": true
+  },
+  {
     "title": "awk...wardddd",
     "category": "ctf-competitions",
     "level": "bluehensctf-2026",

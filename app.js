@@ -899,6 +899,8 @@ async function init() {
   try {
     state.posts = await loadPosts();
 
+    history.replaceState(null, '', window.location.pathname);
+    location.hash = '';
     const sidebarContent = document.getElementById('sidebar-content');
     const sidebarToggle  = document.getElementById('sidebar-toggle');
     const sidebarReopen  = document.getElementById('sidebar-reopen');

@@ -771,6 +771,7 @@ async function renderPost(level, slug) {
   }
   const postData = await res.json();
   renderMarkdown(postData);
+}
 
 function renderMarkdown(postData) {
   const markdownText = postData.content;

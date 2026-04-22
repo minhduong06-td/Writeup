@@ -453,7 +453,7 @@ Từ `ExecutableName` có thể thấy được sau khi lọc chỉ còn lại `
 
 ## 18. Bảng câu hỏi - đáp án
 
-| Task | Câu hỏi | Đáp án |
+| Task | questions | answers |
 |---|---|---|
 | 1 | At what exact time did the user execute the malicious shortcut file? | `2025-01-26 16:17:15` |
 | 2 | The previous malicious file executed an initial payload. What is the full path of this payload? | `C:\Temp\svch0st.exe` |

@@ -408,7 +408,7 @@ function renderSherlock() {
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-sherlock ${post.password_required ? 'post-card-locked' : ''}"
       data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${levelColor(post.level)}" title="${post.title}">
+      style="--card-color: ${levelColor(post.level, post.slug)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>

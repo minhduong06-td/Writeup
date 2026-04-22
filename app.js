@@ -84,19 +84,24 @@ const state = {
 marked.setOptions({ gfm: true, breaks: false, langPrefix: 'language-' });
 
 const levelColors = {
-  'easy':         '#1d4ed8',
-  'very-easy':    '#16a34a',
-  'medium':       '#ca8a04',
-  'texsaw-2026':  '#92400e',
-  'dawgctf-2026': '#4338ca',
-  'umassctf-2026': '#7f1d1d',
+  'easy':               '#1d4ed8',
+  'very-easy':          '#16a34a',
+  'medium':             '#ca8a04',
+  'texsaw-2026':        '#92400e',
+  'dawgctf-2026':       '#4338ca',
+  'umassctf-2026':      '#7f1d1d',
   'persistence-ubuntu': '#0369a1',
-  'cit-2026': '#0284c7',
-  'bluehensctf-2026': '#00509d',
-  'sherlock': '#6d28d9',
+  'cit-2026':           '#0284c7',
+  'bluehensctf-2026':   '#00509d',
+  'sherlock':           '#6d28d9',
 };
 
-function levelColor(level) {
+const slugColors = {
+  'easy-money': '#059669',
+};
+
+function levelColor(level, slug) {
+  if (slug && slugColors[slug]) return slugColors[slug];
   return levelColors[level] || '#2d6a2d';
 }
 
@@ -114,6 +119,11 @@ function formatLevel(level) {
 }
 
 function postIcon(post) {
+  const slugIcons = {
+    'easy-money': '💵',
+  };
+  if (slugIcons[post.slug]) return slugIcons[post.slug];
+
   const levelIcons = {
     'dawgctf-2026': '🐾',
     'texsaw-2026':  '🏆',
@@ -124,11 +134,8 @@ function postIcon(post) {
     'cit-2026': '💻',
     'persistence-ubuntu': '🐧',
     'bluehensctf-2026': '🐔',
+    'sherlock': '🔎',
   };
-  const slugIcons = {
-    'easy-money': '💵',
-  };
-
   if (levelIcons[post.level]) return levelIcons[post.level];
   if (post.category === 'ctf-competitions') return '🏆';
   return '📘';
@@ -361,7 +368,7 @@ function renderPersistenceUbuntu() {
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-persistence-ubuntu ${post.password_required ? 'post-card-locked' : ''}"
       data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${levelColor(post.level)}" title="${post.title}">
+      style="--card-color: ${levelColor(post.level, post.slug)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>

@@ -204,7 +204,7 @@
     "category": "training",
     "level": "easy",
     "slug": "intergalactic-recovery",
-    "path": "trainning/intergalactic-recovery/logger/writeup.md",
+    "path": "trainning/easy/intergalactic-recovery/writeup.md",
     "password_required": false
   },
   {
@@ -328,7 +328,7 @@
     "password_required": false
   },
   {
-    "title": "Hangled Heist",
+    "title": "tangled Heist",
     "category": "training",
     "level": "easy",
     "slug": "tangled-heist",
@@ -451,7 +451,7 @@
     "title": "Lost My Keys",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
-    "slug": "alost-my-keys",
+    "slug": "lost-my-keys",
     "path": "ctf-competitions/texsaw-2026/lost-my-keys/writeup.md",
     "password_required": false
   },

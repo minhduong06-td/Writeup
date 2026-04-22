@@ -4,524 +4,599 @@
     "category": "training",
     "level": "medium",
     "slug": "binary-badresources",
-    "path": "trainning/medium/binary-badresources/writeup.md"
+    "path": "trainning/medium/binary-badresources/writeup.md",
+    "password_required": false
   },
   {
     "title": "Data Siege",
     "category": "training",
     "level": "medium",
     "slug": "data-siege",
-    "path": "trainning/medium/data-siege/writeup.md"
+    "path": "trainning/medium/data-siege/writeup.md",
+    "password_required": false
   },
   {
     "title": "Deadly Arthropod",
     "category": "training",
     "level": "medium",
     "slug": "deadly-arthropod",
-    "path": "trainning/medium/deadly-arthropod/writeup.md"
+    "path": "trainning/medium/deadly-arthropod/writeup.md",
+    "password_required": false
   },
   {
     "title": "Hypercraft",
     "category": "training",
     "level": "medium",
     "slug": "hypercraft",
-    "path": "trainning/medium/hypercraft/writeup.md"
+    "path": "trainning/medium/hypercraft/writeup.md",
+    "password_required": false
   },
   {
     "title": "Interstellar C2",
     "category": "training",
     "level": "medium",
     "slug": "interstellar-c2",
-    "path": "trainning/medium/interstellar-c2/writeup.md"
+    "path": "trainning/medium/interstellar-c2/writeup.md",
+    "password_required": false
   },
   {
     "title": "Keep Tryin'",
     "category": "training",
     "level": "medium",
     "slug": "keep-tryin'",
-    "path": "trainning/medium/keep-tryin'/writeup.md"
+    "path": "trainning/medium/keep-tryin'/writeup.md",
+    "password_required": false
   },
   {
     "title": "PersistenceIsFutile",
     "category": "training",
     "level": "medium",
     "slug": "persistenceisfutile",
-    "path": "trainning/medium/persistenceisfutile/writeup.md"
+    "path": "trainning/medium/persistenceisfutile/writeup.md",
+    "password_required": false
   },
   {
     "title": "Artifact Of Dangerous Sighting",
     "category": "training",
     "level": "easy",
     "slug": "artifact-of-dangerous-sighting",
-    "path": "trainning/easy/artifact-of-dangerous-sighting/writeup.md"
+    "path": "trainning/easy/artifact-of-dangerous-sighting/writeup.md",
+    "password_required": false
   },
   {
     "title": "Automation",
     "category": "training",
     "level": "easy",
     "slug": "automation",
-    "path": "trainning/easy/automation/writeup.md"
+    "path": "trainning/easy/automation/writeup.md",
+    "password_required": false
   },
   {
     "title": "Chase",
     "category": "training",
     "level": "easy",
     "slug": "chase",
-    "path": "trainning/easy/chase/writeup.md"
+    "path": "trainning/easy/chase/writeup.md",
+    "password_required": false
   },
   {
     "title": "Diagnostic",
     "category": "training",
     "level": "easy",
     "slug": "diagnostic",
-    "path": "trainning/easy/diagnostic/writeup.md"
+    "path": "trainning/easy/diagnostic/writeup.md",
+    "password_required": false
   },
   {
     "title": "Downgrade",
     "category": "training",
     "level": "easy",
     "slug": "downgrade",
-    "path": "trainning/easy/downgrade/writeup.md"
+    "path": "trainning/easy/downgrade/writeup.md",
+    "password_required": false
   },
   {
     "title": "Emo",
     "category": "training",
     "level": "easy",
     "slug": "emo",
-    "path": "trainning/easy/emo/writeup.md"
+    "path": "trainning/easy/emo/writeup.md",
+    "password_required": false
   },
   {
     "title": "Endpoint",
     "category": "training",
     "level": "easy",
     "slug": "endpoint",
-    "path": "trainning/easy/endpoint/writeup.md"
+    "path": "trainning/easy/endpoint/writeup.md",
+    "password_required": false
   },
   {
     "title": "Event Horizon",
     "category": "training",
     "level": "easy",
     "slug": "event-horizon",
-    "path": "trainning/easy/event-horizon/writeup.md"
+    "path": "trainning/easy/event-horizon/writeup.md",
+    "password_required": false
   },
   {
     "title": "Export",
     "category": "training",
     "level": "easy",
     "slug": "export",
-    "path": "trainning/easy/export/writeup.md"
+    "path": "trainning/easy/export/writeup.md",
+    "password_required": false
   },
   {
     "title": "Fake Boost",
     "category": "training",
     "level": "easy",
     "slug": "fake-boost",
-    "path": "trainning/easy/fake-boost/writeup.md"
+    "path": "trainning/easy/fake-boost/writeup.md",
+    "password_required": false
   },
   {
     "title": "Fake News",
     "category": "training",
     "level": "easy",
     "slug": "fake-news",
-    "path": "trainning/easy/fake-news/writeup.md"
+    "path": "trainning/easy/fake-news/writeup.md",
+    "password_required": false
   },
   {
     "title": "Fishy HTTP",
     "category": "training",
     "level": "easy",
     "slug": "fishy-http",
-    "path": "trainning/easy/fishy-http/writeup.md"
+    "path": "trainning/easy/fishy-http/writeup.md",
+    "password_required": false
   },
   {
     "title": "Foggy Intrusion",
     "category": "training",
     "level": "easy",
     "slug": "foggy-intrusion",
-    "path": "trainning/easy/foggy-intrusion/writeup.md"
+    "path": "trainning/easy/foggy-intrusion/writeup.md",
+    "password_required": false
   },
   {
     "title": "Free Services",
     "category": "training",
     "level": "easy",
     "slug": "free-services",
-    "path": "trainning/easy/free-services/writeup.md"
+    "path": "trainning/easy/free-services/writeup.md",
+    "password_required": false
   },
   {
     "title": "Getting Closer",
     "category": "training",
     "level": "easy",
     "slug": "getting-closer",
-    "path": "trainning/easy/getting-closer/writeup.md"
+    "path": "trainning/easy/getting-closer/writeup.md",
+    "password_required": false
   },
   {
     "title": "Halloween Invitation",
     "category": "training",
     "level": "easy",
     "slug": "halloween-invitation",
-    "path": "trainning/easy/halloween-invitation/writeup.md"
+    "path": "trainning/easy/halloween-invitation/writeup.md",
+    "password_required": false
   },
   {
     "title": "Illumination",
     "category": "training",
     "level": "easy",
     "slug": "illumination",
-    "path": "trainning/easy/illumination/writeup.md"
+    "path": "trainning/easy/illumination/writeup.md",
+    "password_required": false
   },
   {
     "title": "Insider",
     "category": "training",
     "level": "easy",
     "slug": "insider",
-    "path": "trainning/easy/insider/writeup.md"
+    "path": "trainning/easy/insider/writeup.md",
+    "password_required": false
   },
   {
     "title": "Intergalactic Recovery",
     "category": "training",
     "level": "easy",
     "slug": "intergalactic-recovery",
-    "path": "trainning/intergalactic-recovery/logger/writeup.md"
+    "path": "trainning/intergalactic-recovery/logger/writeup.md",
+    "password_required": false
   },
   {
     "title": "Logger",
     "category": "training",
     "level": "easy",
     "slug": "logger",
-    "path": "trainning/easy/logger/writeup.md"
+    "path": "trainning/easy/logger/writeup.md",
+    "password_required": false
   },
   {
     "title": "Lure",
     "category": "training",
     "level": "easy",
     "slug": "lure",
-    "path": "trainning/easy/lure/writeup.md"
+    "path": "trainning/easy/lure/writeup.md",
+    "password_required": false
   },
   {
     "title": "MarketDump",
     "category": "training",
     "level": "easy",
     "slug": "marketdump",
-    "path": "trainning/easy/marketdump/writeup.md"
+    "path": "trainning/easy/marketdump/writeup.md",
+    "password_required": false
   },
   {
     "title": "Marshal in the Middle",
     "category": "training",
     "level": "easy",
     "slug": "marshal-in-the-middle",
-    "path": "trainning/easy/marshal-in-the-middle/writeup.md"
+    "path": "trainning/easy/marshal-in-the-middle/writeup.md",
+    "password_required": false
   },
   {
     "title": "No Place To Hide",
     "category": "training",
     "level": "easy",
     "slug": "no-place-to-hide",
-    "path": "trainning/easy/no-place-to-hide/writeup.md"
+    "path": "trainning/easy/no-place-to-hide/writeup.md",
+    "password_required": false
   },
   {
     "title": "Packet Cyclone",
     "category": "training",
     "level": "easy",
     "slug": "packet-cyclone",
-    "path": "trainning/easy/packet-cyclone/writeup.md"
+    "path": "trainning/easy/packet-cyclone/writeup.md",
+    "password_required": false
   },
   {
     "title": "Obscure",
     "category": "training",
     "level": "easy",
     "slug": "obscure",
-    "path": "trainning/easy/obscure/writeup.md"
+    "path": "trainning/easy/obscure/writeup.md",
+    "password_required": false
   },
   {
     "title": "perseverance",
     "category": "training",
     "level": "easy",
     "slug": "perseverance",
-    "path": "trainning/easy/perseverance/writeup.md"
+    "path": "trainning/easy/perseverance/writeup.md",
+    "password_required": false
   },
   {
     "title": "Persistence",
     "category": "training",
     "level": "easy",
     "slug": "persistence",
-    "path": "trainning/easy/persistence/writeup.md"
+    "path": "trainning/easy/persistence/writeup.md",
+    "password_required": false
   },
   {
     "title": "POOF",
     "category": "training",
     "level": "easy",
     "slug": "poof",
-    "path": "trainning/easy/poof/writeup.md"
+    "path": "trainning/easy/poof/writeup.md",
+    "password_required": false
   },
   {
     "title": "Pursue the Tracks",
     "category": "training",
     "level": "easy",
     "slug": "pursue-the-tracks",
-    "path": "trainning/easy/pursue-the-tracks/writeup.md"
+    "path": "trainning/easy/pursue-the-tracks/writeup.md",
+    "password_required": false
   },
   {
     "title": "Reminiscent",
     "category": "training",
     "level": "easy",
     "slug": "reminiscent",
-    "path": "trainning/easy/reminiscent/writeup.md"
+    "path": "trainning/easy/reminiscent/writeup.md",
+    "password_required": false
   },
   {
     "title": "Scripts and Formulas",
     "category": "training",
     "level": "easy",
     "slug": "scripts-and-formulas",
-    "path": "trainning/easy/scripts-and-formulas/writeup.md"
+    "path": "trainning/easy/scripts-and-formulas/writeup.md",
+    "password_required": false
   },
   {
     "title": "Silicon Data Sleuthing",
     "category": "training",
     "level": "easy",
     "slug": "silicon-data-sleuthing",
-    "path": "trainning/easy/silicon-data-sleuthing/writeup.md"
+    "path": "trainning/easy/silicon-data-sleuthing/writeup.md",
+    "password_required": false
   },
   {
     "title": "Suspicious-Threat",
     "category": "training",
     "level": "easy",
     "slug": "suspicious-threat",
-    "path": "trainning/easy/suspicious-threat/writeup.md"
+    "path": "trainning/easy/suspicious-threat/writeup.md",
+    "password_required": false
   },
   {
     "title": "Hangled Heist",
     "category": "training",
     "level": "easy",
     "slug": "tangled-heist",
-    "path": "trainning/easy/tangled-heist/writeup.md"
+    "path": "trainning/easy/tangled-heist/writeup.md",
+    "password_required": false
   },
   {
     "title": "TrueSecrets",
     "category": "training",
     "level": "easy",
     "slug": "truesecrets",
-    "path": "trainning/easy/truesecrets/writeup.md"
+    "path": "trainning/easy/truesecrets/writeup.md",
+    "password_required": false
   },
   {
     "title": "Valhalloween",
     "category": "training",
     "level": "easy",
     "slug": "valhalloween",
-    "path": "trainning/easy/valhalloween/writeup.md"
+    "path": "trainning/easy/valhalloween/writeup.md",
+    "password_required": false
   },
   {
     "title": "Wanted Alive",
     "category": "training",
     "level": "easy",
     "slug": "wanted-alive",
-    "path": "trainning/easy/wanted-alive/writeup.md"
+    "path": "trainning/easy/wanted-alive/writeup.md",
+    "password_required": false
   },
   {
     "title": "Alien Cradle",
     "category": "training",
     "level": "very-easy",
     "slug": "alien-cradle",
-    "path": "trainning/very-easy/alien-cradle/writeup.md"
+    "path": "trainning/very-easy/alien-cradle/writeup.md",
+    "password_required": false
   },
   {
     "title": "An Unsual Sighting",
     "category": "training",
     "level": "very-easy",
     "slug": "an-unsual-sighting",
-    "path": "trainning/very-easy/an-unsual-sighting/writeup.md"
+    "path": "trainning/very-easy/an-unsual-sighting/writeup.md",
+    "password_required": false
   },
   {
     "title": "Extraterrestrial Ersistence",
     "category": "training",
     "level": "very-easy",
     "slug": "extraterrestrial-ersistence",
-    "path": "trainning/very-easy/extraterrestrial-ersistence/writeup.md"
+    "path": "trainning/very-easy/extraterrestrial-ersistence/writeup.md",
+    "password_required": false
   },
   {
     "title": "Red Miner",
     "category": "training",
     "level": "very-easy",
     "slug": "red-miner",
-    "path": "trainning/very-easy/red-miner/writeup.md"
+    "path": "trainning/very-easy/red-miner/writeup.md",
+    "password_required": false
   },
   {
     "title": "Sp00ky Theme",
     "category": "training",
     "level": "very-easy",
     "slug": "sp00ky-theme",
-    "path": "trainning/very-easy/sp00ky-theme/writeup.md"
+    "path": "trainning/very-easy/sp00ky-theme/writeup.md",
+    "password_required": false
   },
   {
     "title": "Urgent",
     "category": "training",
     "level": "very-easy",
     "slug": "urgent",
-    "path": "trainning/very-easy/urgent/writeup.md"
+    "path": "trainning/very-easy/urgent/writeup.md",
+    "password_required": false
   },
   {
     "title": "Wrong Spooky Season",
     "category": "training",
     "level": "very-easy",
     "slug": "wrong-spooky-season",
-    "path": "trainning/very-easy/wrong-spooky-season/writeup.md"
+    "path": "trainning/very-easy/wrong-spooky-season/writeup.md",
+    "password_required": false
   },
   {
     "title": "A Different Side Channel",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "a-different-side-channel",
-    "path": "ctf-competitions/texsaw-2026/a-different-side-channel/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/a-different-side-channel/writeup.md",
+    "password_required": false
   },
   {
     "title": "Journaling",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "journaling",
-    "path": "ctf-competitions/texsaw-2026/journaling/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/journaling/writeup.md",
+    "password_required": false
   },
   {
     "title": "Jurrasic Parse",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "jurrasic-parse",
-    "path": "ctf-competitions/texsaw-2026/jurrasic-parse/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/jurrasic-parse/writeup.md",
+    "password_required": false
   },
   {
     "title": "Layers",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "layers",
-    "path": "ctf-competitions/texsaw-2026/layers/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/layers/writeup.md",
+    "password_required": false
   },
   {
     "title": "Lost My Keys",
     "category": "ctf-competitions",
     "level": "texsaw-2026",
     "slug": "alost-my-keys",
-    "path": "ctf-competitions/texsaw-2026/lost-my-keys/writeup.md"
+    "path": "ctf-competitions/texsaw-2026/lost-my-keys/writeup.md",
+    "password_required": false
   },
   {
     "title": "I Love Bacon!",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",
     "slug": "i-love-bacon!",
-    "path": "ctf-competitions/dawgctf-2026/i-love-bacon!/writeup.md"
+    "path": "ctf-competitions/dawgctf-2026/i-love-bacon!/writeup.md",
+    "password_required": false
   },
   {
     "title": "Gen-Z Found My Registry",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",
     "slug": "gen-z-found-my-registry",
-    "path": "ctf-competitions/dawgctf-2026/gen-z-found-my-registry/writeup.md"
+    "path": "ctf-competitions/dawgctf-2026/gen-z-found-my-registry/writeup.md",
+    "password_required": false
   },
   {
     "title": "Stomach Bug",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",
     "slug": "stomach-bug",
-    "path": "ctf-competitions/dawgctf-2026/stomach-bug/writeup.md"
+    "path": "ctf-competitions/dawgctf-2026/stomach-bug/writeup.md",
+    "password_required": false
   },
   {
     "title": "Modem Metamorphosis",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",
     "slug": "modem-metamorphosis",
-    "path": "ctf-competitions/dawgctf-2026/modem-metamorphosis/writeup.md"
+    "path": "ctf-competitions/dawgctf-2026/modem-metamorphosis/writeup.md",
+    "password_required": false
   },
   {
     "title": "TeleLeak",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",
     "slug": "teleleak",
-    "path": "ctf-competitions/dawgctf-2026/teleleak/writeup.md"
+    "path": "ctf-competitions/dawgctf-2026/teleleak/writeup.md",
+    "password_required": false
   },
   {
     "title": "The Step After the PCAP",
     "category": "ctf-competitions",
     "level": "dawgctf-2026",
     "slug": "the-step-after-the-pcap",
-    "path": "ctf-competitions/dawgctf-2026/the-step-after-the-pcap/writeup.md"
+    "path": "ctf-competitions/dawgctf-2026/the-step-after-the-pcap/writeup.md",
+    "password_required": false
   },
   {
     "title": "Click Here For Free Bricks",
     "category": "ctf-competitions",
     "level": "umassctf-2026",
     "slug": "click-here-for-free-bricks",
-    "path": "ctf-competitions/umassctf-2026/click-here-for-free-bricks/writeup.md"
+    "path": "ctf-competitions/umassctf-2026/click-here-for-free-bricks/writeup.md",
+    "password_required": false
   },
   {
     "title": "Lost and Found",
     "category": "ctf-competitions",
     "level": "umassctf-2026",
     "slug": "lost-and-found",
-    "path": "ctf-competitions/umassctf-2026/lost-and-found/writeup.md"
+    "path": "ctf-competitions/umassctf-2026/lost-and-found/writeup.md",
+    "password_required": false
   },
   {
     "title": "Ninja-Nerds",
     "category": "ctf-competitions",
     "level": "umassctf-2026",
     "slug": "ninja-nerds",
-    "path": "ctf-competitions/umassctf-2026/ninja-nerds/writeup.md"
+    "path": "ctf-competitions/umassctf-2026/ninja-nerds/writeup.md",
+    "password_required": false
   },
   {
     "title": "Larping 101",
     "category": "ctf-competitions",
     "level": "cit-2026",
     "slug": "larping-101",
-    "path": "ctf-competitions/cit-2026/larping-101/writeup.md"
+    "path": "ctf-competitions/cit-2026/larping-101/writeup.md",
+    "password_required": false
   },
   {
     "title": "The Evil Files",
     "category": "ctf-competitions",
     "level": "cit-2026",
     "slug": "the-evil-files",
-    "path": "ctf-competitions/cit-2026/the-evil-files/writeup.md"
+    "path": "ctf-competitions/cit-2026/the-evil-files/writeup.md",
+    "password_required": false
   },
   {
     "title": "Persistence Ubuntu",
     "category": "task",
     "level": "persistence-ubuntu",
     "slug": "persistence-ubuntu",
-    "path": "task/persistence-ubuntu/writeup.md"
+    "path": "task/persistence-ubuntu/persistence-ubuntu/writeup.md",
+    "password_required": true
   },
   {
     "title": "awk...wardddd",
     "category": "ctf-competitions",
     "level": "bluehensctf-2026",
     "slug": "awk_wardddd",
-    "path": "ctf-competitions/bluehensctf-2026/awk_wardddd/writeup.md"
+    "path": "ctf-competitions/bluehensctf-2026/awk_wardddd/writeup.md",
+    "password_required": false
   },
   {
     "title": "Blue Hens Telemetry",
     "category": "ctf-competitions",
     "level": "bluehensctf-2026",
     "slug": "blue-hens-telemetry",
-    "path": "ctf-competitions/bluehensctf-2026/blue-hens-telemetry/writeup.md"
+    "path": "ctf-competitions/bluehensctf-2026/blue-hens-telemetry/writeup.md",
+    "password_required": false
   },
   {
     "title": "Freakquency",
     "category": "ctf-competitions",
     "level": "bluehensctf-2026",
     "slug": "freakquency",
-    "path": "ctf-competitions/bluehensctf-2026/freakquency/writeup.md"
+    "path": "ctf-competitions/bluehensctf-2026/freakquency/writeup.md",
+    "password_required": false
   },
   {
     "title": "Hens Can Type",
     "category": "ctf-competitions",
     "level": "bluehensctf-2026",
     "slug": "hens-can-type",
-    "path": "ctf-competitions/bluehensctf-2026/hens-can-type/writeup.md"
+    "path": "ctf-competitions/bluehensctf-2026/hens-can-type/writeup.md",
+    "password_required": false
   },
   {
     "title": "Name Calling",
     "category": "ctf-competitions",
     "level": "bluehensctf-2026",
     "slug": "name-calling",
-    "path": "ctf-competitions/bluehensctf-2026/name-calling/writeup.md"
+    "path": "ctf-competitions/bluehensctf-2026/name-calling/writeup.md",
+    "password_required": false
   },
   {
     "title": "🔴👂ing",
     "category": "ctf-competitions",
     "level": "bluehensctf-2026",
     "slug": "🔴👂ing",
-    "path": "ctf-competitions/bluehensctf-2026/🔴👂ing/writeup.md"
+    "path": "ctf-competitions/bluehensctf-2026/🔴👂ing/writeup.md",
+    "password_required": false
   }
 ]

@@ -244,22 +244,23 @@ function showTaskView() {
     els.persistenceUbuntuCount.textContent = `[ ${persistenceUbuntu} FILES ]`;
 }
 
-// ─────────────────────────────────────────────
-//  PASSWORD MODAL
-// ─────────────────────────────────────────────
 
-/**
- * Show password modal and return a Promise that resolves with the entered
- * password string, or rejects if the user cancels.
- */
-function promptPassword(postTitle) {
+function promptPassword(postTitle, errorMsg = null) {
   return new Promise((resolve, reject) => {
     const modal = els.pwModal;
     const titleEl = document.getElementById('pw-post-title');
     if (titleEl) titleEl.textContent = postTitle;
     els.pwInput.value = '';
-    els.pwError.classList.add('hidden');
-    els.pwError.textContent = '';
+
+    // Hiển thị lỗi nếu được truyền vào (retry case)
+    if (errorMsg) {
+      els.pwError.textContent = errorMsg;
+      els.pwError.classList.remove('hidden');
+    } else {
+      els.pwError.classList.add('hidden');
+      els.pwError.textContent = '';
+    }
+
     modal.classList.remove('hidden');
     els.pwInput.focus();
 
@@ -722,85 +723,62 @@ async function renderPost(level, slug) {
   // ── Password gate (client side) ──
   let password = null;
   if (post.password_required) {
-    // Already unlocked this session?
     if (state.unlockedSlugs.has(slug)) {
       password = sessionStorage.getItem(`pw_${slug}`);
-    } else {
-      // Prompt for password
-      try {
-        password = await promptPassword(post.title);
-      } catch {
-        // User cancelled → go back
-        history.back();
+    }
+  
+    let errorMsg = null;
+    while (true) {
+      if (!password) {
+        try {
+          password = await promptPassword(post.title, errorMsg);
+        } catch {
+          history.back();
+          return;
+        }
+      }
+  
+      const testRes = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, {
+        cache: 'no-store',
+        headers: { 'x-post-password': password }
+      });
+  
+      if (testRes.status === 401) {
+        password = null;
+        errorMsg = '❌ Mật khẩu không đúng. Vui lòng thử lại!';
+        continue;
+      }
+  
+      if (!testRes.ok) {
+        els.markdown.innerHTML = '<p style="color:#b00">ERROR: Cannot read post data.</p>';
         return;
       }
+  
+      // Password đúng → cache và render
+      state.unlockedSlugs.add(slug);
+      sessionStorage.setItem(`pw_${slug}`, password);
+      const postData = await testRes.json();
+      renderMarkdown(postData);
+      return; // Xong, thoát hàm luôn
     }
   }
-
-  // ── Fetch post content ──
-  const headers = {};
-  if (password) headers['x-post-password'] = password;
-
-  const res = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, {
-    cache: 'no-store',
-    headers
-  });
-
-  if (res.status === 401) {
-    // Wrong password — show modal again with error
-    els.pwModal.classList.remove('hidden');
-    els.pwError.textContent = '❌ Mật khẩu không đúng. Vui lòng thử lại!';
-    els.pwError.classList.remove('hidden');
-    els.pwInput.value = '';
-    els.pwInput.focus();
-
-    // Re-attach submit to retry
-    const retrySubmit = async () => {
-      const val = els.pwInput.value.trim();
-      if (!val) return;
-      els.pwModal.classList.add('hidden');
-      els.pwSubmit.removeEventListener('click', retrySubmit);
-      // Re-navigate to trigger full flow again with new password attempt
-      // Store the attempted password temporarily then re-render
-      sessionStorage.setItem(`pw_${slug}`, val);
-      state.unlockedSlugs.add(slug);
-      await renderPost(level, slug);
-    };
-
-    const cancelRetry = () => {
-      els.pwModal.classList.add('hidden');
-      els.pwSubmit.removeEventListener('click', retrySubmit);
-      els.pwCancel.removeEventListener('click', cancelRetry);
-      state.unlockedSlugs.delete(slug);
-      sessionStorage.removeItem(`pw_${slug}`);
-      history.back();
-    };
-
-    els.pwSubmit.addEventListener('click', retrySubmit);
-    els.pwCancel.addEventListener('click', cancelRetry);
-    els.markdown.innerHTML = '';
-    return;
-  }
-
+  
+  // Bài không cần password → chạy xuống đây
+  const res = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, { cache: 'no-store' });
   if (!res.ok) {
     els.markdown.innerHTML = '<p style="color:#b00">ERROR: Cannot read post data.</p>';
     return;
   }
-
-  // ── Password correct → cache it ──
-  if (post.password_required && password) {
-    state.unlockedSlugs.add(slug);
-    sessionStorage.setItem(`pw_${slug}`, password);
-  }
-
   const postData = await res.json();
+  renderMarkdown(postData);
+
+function renderMarkdown(postData) {
   const markdownText = postData.content;
   els.markdown.innerHTML = marked.parse(markdownText);
 
   if (window.hljs) {
     els.markdown.querySelectorAll('pre code').forEach(block => {
       if (block.classList.contains('language-mermaid')) return;
-
       const className = block.className || '';
       if (/\blanguage-(ps1|ps|pwsh)\b/i.test(className)) {
         block.classList.remove('language-ps1', 'language-ps', 'language-pwsh');
@@ -824,20 +802,16 @@ async function renderPost(level, slug) {
       container.textContent = source;
       block.parentElement.replaceWith(container);
     });
-    await window.mermaid.run({
-      nodes: els.markdown.querySelectorAll('.mermaid')
-    });
+    window.mermaid.run({ nodes: els.markdown.querySelectorAll('.mermaid') });
   }
 
   const baseDir = postData.path.slice(0, postData.path.lastIndexOf('/') + 1);
-
   els.markdown.querySelectorAll('img').forEach(img => {
     const src = img.getAttribute('src') || '';
     if (!src || isExternal(src)) return;
     img.src = absolutizeAsset(baseDir, src);
     img.loading = 'lazy';
   });
-
   els.markdown.querySelectorAll('a').forEach(link => {
     const href = link.getAttribute('href') || '';
     if (!href || isExternal(href)) return;

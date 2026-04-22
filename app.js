@@ -138,6 +138,11 @@ function encodePath(path) {
 }
 
 function navigate(hash) {
+  if (hash === '#' || hash === '') {
+    history.replaceState(null, '', location.pathname + location.search);
+    router();  // gọi thẳng, không qua hashchange
+    return;
+  }
   const encoded = hash.replace(/#/, '#').split('/').map((seg, i) =>
     i === 0 ? seg : encodeURIComponent(seg)
   ).join('/');
@@ -1029,6 +1034,7 @@ async function init() {
     });
 
     window.addEventListener('hashchange', router);
+    history.replaceState(null, '', location.pathname + location.search);
     await router();
   } catch (err) {
     console.error(err);

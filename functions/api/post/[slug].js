@@ -1,5 +1,3 @@
-const CORRECT_PASSWORD = "your-secret-password"; // ← đổi password ở đây
-
 export async function onRequestGet(context) {
   const slug = decodeURIComponent(context.params.slug);
   const url = new URL(context.request.url);
@@ -24,8 +22,17 @@ export async function onRequestGet(context) {
 
   // ── Password gate ──
   if (post.password_required) {
+    const correctPassword = await context.env.POST_PASSWORDS.get(slug);
+
+    if (!correctPassword) {
+      return new Response(JSON.stringify({ error: 'no password configured' }), {
+        status: 500,
+        headers: { 'content-type': 'application/json; charset=utf-8' }
+      });
+    }
+
     const provided = context.request.headers.get('x-post-password') || '';
-    if (provided !== CORRECT_PASSWORD) {
+    if (provided !== correctPassword) {
       return new Response(JSON.stringify({ error: 'password_required' }), {
         status: 401,
         headers: { 'content-type': 'application/json; charset=utf-8' }

@@ -1255,6 +1255,17 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   background: #0369a1 !important;
 }
 
+/* ── SHERLOCK ── */
+.sherlock-btn { border-color: #6d28d9; }
+.sherlock-btn:hover { background: #f5f3ff; }
+.sherlock-btn .btn-label { color: #6d28d9; }
+
+[data-theme="dark"] .sherlock-btn { border-color: #7c3aed; }
+[data-theme="dark"] .sherlock-btn:hover { background: #150e2e !important; }
+[data-theme="dark"] .sherlock-btn .btn-label { color: #a78bfa; }
+
+.post-card-sherlock::before { background: #6d28d9 !important; }
+
 /* ── Mermaid dark-theme wrapper ── */
 /* Bọc mermaid diagram trong khối nền tối bất kể light/dark mode tổng */
 

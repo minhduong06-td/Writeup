@@ -16,6 +16,31 @@
 
   <button class="theme-toggle" id="theme-toggle" title="Toggle dark / light mode">🌙</button>
 
+  <!-- ── PASSWORD MODAL ── -->
+  <div id="pw-modal" class="pw-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pw-modal-title">
+    <div class="pw-modal-box">
+      <div class="pw-modal-icon">🔒</div>
+      <h2 class="pw-modal-title" id="pw-modal-title">NỘI DUNG BỊ KHÓA</h2>
+      <p class="pw-modal-subtitle">Bài: <span id="pw-post-title" class="pw-post-name"></span></p>
+      <p class="pw-modal-desc">Vui lòng nhập mật khẩu để tiếp tục</p>
+      <div class="pw-input-row">
+        <input
+          type="password"
+          id="pw-input"
+          class="pw-input"
+          placeholder="Nhập mật khẩu..."
+          autocomplete="current-password"
+          spellcheck="false"
+        >
+      </div>
+      <div id="pw-error" class="pw-error hidden"></div>
+      <div class="pw-btn-row">
+        <button id="pw-cancel" class="pw-btn pw-btn-cancel">✕ HỦY</button>
+        <button id="pw-submit" class="pw-btn pw-btn-submit">🔓 MỞ KHÓA</button>
+      </div>
+    </div>
+  </div>
+
   <main class="shell">
 
     <div id="home-view">

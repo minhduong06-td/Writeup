@@ -252,13 +252,26 @@ function promptPassword(postTitle, errorMsg = null) {
     if (titleEl) titleEl.textContent = postTitle;
     els.pwInput.value = '';
 
-    // Hiển thị lỗi nếu được truyền vào (retry case)
     if (errorMsg) {
       els.pwError.textContent = errorMsg;
       els.pwError.classList.remove('hidden');
+    
+      const icon = document.querySelector('.pw-modal-icon');
+      if (icon) {
+        icon.classList.remove('shake');
+        icon.offsetHeight; 
+        icon.classList.add('shake');
+      }
     } else {
       els.pwError.classList.add('hidden');
       els.pwError.textContent = '';
+    
+      const icon = document.querySelector('.pw-modal-icon');
+      if (icon) {
+        icon.classList.remove('shake');
+        icon.offsetHeight;
+        icon.classList.add('shake');
+      }
     }
 
     modal.classList.remove('hidden');

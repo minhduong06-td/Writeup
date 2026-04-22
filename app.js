@@ -159,7 +159,7 @@ function absolutizeAsset(baseDir, relativePath) {
 }
 
 async function loadPosts() {
-  const res = await fetch('posts.json', { cache: 'no-store' });
+  const res = await fetch('/posts.json', { cache: 'no-store' });
   if (!res.ok) throw new Error('Cannot load posts.json');
   const posts = await res.json();
   return posts.map(post => ({

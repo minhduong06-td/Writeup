@@ -54,22 +54,30 @@ const els = {
   ctfCount:          document.getElementById('ctf-count'),
   easyCount:         document.getElementById('easy-count'),
   veryEasyCount:     document.getElementById('veryeasy-count'),
-  mediumCount:   document.getElementById('medium-count'),
+  mediumCount:       document.getElementById('medium-count'),
   texsaw2026Count:   document.getElementById('texsaw2026-count'),
-  dawgctf2026Count: document.getElementById('dawgctf2026-count'),
+  dawgctf2026Count:  document.getElementById('dawgctf2026-count'),
   umassctf2026Count: document.getElementById('umassctf2026-count'),
   taskCount:              document.getElementById('task-count'),
   taskView:               document.getElementById('task-view'),
   persistenceUbuntuCount: document.getElementById('persistence-ubuntu-count'),
-  cit2026Count: document.getElementById('cit2026-count'),
+  cit2026Count:      document.getElementById('cit2026-count'),
   bluehensctf2026Count: document.getElementById('bluehensctf2026-count'),
+  // Password modal
+  pwModal:           document.getElementById('pw-modal'),
+  pwInput:           document.getElementById('pw-input'),
+  pwSubmit:          document.getElementById('pw-submit'),
+  pwCancel:          document.getElementById('pw-cancel'),
+  pwError:           document.getElementById('pw-error'),
 };
 
 const state = {
   posts: [],
   currentCategory: null,
   currentLevel: null,
-  currentPost: null
+  currentPost: null,
+  // password cache: slug → password string (only after successful auth)
+  unlockedSlugs: new Set(),
 };
 
 marked.setOptions({ gfm: true, breaks: false, langPrefix: 'language-' });
@@ -116,8 +124,8 @@ function postIcon(post) {
   };
 
   if (levelIcons[post.level]) return levelIcons[post.level];
-  if (post.category === 'ctf-competitions') return '🏆'; 
-  return '📘'; 
+  if (post.category === 'ctf-competitions') return '🏆';
+  return '📘';
 }
 
 function slugFromPath(path) {
@@ -198,7 +206,7 @@ function showTrainingView() {
 
   const easy     = state.posts.filter(p => p.category === 'training' && p.level === 'easy').length;
   const veryEasy = state.posts.filter(p => p.category === 'training' && p.level === 'very-easy').length;
-  const medium   = state.posts.filter(p => p.category==='training' && p.level==='medium').length;
+  const medium   = state.posts.filter(p => p.category === 'training' && p.level === 'medium').length;
 
   if (els.easyCount)     els.easyCount.textContent     = `[ ${easy} FILES ]`;
   if (els.veryEasyCount) els.veryEasyCount.textContent = `[ ${veryEasy} FILES ]`;
@@ -236,6 +244,68 @@ function showTaskView() {
     els.persistenceUbuntuCount.textContent = `[ ${persistenceUbuntu} FILES ]`;
 }
 
+// ─────────────────────────────────────────────
+//  PASSWORD MODAL
+// ─────────────────────────────────────────────
+
+/**
+ * Show password modal and return a Promise that resolves with the entered
+ * password string, or rejects if the user cancels.
+ */
+function promptPassword(postTitle) {
+  return new Promise((resolve, reject) => {
+    const modal = els.pwModal;
+    const titleEl = document.getElementById('pw-post-title');
+    if (titleEl) titleEl.textContent = postTitle;
+    els.pwInput.value = '';
+    els.pwError.classList.add('hidden');
+    els.pwError.textContent = '';
+    modal.classList.remove('hidden');
+    els.pwInput.focus();
+
+    function cleanup() {
+      modal.classList.add('hidden');
+      els.pwSubmit.removeEventListener('click', onSubmit);
+      els.pwCancel.removeEventListener('click', onCancel);
+      els.pwInput.removeEventListener('keydown', onKeydown);
+    }
+
+    function onSubmit() {
+      const val = els.pwInput.value.trim();
+      if (!val) {
+        els.pwError.textContent = '⚠ Vui lòng nhập mật khẩu!';
+        els.pwError.classList.remove('hidden');
+        return;
+      }
+      cleanup();
+      resolve(val);
+    }
+
+    function onCancel() {
+      cleanup();
+      reject(new Error('cancelled'));
+    }
+
+    function onKeydown(e) {
+      if (e.key === 'Enter') onSubmit();
+      if (e.key === 'Escape') onCancel();
+    }
+
+    els.pwSubmit.addEventListener('click', onSubmit);
+    els.pwCancel.addEventListener('click', onCancel);
+    els.pwInput.addEventListener('keydown', onKeydown);
+  });
+}
+
+function showPasswordError(msg) {
+  els.pwError.textContent = msg;
+  els.pwError.classList.remove('hidden');
+  els.pwInput.value = '';
+  els.pwInput.focus();
+}
+
+// ─────────────────────────────────────────────
+
 function renderPersistenceUbuntu() {
   state.currentCategory = 'task';
   state.currentLevel    = 'persistence-ubuntu';
@@ -256,12 +326,13 @@ function renderPersistenceUbuntu() {
 
   els.listTitle.textContent = `PERSISTENCE UBUNTU — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-persistence-ubuntu"
+    <article class="post-card post-card-persistence-ubuntu ${post.password_required ? 'post-card-locked' : ''}"
       data-slug="${post.slug}" data-level="${post.level}"
       style="--card-color: ${levelColor(post.level)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
+      ${post.password_required ? '<div class="lock-badge">🔒</div>' : ''}
     </article>
   `).join('');
 
@@ -596,6 +667,7 @@ async function renderPost(level, slug) {
   state.currentLevel    = level;
   state.currentPost     = post;
 
+  // ── Build breadcrumb ──
   if (post.category === 'task') {
     els.postBreadcrumb.innerHTML = `
       <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
@@ -647,10 +719,78 @@ async function renderPost(level, slug) {
   renderPagination(level, slug);
   showView('post');
 
-  const res = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, { cache: 'no-store' });
+  // ── Password gate (client side) ──
+  let password = null;
+  if (post.password_required) {
+    // Already unlocked this session?
+    if (state.unlockedSlugs.has(slug)) {
+      password = sessionStorage.getItem(`pw_${slug}`);
+    } else {
+      // Prompt for password
+      try {
+        password = await promptPassword(post.title);
+      } catch {
+        // User cancelled → go back
+        history.back();
+        return;
+      }
+    }
+  }
+
+  // ── Fetch post content ──
+  const headers = {};
+  if (password) headers['x-post-password'] = password;
+
+  const res = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, {
+    cache: 'no-store',
+    headers
+  });
+
+  if (res.status === 401) {
+    // Wrong password — show modal again with error
+    els.pwModal.classList.remove('hidden');
+    els.pwError.textContent = '❌ Mật khẩu không đúng. Vui lòng thử lại!';
+    els.pwError.classList.remove('hidden');
+    els.pwInput.value = '';
+    els.pwInput.focus();
+
+    // Re-attach submit to retry
+    const retrySubmit = async () => {
+      const val = els.pwInput.value.trim();
+      if (!val) return;
+      els.pwModal.classList.add('hidden');
+      els.pwSubmit.removeEventListener('click', retrySubmit);
+      // Re-navigate to trigger full flow again with new password attempt
+      // Store the attempted password temporarily then re-render
+      sessionStorage.setItem(`pw_${slug}`, val);
+      state.unlockedSlugs.add(slug);
+      await renderPost(level, slug);
+    };
+
+    const cancelRetry = () => {
+      els.pwModal.classList.add('hidden');
+      els.pwSubmit.removeEventListener('click', retrySubmit);
+      els.pwCancel.removeEventListener('click', cancelRetry);
+      state.unlockedSlugs.delete(slug);
+      sessionStorage.removeItem(`pw_${slug}`);
+      history.back();
+    };
+
+    els.pwSubmit.addEventListener('click', retrySubmit);
+    els.pwCancel.addEventListener('click', cancelRetry);
+    els.markdown.innerHTML = '';
+    return;
+  }
+
   if (!res.ok) {
     els.markdown.innerHTML = '<p style="color:#b00">ERROR: Cannot read post data.</p>';
     return;
+  }
+
+  // ── Password correct → cache it ──
+  if (post.password_required && password) {
+    state.unlockedSlugs.add(slug);
+    sessionStorage.setItem(`pw_${slug}`, password);
   }
 
   const postData = await res.json();
@@ -658,36 +798,36 @@ async function renderPost(level, slug) {
   els.markdown.innerHTML = marked.parse(markdownText);
 
   if (window.hljs) {
-  els.markdown.querySelectorAll('pre code').forEach(block => {
-    if (block.classList.contains('language-mermaid')) return;
+    els.markdown.querySelectorAll('pre code').forEach(block => {
+      if (block.classList.contains('language-mermaid')) return;
 
-    const className = block.className || '';
-    if (/\blanguage-(ps1|ps|pwsh)\b/i.test(className)) {
-      block.classList.remove('language-ps1', 'language-ps', 'language-pwsh');
-      block.classList.add('language-powershell');
-    }
-    if (/\blanguage-(sh|shellscript|zsh)\b/i.test(className)) {
-      block.classList.remove('language-sh', 'language-shellscript', 'language-zsh');
-      block.classList.add('language-bash');
-    }
-    if (!/\blanguage-/.test(block.className)) block.classList.add('language-plaintext');
-    window.hljs.highlightElement(block);
-  });
-}
-  
+      const className = block.className || '';
+      if (/\blanguage-(ps1|ps|pwsh)\b/i.test(className)) {
+        block.classList.remove('language-ps1', 'language-ps', 'language-pwsh');
+        block.classList.add('language-powershell');
+      }
+      if (/\blanguage-(sh|shellscript|zsh)\b/i.test(className)) {
+        block.classList.remove('language-sh', 'language-shellscript', 'language-zsh');
+        block.classList.add('language-bash');
+      }
+      if (!/\blanguage-/.test(block.className)) block.classList.add('language-plaintext');
+      window.hljs.highlightElement(block);
+    });
+  }
+
   if (window.mermaid) {
-  els.markdown.querySelectorAll('pre code.language-mermaid').forEach((block, i) => {
-    const source = block.textContent;
-    const container = document.createElement('div');
-    container.className = 'mermaid';
-    container.id = `mermaid-${Date.now()}-${i}`;
-    container.textContent = source;
-    block.parentElement.replaceWith(container);
-  });
-  await window.mermaid.run({
-    nodes: els.markdown.querySelectorAll('.mermaid')
-  });
-}
+    els.markdown.querySelectorAll('pre code.language-mermaid').forEach((block, i) => {
+      const source = block.textContent;
+      const container = document.createElement('div');
+      container.className = 'mermaid';
+      container.id = `mermaid-${Date.now()}-${i}`;
+      container.textContent = source;
+      block.parentElement.replaceWith(container);
+    });
+    await window.mermaid.run({
+      nodes: els.markdown.querySelectorAll('.mermaid')
+    });
+  }
 
   const baseDir = postData.path.slice(0, postData.path.lastIndexOf('/') + 1);
 
@@ -753,7 +893,7 @@ async function router() {
   if (parts.length === 0)                          { showHome(); return; }
   if (parts[0] === 'training')                     { showTrainingView(); return; }
   if (parts[0] === 'ctf-competitions')             { showCtfView(); return; }
-  if (parts[0] === 'task')                         { showTaskView(); return; } 
+  if (parts[0] === 'task')                         { showTaskView(); return; }
   if (parts[0] === 'level' && parts[1]) {
     if (parts[1] === 'texsaw-2026') { renderTexsaw2026(); return; }
     if (parts[1] === 'dawgctf-2026') { renderDawgctf2026(); return; }
@@ -803,13 +943,13 @@ async function init() {
     applySidebar();
 
     document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const cat = btn.dataset.category;
-          if (cat === 'ctf-competitions') navigate('#ctf-competitions');
-          else if (cat === 'task') navigate('#task');
-          else navigate('#training');
-        });
+      btn.addEventListener('click', () => {
+        const cat = btn.dataset.category;
+        if (cat === 'ctf-competitions') navigate('#ctf-competitions');
+        else if (cat === 'task') navigate('#task');
+        else navigate('#training');
       });
+    });
 
     document.querySelectorAll('#training-view .level-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -888,6 +1028,13 @@ async function init() {
       }
       if (!els.postSearchResults.contains(e.target) && e.target !== els.postSearchInput && e.target !== els.postSearchBtn) {
         els.postSearchResults.classList.add('hidden');
+      }
+    });
+
+    // Close modal on backdrop click
+    els.pwModal.addEventListener('click', e => {
+      if (e.target === els.pwModal) {
+        els.pwCancel.click();
       }
     });
 

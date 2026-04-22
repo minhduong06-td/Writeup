@@ -63,6 +63,7 @@ const els = {
   persistenceUbuntuCount: document.getElementById('persistence-ubuntu-count'),
   cit2026Count:      document.getElementById('cit2026-count'),
   bluehensctf2026Count: document.getElementById('bluehensctf2026-count'),
+  sherlockCount: document.getElementById('sherlock-count'),
   // Password modal
   pwModal:           document.getElementById('pw-modal'),
   pwInput:           document.getElementById('pw-input'),

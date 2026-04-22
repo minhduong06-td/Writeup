@@ -254,29 +254,23 @@ function promptPassword(postTitle, errorMsg = null) {
   return new Promise((resolve, reject) => {
     const modal = els.pwModal;
     const titleEl = document.getElementById('pw-post-title');
+
     if (titleEl) titleEl.textContent = postTitle;
     els.pwInput.value = '';
 
     if (errorMsg) {
       els.pwError.textContent = errorMsg;
       els.pwError.classList.remove('hidden');
-    
-      const icon = document.querySelector('.pw-modal-icon');
-      if (icon) {
-        icon.classList.remove('shake');
-        icon.offsetHeight; 
-        icon.classList.add('shake');
-      }
-    } else {
-      els.pwError.classList.add('hidden');
-      els.pwError.textContent = '';
-    
+
       const icon = document.querySelector('.pw-modal-icon');
       if (icon) {
         icon.classList.remove('shake');
         icon.offsetHeight;
         icon.classList.add('shake');
       }
+    } else {
+      els.pwError.classList.add('hidden');
+      els.pwError.textContent = '';
     }
 
     modal.classList.remove('hidden');
@@ -287,13 +281,15 @@ function promptPassword(postTitle, errorMsg = null) {
       els.pwSubmit.removeEventListener('click', onSubmit);
       els.pwCancel.removeEventListener('click', onCancel);
       els.pwInput.removeEventListener('keydown', onKeydown);
+      modal.removeEventListener('click', onBackdropClick);
     }
 
     function onSubmit() {
       const val = els.pwInput.value.trim();
       if (!val) {
-        els.pwError.textContent = '⚠ Vui lòng nhập mật khẩu!';
+        els.pwError.textContent = '⚠ Please enter the password!';
         els.pwError.classList.remove('hidden');
+        els.pwInput.focus();
         return;
       }
       cleanup();
@@ -310,9 +306,16 @@ function promptPassword(postTitle, errorMsg = null) {
       if (e.key === 'Escape') onCancel();
     }
 
+    function onBackdropClick(e) {
+      if (e.target === modal) {
+        onCancel();
+      }
+    }
+
     els.pwSubmit.addEventListener('click', onSubmit);
     els.pwCancel.addEventListener('click', onCancel);
     els.pwInput.addEventListener('keydown', onKeydown);
+    modal.addEventListener('click', onBackdropClick);
   });
 }
 

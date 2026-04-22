@@ -746,7 +746,7 @@ async function renderPost(level, slug) {
         try {
           password = await promptPassword(post.title, errorMsg);
         } catch {
-          history.back();
+          navigate('#');
           return;
         }
       }

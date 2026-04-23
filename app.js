@@ -795,12 +795,12 @@ async function renderPost(level, slug) {
   renderPagination(level, slug);
   showView('post');
 
-  let password = null;
+ let password = null;
   if (post.password_required) {
     if (state.unlockedSlugs.has(slug)) {
       password = sessionStorage.getItem(`pw_${slug}`);
     }
-  
+
     let errorMsg = null;
     while (true) {
       if (!password) {
@@ -811,79 +811,97 @@ async function renderPost(level, slug) {
           return;
         }
       }
-  
+
       const testRes = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, {
         cache: 'no-store',
         headers: { 'x-post-password': password }
       });
-  
+
       if (testRes.status === 401) {
         password = null;
-        errorMsg = '❌ Mật khẩu không đúng. Vui lòng thử lại!';
+        errorMsg = 'Wrong';
         continue;
       }
-  
+
+      let testData;
+      try {
+        testData = await testRes.json();
+      } catch {
+        els.markdown.innerHTML = `
+          <div style="text-align:center;padding:56px 24px;font-family:var(--mono-font)">
+            <div style="font-size:72px;margin-bottom:20px">⚠️</div>
+            <div style="font-size:20px;color:#dc2626">[ ERROR ${testRes.status} ]</div>
+            <div style="font-size:15px;color:var(--muted);margin-top:8px">Invalid response from server.</div>
+          </div>`;
+        return;
+      }
+
+      if (testRes.status === 404 && testData.error === 'markdown file not found') {
+        els.markdown.innerHTML = `
+          <div style="text-align:center;padding:56px 24px;font-family:var(--mono-font)">
+            <div style="font-size:72px;margin-bottom:20px">📭</div>
+            <div style="font-size:24px;color:var(--muted);margin-bottom:10px">[ NO CONTENT YET ]</div>
+            <div style="font-size:17px;color:var(--border-lite)">
+              Writeup for <strong style="color:var(--accent)">${post.title}</strong> hasn't been uploaded yet.
+            </div>
+          </div>`;
+        return;
+      }
+
       if (!testRes.ok) {
-        els.markdown.innerHTML = '<p style="color:#b00">ERROR: Cannot read post data.</p>';
+        els.markdown.innerHTML = `
+          <div style="text-align:center;padding:56px 24px;font-family:var(--mono-font)">
+            <div style="font-size:72px;margin-bottom:20px">⚠️</div>
+            <div style="font-size:20px;color:#dc2626">[ ERROR ${testRes.status} ]</div>
+            <div style="font-size:15px;color:var(--muted);margin-top:8px">${testData.error || 'Unknown error'}</div>
+          </div>`;
         return;
       }
 
       state.unlockedSlugs.add(slug);
       sessionStorage.setItem(`pw_${slug}`, password);
-      const ctType = testRes.headers.get('content-type') || '';
-      if (!ctType.includes('application/json')) {
-        els.markdown.innerHTML = `...[ NO CONTENT YET ]...`;
-        return;
-      }
-      const postData = await testRes.json();
-      renderMarkdown(postData);
-      return; 
+      renderMarkdown(testData);
+      return;
     }
   }
   
-  const res = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, { cache: 'no-store' });
+   const res = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, { cache: 'no-store' });
+   let resData;
+   try {
+     resData = await res.json();
+   } catch {
+     els.markdown.innerHTML = `
+       <div style="text-align:center;padding:56px 24px;font-family:var(--mono-font)">
+         <div style="font-size:72px;margin-bottom:20px">⚠️</div>
+         <div style="font-size:20px;color:#dc2626">[ ERROR ${res.status} ]</div>
+         <div style="font-size:15px;color:var(--muted);margin-top:8px">Invalid response from server.</div>
+       </div>`;
+     return;
+   }
 
-  if (res.status === 404) {
-    els.markdown.innerHTML = `
-      <div style="text-align:center;padding:48px 24px;font-family:var(--mono-font)">
-        <div style="font-size:64px;margin-bottom:16px">📭</div>
-        <div style="font-size:22px;color:var(--muted);margin-bottom:8px">
-          [ NO CONTENT YET ]
-        </div>
-        <div style="font-size:16px;color:var(--border-lite)">
-          Writeup for <strong style="color:var(--accent)">${post.title}</strong> hasn't been uploaded.
-        </div>
-      </div>`;
-    return;
-  }
+   if (res.status === 404 && resData.error === 'markdown file not found') {
+     els.markdown.innerHTML = `
+       <div style="text-align:center;padding:56px 24px;font-family:var(--mono-font)">
+         <div style="font-size:72px;margin-bottom:20px">📭</div>
+         <div style="font-size:24px;color:var(--muted);margin-bottom:10px">[ NO CONTENT YET ]</div>
+         <div style="font-size:17px;color:var(--border-lite)">
+           Writeup for <strong style="color:var(--accent)">${post.title}</strong> hasn't been uploaded yet.
+         </div>
+       </div>`;
+     return;
+   }
 
-  if (!res.ok) {
-    els.markdown.innerHTML = `
-      <div style="text-align:center;padding:48px 24px;font-family:var(--mono-font)">
-        <div style="font-size:64px;margin-bottom:16px">⚠️</div>
-        <div style="font-size:20px;color:#dc2626">[ ERROR ${res.status} ]</div>
-        <div style="font-size:15px;color:var(--muted);margin-top:8px">Cannot load post data.</div>
-      </div>`;
-    return;
-  }
+   if (!res.ok) {
+     els.markdown.innerHTML = `
+       <div style="text-align:center;padding:56px 24px;font-family:var(--mono-font)">
+         <div style="font-size:72px;margin-bottom:20px">⚠️</div>
+         <div style="font-size:20px;color:#dc2626">[ ERROR ${res.status} ]</div>
+         <div style="font-size:15px;color:var(--muted);margin-top:8px">${resData.error || 'Unknown error'}</div>
+       </div>`;
+     return;
+   }
 
-  const contentType = res.headers.get('content-type') || '';
-  if (!contentType.includes('application/json')) {
-    els.markdown.innerHTML = `
-      <div style="text-align:center;padding:48px 24px;font-family:var(--mono-font)">
-        <div style="font-size:64px;margin-bottom:16px">📭</div>
-        <div style="font-size:22px;color:var(--muted);margin-bottom:8px">
-          [ NO CONTENT YET ]
-        </div>
-        <div style="font-size:16px;color:var(--border-lite)">
-          Writeup for <strong style="color:var(--accent)">${post.title}</strong> hasn't been uploaded.
-        </div>
-      </div>`;
-    return;
-  }
-
-  const postData = await res.json();
-  renderMarkdown(postData);
+   renderMarkdown(resData);
 }
 
 function renderMarkdown(postData) {

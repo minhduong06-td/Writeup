@@ -606,5 +606,45 @@
     "slug": "🔴👂ing",
     "path": "ctf-competitions/bluehensctf-2026/🔴👂ing/writeup.md",
     "password_required": false
+  },
+  {
+    "title": "Basics",
+    "category": "ctf-competitions",
+    "level": "bluehensctf-2026",
+    "slug": "basics",
+    "path": "ctf-competitions/bluehensctf-2026/basics/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "4 Challenge",
+    "category": "ctf-competitions",
+    "level": "cit-2026",
+    "slug": "4-challenge",
+    "path": "ctf-competitions/cit-2026/4-challenge/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Transmission From 1993",
+    "category": "ctf-competitions",
+    "level": "cit-2026",
+    "slug": "transmission-from-1993",
+    "path": "ctf-competitions/cit-2026/transmission-from-1993/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Wiretap",
+    "category": "ctf-competitions",
+    "level": "cit-2026",
+    "slug": "wiretap",
+    "path": "ctf-competitions/cit-2026/wiretap/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "You Gotta Run Run Run Run Run",
+    "category": "ctf-competitions",
+    "level": "cit-2026",
+    "slug": "you-gotta-run-run-run-run-run",
+    "path": "ctf-competitions/cit-2026/you-gotta-run-run-run-run-run/writeup.md",
+    "password_required": false
   }
 ]

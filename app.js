@@ -827,22 +827,61 @@ async function renderPost(level, slug) {
         els.markdown.innerHTML = '<p style="color:#b00">ERROR: Cannot read post data.</p>';
         return;
       }
-  
-      // Password đúng → cache và render
+
       state.unlockedSlugs.add(slug);
       sessionStorage.setItem(`pw_${slug}`, password);
+      const ctType = testRes.headers.get('content-type') || '';
+      if (!ctType.includes('application/json')) {
+        els.markdown.innerHTML = `...[ NO CONTENT YET ]...`;
+        return;
+      }
       const postData = await testRes.json();
       renderMarkdown(postData);
-      return; // Xong, thoát hàm luôn
+      return; 
     }
   }
   
-  // Bài không cần password → chạy xuống đây
   const res = await fetch(`/api/post/${encodeURIComponent(post.slug)}`, { cache: 'no-store' });
-  if (!res.ok) {
-    els.markdown.innerHTML = '<p style="color:#b00">ERROR: Cannot read post data.</p>';
+
+  if (res.status === 404) {
+    els.markdown.innerHTML = `
+      <div style="text-align:center;padding:48px 24px;font-family:var(--mono-font)">
+        <div style="font-size:64px;margin-bottom:16px">📭</div>
+        <div style="font-size:22px;color:var(--muted);margin-bottom:8px">
+          [ NO CONTENT YET ]
+        </div>
+        <div style="font-size:16px;color:var(--border-lite)">
+          Writeup for <strong style="color:var(--accent)">${post.title}</strong> hasn't been uploaded.
+        </div>
+      </div>`;
     return;
   }
+
+  if (!res.ok) {
+    els.markdown.innerHTML = `
+      <div style="text-align:center;padding:48px 24px;font-family:var(--mono-font)">
+        <div style="font-size:64px;margin-bottom:16px">⚠️</div>
+        <div style="font-size:20px;color:#dc2626">[ ERROR ${res.status} ]</div>
+        <div style="font-size:15px;color:var(--muted);margin-top:8px">Cannot load post data.</div>
+      </div>`;
+    return;
+  }
+
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    els.markdown.innerHTML = `
+      <div style="text-align:center;padding:48px 24px;font-family:var(--mono-font)">
+        <div style="font-size:64px;margin-bottom:16px">📭</div>
+        <div style="font-size:22px;color:var(--muted);margin-bottom:8px">
+          [ NO CONTENT YET ]
+        </div>
+        <div style="font-size:16px;color:var(--border-lite)">
+          Writeup for <strong style="color:var(--accent)">${post.title}</strong> hasn't been uploaded.
+        </div>
+      </div>`;
+    return;
+  }
+
   const postData = await res.json();
   renderMarkdown(postData);
 }

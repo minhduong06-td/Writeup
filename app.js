@@ -77,7 +77,6 @@ const state = {
   currentCategory: null,
   currentLevel: null,
   currentPost: null,
-  // password cache: slug → password string (only after successful auth)
   unlockedSlugs: new Set(),
 };
 
@@ -153,7 +152,7 @@ function encodePath(path) {
 function navigate(hash) {
   if (hash === '#' || hash === '') {
     history.replaceState(null, '', location.pathname + location.search);
-    router();  // gọi thẳng, không qua hashchange
+    router(); 
     return;
   }
   const encoded = hash.replace(/#/, '#').split('/').map((seg, i) =>
@@ -343,8 +342,6 @@ function showPasswordError(msg) {
   els.pwInput.value = '';
   els.pwInput.focus();
 }
-
-// ─────────────────────────────────────────────
 
 function renderPersistenceUbuntu() {
   state.currentCategory = 'task';
@@ -747,7 +744,6 @@ async function renderPost(level, slug) {
   state.currentLevel    = level;
   state.currentPost     = post;
 
-  // ── Build breadcrumb ──
   if (post.category === 'task') {
     els.postBreadcrumb.innerHTML = `
       <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
@@ -799,7 +795,6 @@ async function renderPost(level, slug) {
   renderPagination(level, slug);
   showView('post');
 
-  // ── Password gate (client side) ──
   let password = null;
   if (post.password_required) {
     if (state.unlockedSlugs.has(slug)) {
@@ -1088,7 +1083,6 @@ async function init() {
       }
     });
 
-    // Close modal on backdrop click
     els.pwModal.addEventListener('click', e => {
       if (e.target === els.pwModal) {
         els.pwCancel.click();

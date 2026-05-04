@@ -646,5 +646,93 @@
     "slug": "you-gotta-run-run-run-run-run",
     "path": "ctf-competitions/cit-2026/you-gotta-run-run-run-run-run/writeup.md",
     "password_required": false
+  },
+  {
+    "title": "One Of Us",
+    "category": "training",
+    "level": "medium",
+    "slug": "one-of-us",
+    "path": "trainning/medium/one-of-us/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Phreaky",
+    "category": "training",
+    "level": "medium",
+    "slug": "phreaky",
+    "path": "trainning/medium/phreaky/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Precious Guidance",
+    "category": "training",
+    "level": "medium",
+    "slug": "precious-guidance",
+    "path": "trainning/medium/precious-guidance/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Red Failure",
+    "category": "training",
+    "level": "medium",
+    "slug": "red-failure",
+    "path": "trainning/medium/red-failure/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "RedTrails",
+    "category": "training",
+    "level": "medium",
+    "slug": "redTrails",
+    "path": "trainning/medium/redTrails/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Reflection",
+    "category": "training",
+    "level": "medium",
+    "slug": "reflection",
+    "path": "trainning/medium/reflection/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Rogue",
+    "category": "training",
+    "level": "medium",
+    "slug": "rogue",
+    "path": "trainning/medium/rogue/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Seized",
+    "category": "training",
+    "level": "medium",
+    "slug": "seized",
+    "path": "trainning/medium/seized/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Strike Back",
+    "category": "training",
+    "level": "medium",
+    "slug": "strike-back",
+    "path": "trainning/medium/strike-back/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Zombienet",
+    "category": "training",
+    "level": "medium",
+    "slug": "zombienet",
+    "path": "trainning/medium/zombienet/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "Pf Ing",
+    "category": "task",
+    "level": "pf-ing",
+    "slug": "pf-ing",
+    "path": "task/pf-ing/pf-ing/writeup.md",
+    "password_required": false
   }
 ]

@@ -750,5 +750,13 @@
     "slug": "no-start-where",
     "path": "trainning/medium/no-start-where/writeup.md",
     "password_required": false
+  },
+  {
+    "title": "Relic Maps",
+    "category": "training",
+    "level": "medium",
+    "slug": "relic-maps",
+    "path": "trainning/medium/relic-maps/writeup.md",
+    "password_required": false
   }
 ]

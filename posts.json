@@ -734,5 +734,21 @@
     "slug": "pf-ing",
     "path": "task/pf-ing/pf-ing/writeup.md",
     "password_required": false
+  },
+  {
+    "title": "Mbcoin",
+    "category": "training",
+    "level": "medium",
+    "slug": "mbcoin",
+    "path": "trainning/medium/mbcoin/writeup.md",
+    "password_required": false
+  },
+  {
+    "title": "No Start Where",
+    "category": "training",
+    "level": "medium",
+    "slug": "no-start-where",
+    "path": "trainning/medium/no-start-where/writeup.md",
+    "password_required": false
   }
 ]

@@ -1596,3 +1596,16 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   .pw-btn { font-size: 8px; padding: 10px 8px; }
   .pw-input { font-size: 17px; }
 }
+
+/* ── PF ING (task) ── */
+.pfing-btn { border-color: #c0392b; }
+.pfing-btn:hover { background: #faefee; }
+.pfing-btn .btn-label { color: #c0392b; }
+
+[data-theme="dark"] .pfing-btn { border-color: #c0392b; }
+[data-theme="dark"] .pfing-btn:hover { background: #230a08 !important; }
+[data-theme="dark"] .pfing-btn .btn-label { color: #d98880; }
+
+.post-card-pfing::before {
+  background: #c0392b !important;
+}

@@ -64,7 +64,9 @@ const els = {
   cit2026Count:      document.getElementById('cit2026-count'),
   bluehensctf2026Count: document.getElementById('bluehensctf2026-count'),
   sherlockCount: document.getElementById('sherlock-count'),
-  // Password modal
+  // <<CTF_SHOW_CTF_COUNTS>>
+  pfingCount: document.getElementById('pfing-count'),
+  // <<TASK_ELS_COUNT>>
   pwModal:           document.getElementById('pw-modal'),
   pwInput:           document.getElementById('pw-input'),
   pwSubmit:          document.getElementById('pw-submit'),
@@ -93,6 +95,8 @@ const levelColors = {
   'cit-2026':           '#0284c7',
   'bluehensctf-2026':   '#00509d',
   'sherlock':           '#6d28d9',
+  'pf-ing': '#c0392b',
+  // <<CTF_LEVEL_COLORS>> 
 };
 
 const slugColors = {
@@ -114,6 +118,8 @@ function formatLevel(level) {
   if (level === 'medium')      return 'MEDIUM';
   if (level === 'bluehensctf-2026') return 'BLUEHENSCTF 2026';
   if (level === 'sherlock') return 'SHERLOCK';
+  if (level === 'pf-ing') return 'PF ING';
+  // <<CTF_FORMAT_LEVEL>>
   return 'EASY';
 }
 
@@ -134,6 +140,8 @@ function postIcon(post) {
     'persistence-ubuntu': '🐧',
     'bluehensctf-2026': '🐔',
     'sherlock': '🔎',
+    'pf-ing': '⚡',
+    // <<CTF_POST_ICONS>>
   };
   if (levelIcons[post.level]) return levelIcons[post.level];
   if (post.category === 'ctf-competitions') return '🏆';
@@ -264,6 +272,9 @@ function showTaskView() {
   ).length;
   if (els.sherlockCount)
     els.sherlockCount.textContent = `[ ${sherlock} FILES ]`;
+  const pfing = state.posts.filter(p => p.category === 'task' && p.level === 'pf-ing').length;
+  if (els.pfingCount) els.pfingCount.textContent = `[ ${pfing} FILES ]`;
+  // <<TASK_SHOW_COUNTS>>
 }
 
 
@@ -343,6 +354,47 @@ function showPasswordError(msg) {
   els.pwInput.focus();
 }
 
+function renderPfing() {
+  state.currentCategory = 'task';
+  state.currentLevel    = 'pf-ing';
+  state.currentPost     = null;
+
+  const items = state.posts.filter(
+    p => p.category === 'task' && p.level === 'pf-ing'
+  );
+  els.listBreadcrumb.innerHTML = `
+    <span class="bc-root" id="bc-pi-root">[ ROOT ]</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-mid" id="bc-pi-task">TASK</span>
+    <span class="bc-sep">▶</span>
+    <span class="bc-current">PF ING</span>
+  `;
+  document.getElementById('bc-pi-root').addEventListener('click', () => navigate('#'));
+  document.getElementById('bc-pi-task').addEventListener('click', () => navigate('#task'));
+
+  els.listTitle.textContent = `PF ING — ${items.length} FILES`;
+  els.postGrid.innerHTML = items.map(post => `
+    <article class="post-card post-card-pfing ${post.password_required ? 'post-card-locked' : ''}"
+      data-slug="${post.slug}" data-level="${post.level}"
+      style="--card-color: ${levelColor(post.level, post.slug)}" title="${post.title}">
+      <div class="folder-icon">${postIcon(post)}</div>
+      <div class="folder-name">${post.title}</div>
+      <div class="folder-slug">${post.slug}</div>
+      ${post.password_required ? '<div class="lock-badge">🔒</div>' : ''}
+    </article>
+  `).join('');
+
+  els.backHome.textContent = '⬅ TASK';
+  showView('list');
+
+  document.querySelectorAll('.post-card').forEach(card => {
+    card.addEventListener('click', () => {
+      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
+    });
+  });
+}
+
+// <<TASK_RENDER_FUNCTIONS>>
 function renderPersistenceUbuntu() {
   state.currentCategory = 'task';
   state.currentLevel    = 'persistence-ubuntu';
@@ -634,6 +686,8 @@ function renderBluehensctf2026() {
     });
   });
 }
+
+// <<CTF_RENDER_FUNCTIONS>> 
 
 function doPostSearch() {
   const query = els.postSearchInput.value.trim().toLowerCase();
@@ -1006,6 +1060,9 @@ async function router() {
     if (parts[1] === 'umassctf-2026') { renderUmassctf2026(); return; }
     if (parts[1] === 'cit-2026') { renderCit2026(); return; }
     if (parts[1] === 'bluehensctf-2026') { renderBluehensctf2026(); return; }
+    // <<CTF_ROUTER_CASES>> 
+    if (parts[1] === 'pf-ing') { renderPfing(); return; }
+    // <<TASK_ROUTER_CASES>>
     if (parts[1] === 'persistence-ubuntu') { renderPersistenceUbuntu(); return; }
     if (parts[1] === 'sherlock') { renderSherlock(); return; }
     renderLevel(parts[1]); return;

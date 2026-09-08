@@ -283,33 +283,12 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .dynamic-level-btn:hover {
   border-color: var(--dynamic-level-color, var(--border));
 }
-
-.easy-btn { border-color: #1d4ed8; }
-.easy-btn:hover { background: #eff6ff; }
-.easy-btn .btn-label { color: #1d4ed8; }
-
-.veryeasy-btn { border-color: var(--accent); }
-.veryeasy-btn:hover { background: #f0fff4; }
-
-.medium-btn { border-color: #ca8a04; }
-.medium-btn:hover { background: #fefce8; }
-.medium-btn .btn-label { color: #ca8a04; }
-
-[data-theme="dark"] .medium-btn { border-color: #eab308; }
-[data-theme="dark"] .medium-btn:hover { background: #1a1500 !important; }
-[data-theme="dark"] .medium-btn .btn-label { color: #facc15; }
-
-.hard-btn { border-color: #dc2626; }
-.hard-btn:hover { background: #fff1f1; }
-.hard-btn .btn-label { color: #dc2626; }
-
-[data-theme="dark"] .hard-btn { border-color: #ef4444; }
-[data-theme="dark"] .hard-btn:hover { background: #2e0a0a !important; }
-[data-theme="dark"] .hard-btn .btn-label { color: #f87171; }
-
-.texsaw2026-btn { border-color: #92400e; }
-.texsaw2026-btn:hover { background: #fffbeb; }
-.texsaw2026-btn .btn-label { color: #92400e; }
+[data-theme="dark"] .dynamic-level-btn {
+  border-color: var(--dynamic-level-color, var(--border));
+}
+[data-theme="dark"] .dynamic-level-btn .btn-label {
+  color: var(--dynamic-level-color, var(--green2));
+}
 
 .btn-icon { font-size: 32px; display: block; }
 .btn-label { font-size: 14px; font-weight: bold; color: var(--green-dark); }
@@ -1064,51 +1043,6 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 [data-theme="dark"] .ctf-btn:hover { background: #1c1608 !important; }
 [data-theme="dark"] .ctf-btn .btn-label { color: #fbbf24; }
 
-[data-theme="dark"] .texsaw2026-btn { border-color: #b45309; }
-[data-theme="dark"] .texsaw2026-btn:hover { background: #1c1608 !important; }
-[data-theme="dark"] .texsaw2026-btn .btn-label { color: #fbbf24; }
-
-.post-card-texsaw::before {
-  background: #f59e0b !important;
-}
-
-.dawgctf2026-btn { border-color: #4338ca; }
-.dawgctf2026-btn:hover { background: #eef2ff; }
-.dawgctf2026-btn .btn-label { color: #4338ca; }
-
-[data-theme="dark"] .dawgctf2026-btn { border-color: #6366f1; }
-[data-theme="dark"] .dawgctf2026-btn:hover { background: #0f0f2e !important; }
-[data-theme="dark"] .dawgctf2026-btn .btn-label { color: #a5b4fc; }
-
-/* DawgCTF post-card accent stripe */
-.post-card-dawgctf::before {
-  background: #6366f1 !important;
-}
-
-.umassctf2026-btn { border-color: #7f1d1d; }
-.umassctf2026-btn:hover { background: #fff1f1; }
-.umassctf2026-btn .btn-label { color: #7f1d1d; }
-
-[data-theme="dark"] .umassctf2026-btn { border-color: #b91c1c; }
-[data-theme="dark"] .umassctf2026-btn:hover { background: #1f0a0a !important; }
-[data-theme="dark"] .umassctf2026-btn .btn-label { color: #fca5a5; }
-
-.post-card-umassctf::before {
-  background: #7f1d1d !important;
-}
-
-.cit2026-btn { border-color: #0284c7; }
-.cit2026-btn:hover { background: #f0f9ff; }
-.cit2026-btn .btn-label { color: #0284c7; }
-
-[data-theme="dark"] .cit2026-btn { border-color: #0ea5e9; }
-[data-theme="dark"] .cit2026-btn:hover { background: #0a1f2e !important; }
-[data-theme="dark"] .cit2026-btn .btn-label { color: #38bdf8; }
-
-.post-card-cit::before {
-  background: #0284c7 !important;
-}
-
 .training-level-switch {
   margin-top: 12px;
   margin-bottom: 8px;
@@ -1233,28 +1167,6 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 [data-theme="dark"] .task-btn:hover { background: #0a1f2e !important; }
 [data-theme="dark"] .task-btn .btn-label { color: #38bdf8; }
 
-.persistence-ubuntu-btn { border-color: #0369a1; }
-.persistence-ubuntu-btn:hover { background: #f0f9ff; }
-.persistence-ubuntu-btn .btn-label { color: #0369a1; }
-
-[data-theme="dark"] .persistence-ubuntu-btn { border-color: #0284c7; }
-[data-theme="dark"] .persistence-ubuntu-btn:hover { background: #0a1f2e !important; }
-[data-theme="dark"] .persistence-ubuntu-btn .btn-label { color: #38bdf8; }
-
-.post-card-persistence-ubuntu::before {
-  background: #0369a1 !important;
-}
-
-.sherlock-btn { border-color: #6d28d9; }
-.sherlock-btn:hover { background: #f5f3ff; }
-.sherlock-btn .btn-label { color: #6d28d9; }
-
-[data-theme="dark"] .sherlock-btn { border-color: #7c3aed; }
-[data-theme="dark"] .sherlock-btn:hover { background: #150e2e !important; }
-[data-theme="dark"] .sherlock-btn .btn-label { color: #a78bfa; }
-
-.post-card-sherlock::before { background: var(--card-color, #6d28d9) !important; }
-
 .markdown-body .mermaid {
   background: #1e1e2e;
   border: 1px solid #313244;
@@ -1368,18 +1280,6 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 }
 .markdown-body .mermaid::-webkit-scrollbar-thumb:hover {
   background: #6c7086;
-}
-
-.bluehensctf2026-btn { border-color: #00509d; }
-.bluehensctf2026-btn:hover { background: #ebf1f7; }
-.bluehensctf2026-btn .btn-label { color: #00509d; }
-
-[data-theme="dark"] .bluehensctf2026-btn { border-color: #00509d; }
-[data-theme="dark"] .bluehensctf2026-btn:hover { background: #000e1c !important; }
-[data-theme="dark"] .bluehensctf2026-btn .btn-label { color: #6696c4; }
-
-.post-card-bluehensctf2026::before {
-  background: #00509d !important;
 }
 
 .pw-modal-overlay {
@@ -1608,42 +1508,3 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   .pw-input { font-size: 17px; }
 }
 
-/* ── PF ING (task) ── */
-.pfing-btn { border-color: #c0392b; }
-.pfing-btn:hover { background: #faefee; }
-.pfing-btn .btn-label { color: #c0392b; }
-
-[data-theme="dark"] .pfing-btn { border-color: #c0392b; }
-[data-theme="dark"] .pfing-btn:hover { background: #230a08 !important; }
-[data-theme="dark"] .pfing-btn .btn-label { color: #d98880; }
-
-.post-card-pfing::before {
-  background: #c0392b !important;
-}
-
-
-/* ── Dynamically managed levels (add-ctf.js) ── */
-/* <<MANAGED_LEVEL_STYLES>> */
-.managed-level-btn {
-  border-color: var(--level-color, var(--border));
-}
-
-.managed-level-btn:hover {
-  background: var(--level-hover-light, var(--panel2));
-}
-
-.managed-level-btn .btn-label {
-  color: var(--level-color, var(--green-dark));
-}
-
-[data-theme="dark"] .managed-level-btn {
-  border-color: var(--level-color, var(--border));
-}
-
-[data-theme="dark"] .managed-level-btn:hover {
-  background: var(--level-hover-dark, var(--panel2)) !important;
-}
-
-[data-theme="dark"] .managed-level-btn .btn-label {
-  color: var(--level-text-dark, var(--green2));
-}

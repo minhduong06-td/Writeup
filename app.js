@@ -88,6 +88,23 @@ const managedLevels = {
   // <<MANAGED_LEVELS>>
 };
 
+function hydrateManagedLevels(posts) {
+  for (const post of posts || []) {
+    if (!post?.level) continue;
+    const hasMeta = post.level_name || post.level_icon || post.level_color;
+    if (!hasMeta) continue;
+
+    const current = managedLevels[post.level] || {};
+    managedLevels[post.level] = {
+      ...current,
+      category: post.category || current.category,
+      name: post.level_name || current.name,
+      icon: post.level_icon || current.icon,
+      color: post.level_color || current.color,
+    };
+  }
+}
+
 const categoryUi = {
   training: { label: 'HTB', hash: '#training', back: '⬅ HTB' },
   'ctf-competitions': { label: 'CTF-COMPETITIONS', hash: '#ctf-competitions', back: '⬅ CTF' },
@@ -1206,6 +1223,7 @@ async function router() {
 async function init() {
   try {
     state.posts = await loadPosts();
+    hydrateManagedLevels(state.posts);
     ensureAllLevelButtons();
 
     history.replaceState(null, '', window.location.pathname);

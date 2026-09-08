@@ -152,7 +152,7 @@ const categoryUi = {
 };
 
 const difficultyColors = {
-  'very-easy': '#16a34a',
+  'very-easy': '#8c05a1',
   'easy':      '#16a34a',
   'medium':    '#ca8a04',
   'hard':      '#dc2626',

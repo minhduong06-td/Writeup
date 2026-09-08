@@ -78,7 +78,7 @@ const managedLevels = {
 function hydrateManagedLevels(posts) {
   for (const post of posts || []) {
     if (!post?.level) continue;
-    const hasMeta = post.level_name || post.level_icon || post.level_color;
+    const hasMeta = post.level_name || post.level_icon || post.level_color || post.level_mode;
     if (!hasMeta) continue;
 
     const current = managedLevels[post.level] || {};
@@ -88,6 +88,7 @@ function hydrateManagedLevels(posts) {
       name: post.level_name || current.name,
       icon: post.level_icon || current.icon,
       color: post.level_color || current.color,
+      mode: post.level_mode || current.mode,
     };
   }
 }
@@ -150,11 +151,14 @@ function formatLevel(level) {
     .toUpperCase();
 }
 
-function postIcon(post) {
-  if (post?.post_icon) return post.post_icon;
-  if (managedLevels[post?.level]?.icon) return managedLevels[post.level].icon;
+function levelMode(level) {
+  return managedLevels[level]?.mode || 'list';
+}
 
-  if (post?.category === 'training') {
+function levelButtonIcon(level, category = null) {
+  if (managedLevels[level]?.icon) return managedLevels[level].icon;
+
+  if (category === 'training') {
     const icons = {
       'very-easy': '📗',
       'easy': '📘',
@@ -162,11 +166,35 @@ function postIcon(post) {
       'hard': '📕',
       'insane': '📓',
     };
-    return icons[normalizeDifficulty(post.level)] || '📘';
+    return icons[normalizeDifficulty(level)] || '📘';
   }
-  if (post?.category === 'ctf-competitions') return '🏆';
-  if (post?.category === 'task') return '🧩';
+  if (category === 'ctf-competitions') return '🏆';
+  if (category === 'task') return '🧩';
   return '📁';
+}
+
+function levelBackHash(level) {
+  const category = resolveLevelCategory(level);
+  if (levelMode(level) === 'direct') {
+    return (categoryUi[category] || categoryUi.training).hash;
+  }
+  return `#level/${level}`;
+}
+
+function navigateToLevel(level) {
+  const category = resolveLevelCategory(level);
+  const items = state.posts.filter(p => p.category === category && p.level === level);
+  if (levelMode(level) === 'direct' && items.length === 1) {
+    navigate(`#post/${items[0].level}/${items[0].slug}`);
+    return;
+  }
+  navigate(`#level/${level}`);
+}
+
+function postIcon(post) {
+  if (post?.icon) return post.icon;
+  if (post?.post_icon) return post.post_icon; // legacy compatibility
+  return levelButtonIcon(post?.level, post?.category);
 }
 
 function slugFromPath(path) {
@@ -288,7 +316,7 @@ function ensureLevelButtons(viewId, category) {
     btn.dataset.level = level;
     btn.style.setProperty('--dynamic-level-color', levelColor(level, category));
     btn.innerHTML = `
-      <span class="btn-icon">${firstPost ? postIcon(firstPost) : '📁'}</span>
+      <span class="btn-icon">${levelButtonIcon(level, category)}</span>
       <span class="btn-label">${formatLevel(level)}</span>
       <span class="btn-sub">[ — FILES ]</span>
     `;
@@ -585,7 +613,7 @@ async function renderPost(level, slug) {
     `;
     document.getElementById('bc-post-root').addEventListener('click', () => navigate('#'));
     document.getElementById('bc-post-task').addEventListener('click', () => navigate('#task'));
-    document.getElementById('bc-post-level').addEventListener('click', () => navigate(`#level/${level}`));
+    document.getElementById('bc-post-level').addEventListener('click', () => navigate(levelBackHash(level)));
   } else if (post.category === 'ctf-competitions') {
     els.postBreadcrumb.innerHTML = `
       <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
@@ -636,7 +664,7 @@ async function renderPost(level, slug) {
         try {
           password = await promptPassword(post.title, errorMsg);
         } catch {
-          navigate(`#level/${level}`);
+          navigate(levelBackHash(level));
           return;
         }
       }
@@ -887,7 +915,7 @@ async function init() {
 
     for (const viewId of ['training-view', 'ctf-view', 'task-view']) {
       document.querySelectorAll(`#${viewId} .level-btn`).forEach(btn => {
-        btn.addEventListener('click', () => navigate(`#level/${btn.dataset.level}`));
+        btn.addEventListener('click', () => navigateToLevel(btn.dataset.level));
       });
     }
 
@@ -918,10 +946,8 @@ async function init() {
     });
 
     els.backList.addEventListener('click', () => {
-      if (state.currentCategory === 'ctf-competitions') {
-        navigate(`#level/${state.currentLevel}`);
-      } else if (state.currentLevel) {
-        navigate(`#level/${state.currentLevel}`);
+      if (state.currentLevel) {
+        navigate(levelBackHash(state.currentLevel));
       } else {
         navigate('#training');
       }

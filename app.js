@@ -52,21 +52,8 @@ const els = {
   postPagination:    document.getElementById('post-pagination'),
   trainingCount:     document.getElementById('training-count'),
   ctfCount:          document.getElementById('ctf-count'),
-  easyCount:         document.getElementById('easy-count'),
-  veryEasyCount:     document.getElementById('veryeasy-count'),
-  mediumCount:       document.getElementById('medium-count'),
-  texsaw2026Count:   document.getElementById('texsaw2026-count'),
-  dawgctf2026Count:  document.getElementById('dawgctf2026-count'),
-  umassctf2026Count: document.getElementById('umassctf2026-count'),
   taskCount:              document.getElementById('task-count'),
   taskView:               document.getElementById('task-view'),
-  persistenceUbuntuCount: document.getElementById('persistence-ubuntu-count'),
-  cit2026Count:      document.getElementById('cit2026-count'),
-  bluehensctf2026Count: document.getElementById('bluehensctf2026-count'),
-  sherlockCount: document.getElementById('sherlock-count'),
-  // <<CTF_ELS_COUNT>>
-  pfingCount: document.getElementById('pfing-count'),
-  // <<TASK_ELS_COUNT>>
   pwModal:           document.getElementById('pw-modal'),
   pwInput:           document.getElementById('pw-input'),
   pwSubmit:          document.getElementById('pw-submit'),
@@ -111,23 +98,6 @@ const categoryUi = {
   task: { label: 'TASK', hash: '#task', back: '⬅ TASK' },
 };
 
-const levelColors = {
-  'easy':               '#1d4ed8',
-  'very-easy':          '#16a34a',
-  'medium':             '#ca8a04',
-  'hard':               '#dc2626',
-  'insane':             '#6b7280',
-  'texsaw-2026':        '#92400e',
-  'dawgctf-2026':       '#4338ca',
-  'umassctf-2026':      '#7f1d1d',
-  'persistence-ubuntu': '#0369a1',
-  'cit-2026':           '#0284c7',
-  'bluehensctf-2026':   '#00509d',
-  'sherlock':           '#6d28d9',
-  'pf-ing':             '#c0392b',
-  // <<CTF_LEVEL_COLORS>>
-};
-
 const difficultyColors = {
   'very-easy': '#16a34a',
   'easy':      '#16a34a',
@@ -157,32 +127,23 @@ function autoLevelColor(level) {
   return palette[Math.abs(hash) % palette.length];
 }
 
-function levelColor(level) {
+function levelColor(level, category = null) {
   if (managedLevels[level]?.color) return managedLevels[level].color;
-  return levelColors[level] || autoLevelColor(level);
+  if (category === 'training') {
+    const semantic = difficultyColor(level);
+    if (semantic) return semantic;
+  }
+  return autoLevelColor(level);
 }
 
 function postColor(post) {
   const explicitDifficulty = difficultyColor(post?.difficulty);
   if (explicitDifficulty) return explicitDifficulty;
-  if (post?.level === 'sherlock') return difficultyColors.easy;
-  return levelColor(post?.level);
+  return levelColor(post?.level, post?.category);
 }
 
 function formatLevel(level) {
   if (managedLevels[level]?.name) return managedLevels[level].name;
-  const special = {
-    'very-easy': 'VERY EASY',
-    'texsaw-2026': 'TEXSAW 2026',
-    'dawgctf-2026': 'DAWGCTF 2026',
-    'umassctf-2026': 'UMASSCTF 2026',
-    'cit-2026': 'CIT 2026',
-    'persistence-ubuntu': 'PERSISTENCE UBUNTU',
-    'bluehensctf-2026': 'BLUEHENSCTF 2026',
-    'sherlock': 'SHERLOCK',
-    'pf-ing': 'PF ING',
-  };
-  if (special[level]) return special[level];
   return String(level || 'UNKNOWN')
     .replace(/[-_]+/g, ' ')
     .replace(/\bctf\b/gi, 'CTF')
@@ -190,30 +151,22 @@ function formatLevel(level) {
 }
 
 function postIcon(post) {
-  const slugIcons = {
-    'easy-money': '💵',
-  };
-  if (slugIcons[post.slug]) return slugIcons[post.slug];
+  if (post?.post_icon) return post.post_icon;
+  if (managedLevels[post?.level]?.icon) return managedLevels[post.level].icon;
 
-  if (managedLevels[post.level]?.icon) return managedLevels[post.level].icon;
-
-  const levelIcons = {
-    'dawgctf-2026': '🐾',
-    'texsaw-2026':  '🏆',
-    'very-easy':    '📗',
-    'medium':       '📙',
-    'easy':         '📘',
-    'umassctf-2026': '🎓',
-    'cit-2026': '💻',
-    'persistence-ubuntu': '🐧',
-    'bluehensctf-2026': '🐔',
-    'sherlock': '🔎',
-    'pf-ing': '⚡',
-    // <<CTF_POST_ICONS>>
-  };
-  if (levelIcons[post.level]) return levelIcons[post.level];
-  if (post.category === 'ctf-competitions') return '🏆';
-  return '📘';
+  if (post?.category === 'training') {
+    const icons = {
+      'very-easy': '📗',
+      'easy': '📘',
+      'medium': '📙',
+      'hard': '📕',
+      'insane': '📓',
+    };
+    return icons[normalizeDifficulty(post.level)] || '📘';
+  }
+  if (post?.category === 'ctf-competitions') return '🏆';
+  if (post?.category === 'task') return '🧩';
+  return '📁';
 }
 
 function slugFromPath(path) {
@@ -314,26 +267,33 @@ function ensureLevelButtons(viewId, category) {
   const switchEl = document.querySelector(`#${viewId} .level-switch`);
   if (!switchEl) return;
 
+  const levelOrder = ['very-easy', 'easy', 'medium', 'hard', 'insane'];
+  const rank = level => {
+    const idx = levelOrder.indexOf(normalizeDifficulty(level));
+    return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
+  };
+
   const levels = [...new Set(
     state.posts.filter(p => p.category === category).map(p => p.level).filter(Boolean)
-  )];
+  )].sort((a, b) =>
+    (category === 'training' ? rank(a) - rank(b) : 0) ||
+    formatLevel(a).localeCompare(formatLevel(b))
+  );
 
-  levels.forEach(level => {
-    if (switchEl.querySelector(`.level-btn[data-level="${CSS.escape(level)}"]`)) return;
-
+  switchEl.innerHTML = '';
+  for (const level of levels) {
     const firstPost = state.posts.find(p => p.category === category && p.level === level);
     const btn = document.createElement('button');
-    const color = levelColor(level);
-    btn.className = `level-btn dynamic-level-btn ${levelCssToken(level)}-btn`;
+    btn.className = 'level-btn dynamic-level-btn';
     btn.dataset.level = level;
-    btn.style.setProperty('--dynamic-level-color', color);
+    btn.style.setProperty('--dynamic-level-color', levelColor(level, category));
     btn.innerHTML = `
       <span class="btn-icon">${firstPost ? postIcon(firstPost) : '📁'}</span>
       <span class="btn-label">${formatLevel(level)}</span>
       <span class="btn-sub">[ — FILES ]</span>
     `;
     switchEl.appendChild(btn);
-  });
+  }
 
   updateLevelCounts(viewId, category);
 }
@@ -365,14 +325,6 @@ function showTrainingView() {
   state.currentLevel    = null;
   state.currentPost     = null;
   showView('training');
-
-  const easy     = state.posts.filter(p => p.category === 'training' && p.level === 'easy').length;
-  const veryEasy = state.posts.filter(p => p.category === 'training' && p.level === 'very-easy').length;
-  const medium   = state.posts.filter(p => p.category === 'training' && p.level === 'medium').length;
-
-  if (els.easyCount)     els.easyCount.textContent     = `[ ${easy} FILES ]`;
-  if (els.veryEasyCount) els.veryEasyCount.textContent = `[ ${veryEasy} FILES ]`;
-  if (els.mediumCount)   els.mediumCount.textContent   = `[ ${medium} FILES ]`;
   updateLevelCounts('training-view', 'training');
 }
 
@@ -381,19 +333,7 @@ function showCtfView() {
   state.currentLevel    = null;
   state.currentPost     = null;
   showView('ctf');
-
-  const texsaw2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'texsaw-2026').length;
-  if (els.texsaw2026Count) els.texsaw2026Count.textContent = `[ ${texsaw2026} FILES ]`;
-  const dawgctf2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'dawgctf-2026').length;
-  if (els.dawgctf2026Count) els.dawgctf2026Count.textContent = `[ ${dawgctf2026} FILES ]`;
-  const umassctf2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'umassctf-2026').length;
-  if (els.umassctf2026Count) els.umassctf2026Count.textContent = `[ ${umassctf2026} FILES ]`;
-  const cit2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'cit-2026').length;
-  if (els.cit2026Count) els.cit2026Count.textContent = `[ ${cit2026} FILES ]`;
-  const bluehensctf2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'bluehensctf-2026').length;
-  if (els.bluehensctf2026Count) els.bluehensctf2026Count.textContent = `[ ${bluehensctf2026} FILES ]`;
   updateLevelCounts('ctf-view', 'ctf-competitions');
-  // <<CTF_SHOW_CTF_COUNTS>>
 }
 
 function showTaskView() {
@@ -401,21 +341,7 @@ function showTaskView() {
   state.currentLevel    = null;
   state.currentPost     = null;
   showView('task');
-
-  const persistenceUbuntu = state.posts.filter(
-    p => p.category === 'task' && p.level === 'persistence-ubuntu'
-  ).length;
-  if (els.persistenceUbuntuCount)
-    els.persistenceUbuntuCount.textContent = `[ ${persistenceUbuntu} FILES ]`;
-  const sherlock = state.posts.filter(
-    p => p.category === 'task' && p.level === 'sherlock'
-  ).length;
-  if (els.sherlockCount)
-    els.sherlockCount.textContent = `[ ${sherlock} FILES ]`;
-  const pfing = state.posts.filter(p => p.category === 'task' && p.level === 'pf-ing').length;
-  if (els.pfingCount) els.pfingCount.textContent = `[ ${pfing} FILES ]`;
   updateLevelCounts('task-view', 'task');
-  // <<TASK_SHOW_COUNTS>>
 }
 
 
@@ -495,127 +421,6 @@ function showPasswordError(msg) {
   els.pwInput.focus();
 }
 
-function renderPfing() {
-  state.currentCategory = 'task';
-  state.currentLevel    = 'pf-ing';
-  state.currentPost     = null;
-
-  const items = state.posts.filter(
-    p => p.category === 'task' && p.level === 'pf-ing'
-  );
-  els.listBreadcrumb.innerHTML = `
-    <span class="bc-root" id="bc-pi-root">[ ROOT ]</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-mid" id="bc-pi-task">TASK</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-current">PF ING</span>
-  `;
-  document.getElementById('bc-pi-root').addEventListener('click', () => navigate('#'));
-  document.getElementById('bc-pi-task').addEventListener('click', () => navigate('#task'));
-
-  els.listTitle.textContent = `PF ING — ${items.length} FILES`;
-  els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-pfing ${post.password_required ? 'post-card-locked' : ''}"
-      data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${postColor(post)}" title="${post.title}">
-      <div class="folder-icon">${postIcon(post)}</div>
-      <div class="folder-name">${post.title}</div>
-      <div class="folder-slug">${post.slug}</div>
-      ${post.password_required ? '<div class="lock-badge">🔒</div>' : ''}
-    </article>
-  `).join('');
-
-  els.backHome.textContent = '⬅ TASK';
-  showView('list');
-
-  document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => {
-      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
-    });
-  });
-}
-
-// <<TASK_RENDER_FUNCTIONS>>
-function renderPersistenceUbuntu() {
-  state.currentCategory = 'task';
-  state.currentLevel    = 'persistence-ubuntu';
-  state.currentPost     = null;
-
-  const items = state.posts.filter(
-    p => p.category === 'task' && p.level === 'persistence-ubuntu'
-  );
-  els.listBreadcrumb.innerHTML = `
-    <span class="bc-root" id="bc-pu-root">[ ROOT ]</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-mid" id="bc-pu-task">TASK</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-current">PERSISTENCE UBUNTU</span>
-  `;
-  document.getElementById('bc-pu-root').addEventListener('click', () => navigate('#'));
-  document.getElementById('bc-pu-task').addEventListener('click', () => navigate('#task'));
-
-  els.listTitle.textContent = `PERSISTENCE UBUNTU — ${items.length} FILES`;
-  els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-persistence-ubuntu ${post.password_required ? 'post-card-locked' : ''}"
-      data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${postColor(post)}" title="${post.title}">
-      <div class="folder-icon">${postIcon(post)}</div>
-      <div class="folder-name">${post.title}</div>
-      <div class="folder-slug">${post.slug}</div>
-      ${post.password_required ? '<div class="lock-badge">🔒</div>' : ''}
-    </article>
-  `).join('');
-
-  els.backHome.textContent = '⬅ TASK';
-  showView('list');
-
-  document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => {
-      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
-    });
-  });
-}
-
-function renderSherlock() {
-  state.currentCategory = 'task';
-  state.currentLevel    = 'sherlock';
-  state.currentPost     = null;
-
-  const items = state.posts.filter(
-    p => p.category === 'task' && p.level === 'sherlock'
-  );
-  els.listBreadcrumb.innerHTML = `
-    <span class="bc-root" id="bc-sh-root">[ ROOT ]</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-mid" id="bc-sh-task">TASK</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-current">SHERLOCK</span>
-  `;
-  document.getElementById('bc-sh-root').addEventListener('click', () => navigate('#'));
-  document.getElementById('bc-sh-task').addEventListener('click', () => navigate('#task'));
-
-  els.listTitle.textContent = `SHERLOCK — ${items.length} FILES`;
-  els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-sherlock ${post.password_required ? 'post-card-locked' : ''}"
-      data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${postColor(post)}" title="${post.title}">
-      <div class="folder-icon">${postIcon(post)}</div>
-      <div class="folder-name">${post.title}</div>
-      <div class="folder-slug">${post.slug}</div>
-      ${post.password_required ? '<div class="lock-badge">🔒</div>' : ''}
-    </article>
-  `).join('');
-
-  els.backHome.textContent = '⬅ TASK';
-  showView('list');
-
-  document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => {
-      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
-    });
-  });
-}
-
 function renderLevel(level) {
   const category = resolveLevelCategory(level);
   const ui = categoryUi[category] || categoryUi.training;
@@ -658,185 +463,6 @@ function renderLevel(level) {
     });
   });
 }
-
-function renderTexsaw2026() {
-  state.currentCategory = 'ctf-competitions';
-  state.currentLevel    = 'texsaw-2026';
-  state.currentPost     = null;
-
-  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'texsaw-2026');
-  els.listBreadcrumb.innerHTML = `
-    <span class="bc-root" id="bc-tx-root">[ ROOT ]</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-mid" id="bc-tx-ctf">CTF-COMPETITIONS</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-current">TEXSAW 2026</span>
-  `;
-  document.getElementById('bc-tx-root').addEventListener('click', () => navigate('#'));
-  document.getElementById('bc-tx-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
-
-  els.listTitle.textContent = `TEXSAW 2026 — ${items.length} FILES`;
-  els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-texsaw" data-slug="${post.slug}" data-level="${post.level}" style="--card-color: ${levelColor(post.level)}" title="${post.title}">
-      <div class="folder-icon">${postIcon(post)}</div>
-      <div class="folder-name">${post.title}</div>
-      <div class="folder-slug">${post.slug}</div>
-    </article>
-  `).join('');
-
-  els.backHome.textContent = '⬅ CTF';
-  showView('list');
-
-  document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => {
-      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
-    });
-  });
-}
-
-function renderDawgctf2026() {
-  state.currentCategory = 'ctf-competitions';
-  state.currentLevel    = 'dawgctf-2026';
-  state.currentPost     = null;
-
-  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'dawgctf-2026');
-  els.listBreadcrumb.innerHTML = `
-    <span class="bc-root" id="bc-dg-root">[ ROOT ]</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-mid" id="bc-dg-ctf">CTF-COMPETITIONS</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-current">DAWGCTF 2026</span>
-  `;
-  document.getElementById('bc-dg-root').addEventListener('click', () => navigate('#'));
-  document.getElementById('bc-dg-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
-
-  els.listTitle.textContent = `DAWGCTF 2026 — ${items.length} FILES`;
-  els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-dawgctf" data-slug="${post.slug}" data-level="${post.level}" style="--card-color: ${levelColor(post.level)}" title="${post.title}">
-      <div class="folder-icon">${postIcon(post)}</div>
-      <div class="folder-name">${post.title}</div>
-      <div class="folder-slug">${post.slug}</div>
-    </article>
-  `).join('');
-
-  els.backHome.textContent = '⬅ CTF';
-  showView('list');
-
-  document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => {
-      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
-    });
-  });
-}
-
-function renderUmassctf2026() {
-  state.currentCategory = 'ctf-competitions';
-  state.currentLevel    = 'umassctf-2026';
-  state.currentPost     = null;
-
-  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'umassctf-2026');
-  els.listBreadcrumb.innerHTML = `
-    <span class="bc-root" id="bc-um-root">[ ROOT ]</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-mid" id="bc-um-ctf">CTF-COMPETITIONS</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-current">UMASSCTF 2026</span>
-  `;
-  document.getElementById('bc-um-root').addEventListener('click', () => navigate('#'));
-  document.getElementById('bc-um-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
-
-  els.listTitle.textContent = `UMASSCTF 2026 — ${items.length} FILES`;
-  els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-umassctf" data-slug="${post.slug}" data-level="${post.level}" style="--card-color: ${levelColor(post.level)}" title="${post.title}">
-      <div class="folder-icon">${postIcon(post)}</div>
-      <div class="folder-name">${post.title}</div>
-      <div class="folder-slug">${post.slug}</div>
-    </article>
-  `).join('');
-
-  els.backHome.textContent = '⬅ CTF';
-  showView('list');
-
-  document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => {
-      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
-    });
-  });
-}
-
-function renderCit2026() {
-  state.currentCategory = 'ctf-competitions';
-  state.currentLevel    = 'cit-2026';
-  state.currentPost     = null;
-
-  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'cit-2026');
-  els.listBreadcrumb.innerHTML = `
-    <span class="bc-root" id="bc-ci-root">[ ROOT ]</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-mid" id="bc-ci-ctf">CTF-COMPETITIONS</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-current">CIT 2026</span>
-  `;
-  document.getElementById('bc-ci-root').addEventListener('click', () => navigate('#'));
-  document.getElementById('bc-ci-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
-
-  els.listTitle.textContent = `CIT 2026 — ${items.length} FILES`;
-  els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-cit" data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${levelColor(post.level)}" title="${post.title}">
-      <div class="folder-icon">${postIcon(post)}</div>
-      <div class="folder-name">${post.title}</div>
-      <div class="folder-slug">${post.slug}</div>
-    </article>
-  `).join('');
-
-  els.backHome.textContent = '⬅ CTF';
-  showView('list');
-
-  document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => {
-      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
-    });
-  });
-}
-
-function renderBluehensctf2026() {
-  state.currentCategory = 'ctf-competitions';
-  state.currentLevel    = 'bluehensctf-2026';
-  state.currentPost     = null;
-
-  const items = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'bluehensctf-2026');
-  els.listBreadcrumb.innerHTML = `
-    <span class="bc-root" id="bc-b2-root">[ ROOT ]</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-mid" id="bc-b2-ctf">CTF-COMPETITIONS</span>
-    <span class="bc-sep">▶</span>
-    <span class="bc-current">BLUEHENSCTF 2026</span>
-  `;
-  document.getElementById('bc-b2-root').addEventListener('click', () => navigate('#'));
-  document.getElementById('bc-b2-ctf').addEventListener('click', () => navigate('#ctf-competitions'));
-
-  els.listTitle.textContent = `BLUEHENSCTF 2026 — ${items.length} FILES`;
-  els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card post-card-bluehensctf2026" data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${levelColor(post.level)}" title="${post.title}">
-      <div class="folder-icon">${postIcon(post)}</div>
-      <div class="folder-name">${post.title}</div>
-      <div class="folder-slug">${post.slug}</div>
-    </article>
-  `).join('');
-
-  els.backHome.textContent = '⬅ CTF';
-  showView('list');
-
-  document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => {
-      navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
-    });
-  });
-}
-
-// <<CTF_RENDER_FUNCTIONS>> 
 
 function doPostSearch() {
   const query = els.postSearchInput.value.trim().toLowerCase();
@@ -1204,17 +830,8 @@ async function router() {
   if (parts[0] === 'ctf-competitions')             { showCtfView(); return; }
   if (parts[0] === 'task')                         { showTaskView(); return; }
   if (parts[0] === 'level' && parts[1]) {
-    if (parts[1] === 'texsaw-2026') { renderTexsaw2026(); return; }
-    if (parts[1] === 'dawgctf-2026') { renderDawgctf2026(); return; }
-    if (parts[1] === 'umassctf-2026') { renderUmassctf2026(); return; }
-    if (parts[1] === 'cit-2026') { renderCit2026(); return; }
-    if (parts[1] === 'bluehensctf-2026') { renderBluehensctf2026(); return; }
-    // <<CTF_ROUTER_CASES>> 
-    if (parts[1] === 'pf-ing') { renderPfing(); return; }
-    // <<TASK_ROUTER_CASES>>
-    if (parts[1] === 'persistence-ubuntu') { renderPersistenceUbuntu(); return; }
-    if (parts[1] === 'sherlock') { renderSherlock(); return; }
-    renderLevel(parts[1]); return;
+    renderLevel(parts[1]);
+    return;
   }
   if (parts[0] === 'post' && parts[1] && parts[2]) { await renderPost(parts[1], parts[2]); return; }
   showHome();
@@ -1268,22 +885,11 @@ async function init() {
       });
     });
 
-    document.querySelectorAll('#training-view .level-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        navigate(`#level/${btn.dataset.level}`);
+    for (const viewId of ['training-view', 'ctf-view', 'task-view']) {
+      document.querySelectorAll(`#${viewId} .level-btn`).forEach(btn => {
+        btn.addEventListener('click', () => navigate(`#level/${btn.dataset.level}`));
       });
-    });
-
-    document.querySelectorAll('#ctf-view .level-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        navigate(`#level/${btn.dataset.level}`);
-      });
-    });
-    document.querySelectorAll('#task-view .level-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        navigate(`#level/${btn.dataset.level}`);
-      });
-    });
+    }
 
     document.getElementById('back-home-from-training').addEventListener('click', () => {
       navigate('#');

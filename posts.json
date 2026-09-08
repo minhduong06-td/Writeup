@@ -319,7 +319,11 @@
     "level": "persistence-ubuntu",
     "slug": "persistence-ubuntu",
     "path": "task/persistence-ubuntu/persistence-ubuntu/writeup.md",
-    "password_required": true
+    "password_required": true,
+    "level_name": "PERSISTENCE UBUNTU",
+    "level_icon": "🐧",
+    "level_color": "#be123c",
+    "level_mode": "direct"
   },
   {
     "title": "Pf Ing",
@@ -327,7 +331,11 @@
     "level": "pf-ing",
     "slug": "pf-ing",
     "path": "task/pf-ing/pf-ing/writeup.md",
-    "password_required": false
+    "password_required": false,
+    "level_name": "PF ING",
+    "level_icon": "⚡",
+    "level_color": "#c0392b",
+    "level_mode": "direct"
   },
   {
     "title": "Easy Money",
@@ -336,7 +344,12 @@
     "slug": "easy-money",
     "path": "task/sherlock/easy-money/writeup.md",
     "password_required": false,
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "level_name": "SHERLOCK",
+    "level_icon": "🕵️",
+    "level_color": "#7c3aed",
+    "level_mode": "difficulty",
+    "icon": "💵"
   },
   {
     "title": "Fortyseven 1",
@@ -345,7 +358,12 @@
     "slug": "fortyseven-1",
     "path": "task/sherlock/fortyseven-1/writeup.md",
     "password_required": false,
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "level_name": "SHERLOCK",
+    "level_icon": "🕵️",
+    "level_color": "#7c3aed",
+    "level_mode": "difficulty",
+    "icon": "🔐"
   },
   {
     "title": "Vantage",
@@ -354,7 +372,12 @@
     "slug": "vantage",
     "path": "task/sherlock/vantage/writeup.md",
     "password_required": false,
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "level_name": "SHERLOCK",
+    "level_icon": "🕵️",
+    "level_color": "#7c3aed",
+    "level_mode": "difficulty",
+    "icon": "🎯"
   },
   {
     "title": "Artifact Of Dangerous Sighting",

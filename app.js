@@ -64,7 +64,7 @@ const els = {
   cit2026Count:      document.getElementById('cit2026-count'),
   bluehensctf2026Count: document.getElementById('bluehensctf2026-count'),
   sherlockCount: document.getElementById('sherlock-count'),
-  // <<CTF_SHOW_CTF_COUNTS>>
+  // <<CTF_ELS_COUNT>>
   pfingCount: document.getElementById('pfing-count'),
   // <<TASK_ELS_COUNT>>
   pwModal:           document.getElementById('pw-modal'),
@@ -84,10 +84,22 @@ const state = {
 
 marked.setOptions({ gfm: true, breaks: false, langPrefix: 'language-' });
 
+const managedLevels = {
+  // <<MANAGED_LEVELS>>
+};
+
+const categoryUi = {
+  training: { label: 'HTB', hash: '#training', back: '⬅ HTB' },
+  'ctf-competitions': { label: 'CTF-COMPETITIONS', hash: '#ctf-competitions', back: '⬅ CTF' },
+  task: { label: 'TASK', hash: '#task', back: '⬅ TASK' },
+};
+
 const levelColors = {
   'easy':               '#1d4ed8',
   'very-easy':          '#16a34a',
   'medium':             '#ca8a04',
+  'hard':               '#dc2626',
+  'insane':             '#6b7280',
   'texsaw-2026':        '#92400e',
   'dawgctf-2026':       '#4338ca',
   'umassctf-2026':      '#7f1d1d',
@@ -95,32 +107,69 @@ const levelColors = {
   'cit-2026':           '#0284c7',
   'bluehensctf-2026':   '#00509d',
   'sherlock':           '#6d28d9',
-  'pf-ing': '#c0392b',
-  // <<CTF_LEVEL_COLORS>> 
+  'pf-ing':             '#c0392b',
+  // <<CTF_LEVEL_COLORS>>
 };
 
-const slugColors = {
-  'easy-money': '#059669',
+const difficultyColors = {
+  'very-easy': '#16a34a',
+  'easy':      '#16a34a',
+  'medium':    '#ca8a04',
+  'hard':      '#dc2626',
+  'insane':    '#6b7280',
 };
 
-function levelColor(level, slug) {
-  if (slug && slugColors[slug]) return slugColors[slug];
-  return levelColors[level] || '#2d6a2d';
+function normalizePasswordRequired(value) {
+  return value === true;
+}
+
+function normalizeDifficulty(value) {
+  if (!value) return null;
+  return String(value).trim().toLowerCase().replace(/[ _]+/g, '-');
+}
+
+function difficultyColor(difficulty) {
+  return difficultyColors[normalizeDifficulty(difficulty)] || null;
+}
+
+function autoLevelColor(level) {
+  const palette = ['#2563eb', '#7c3aed', '#0891b2', '#0f766e', '#a16207', '#be123c', '#4f46e5', '#b45309'];
+  let hash = 0;
+  const text = String(level || 'default');
+  for (let i = 0; i < text.length; i++) hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
+  return palette[Math.abs(hash) % palette.length];
+}
+
+function levelColor(level) {
+  if (managedLevels[level]?.color) return managedLevels[level].color;
+  return levelColors[level] || autoLevelColor(level);
+}
+
+function postColor(post) {
+  const explicitDifficulty = difficultyColor(post?.difficulty);
+  if (explicitDifficulty) return explicitDifficulty;
+  if (post?.level === 'sherlock') return difficultyColors.easy;
+  return levelColor(post?.level);
 }
 
 function formatLevel(level) {
-  if (level === 'very-easy')   return 'VERY EASY';
-  if (level === 'texsaw-2026') return 'TEXSAW 2026';
-  if (level === 'dawgctf-2026') return 'DAWGCTF 2026';
-  if (level === 'umassctf-2026') return 'UMASSCTF 2026';
-  if (level === 'cit-2026') return 'CIT 2026';
-  if (level === 'persistence-ubuntu') return 'PERSISTENCE UBUNTU';
-  if (level === 'medium')      return 'MEDIUM';
-  if (level === 'bluehensctf-2026') return 'BLUEHENSCTF 2026';
-  if (level === 'sherlock') return 'SHERLOCK';
-  if (level === 'pf-ing') return 'PF ING';
-  // <<CTF_FORMAT_LEVEL>>
-  return 'EASY';
+  if (managedLevels[level]?.name) return managedLevels[level].name;
+  const special = {
+    'very-easy': 'VERY EASY',
+    'texsaw-2026': 'TEXSAW 2026',
+    'dawgctf-2026': 'DAWGCTF 2026',
+    'umassctf-2026': 'UMASSCTF 2026',
+    'cit-2026': 'CIT 2026',
+    'persistence-ubuntu': 'PERSISTENCE UBUNTU',
+    'bluehensctf-2026': 'BLUEHENSCTF 2026',
+    'sherlock': 'SHERLOCK',
+    'pf-ing': 'PF ING',
+  };
+  if (special[level]) return special[level];
+  return String(level || 'UNKNOWN')
+    .replace(/[-_]+/g, ' ')
+    .replace(/\bctf\b/gi, 'CTF')
+    .toUpperCase();
 }
 
 function postIcon(post) {
@@ -128,6 +177,8 @@ function postIcon(post) {
     'easy-money': '💵',
   };
   if (slugIcons[post.slug]) return slugIcons[post.slug];
+
+  if (managedLevels[post.level]?.icon) return managedLevels[post.level].icon;
 
   const levelIcons = {
     'dawgctf-2026': '🐾',
@@ -184,9 +235,19 @@ async function loadPosts() {
   const posts = await res.json();
   return posts.map(post => ({
     ...post,
-    slug: post.slug || slugFromPath(post.path)
+    slug: post.slug || slugFromPath(post.path),
+    password_required: normalizePasswordRequired(post.password_required),
+    difficulty: normalizeDifficulty(post.difficulty)
   }));
 }
+
+function formatPostBadge(post) {
+  if (!post) return '';
+  const diff = normalizeDifficulty(post.difficulty);
+  if (diff) return `${formatLevel(post.level)} · ${formatLevel(diff)}`;
+  return formatLevel(post.level);
+}
+
 
 function clearPostContent() {
   els.markdown.innerHTML = '';
@@ -223,6 +284,65 @@ function showHome() {
   if (els.taskCount) els.taskCount.textContent = `[ ${taskPosts.length} FILES ]`;
 }
 
+function updateLevelCounts(viewId, category) {
+  document.querySelectorAll(`#${viewId} .level-btn[data-level]`).forEach(btn => {
+    const level = btn.dataset.level;
+    const count = state.posts.filter(p => p.category === category && p.level === level).length;
+    const countEl = btn.querySelector('.btn-sub');
+    if (countEl) countEl.textContent = `[ ${count} FILES ]`;
+  });
+}
+
+function ensureLevelButtons(viewId, category) {
+  const switchEl = document.querySelector(`#${viewId} .level-switch`);
+  if (!switchEl) return;
+
+  const levels = [...new Set(
+    state.posts.filter(p => p.category === category).map(p => p.level).filter(Boolean)
+  )];
+
+  levels.forEach(level => {
+    if (switchEl.querySelector(`.level-btn[data-level="${CSS.escape(level)}"]`)) return;
+
+    const firstPost = state.posts.find(p => p.category === category && p.level === level);
+    const btn = document.createElement('button');
+    const color = levelColor(level);
+    btn.className = `level-btn dynamic-level-btn ${levelCssToken(level)}-btn`;
+    btn.dataset.level = level;
+    btn.style.setProperty('--dynamic-level-color', color);
+    btn.innerHTML = `
+      <span class="btn-icon">${firstPost ? postIcon(firstPost) : '📁'}</span>
+      <span class="btn-label">${formatLevel(level)}</span>
+      <span class="btn-sub">[ — FILES ]</span>
+    `;
+    switchEl.appendChild(btn);
+  });
+
+  updateLevelCounts(viewId, category);
+}
+
+function ensureAllLevelButtons() {
+  ensureLevelButtons('training-view', 'training');
+  ensureLevelButtons('ctf-view', 'ctf-competitions');
+  ensureLevelButtons('task-view', 'task');
+}
+
+function resolveLevelCategory(level) {
+  const configured = managedLevels[level]?.category;
+  if (configured) return configured;
+
+  const categories = [...new Set(
+    state.posts.filter(p => p.level === level).map(p => p.category)
+  )];
+  if (categories.length === 1) return categories[0];
+  if (state.currentCategory && categories.includes(state.currentCategory)) return state.currentCategory;
+  return 'training';
+}
+
+function levelCssToken(level) {
+  return String(level).toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
+}
+
 function showTrainingView() {
   state.currentCategory = 'training';
   state.currentLevel    = null;
@@ -236,6 +356,7 @@ function showTrainingView() {
   if (els.easyCount)     els.easyCount.textContent     = `[ ${easy} FILES ]`;
   if (els.veryEasyCount) els.veryEasyCount.textContent = `[ ${veryEasy} FILES ]`;
   if (els.mediumCount)   els.mediumCount.textContent   = `[ ${medium} FILES ]`;
+  updateLevelCounts('training-view', 'training');
 }
 
 function showCtfView() {
@@ -254,6 +375,8 @@ function showCtfView() {
   if (els.cit2026Count) els.cit2026Count.textContent = `[ ${cit2026} FILES ]`;
   const bluehensctf2026 = state.posts.filter(p => p.category === 'ctf-competitions' && p.level === 'bluehensctf-2026').length;
   if (els.bluehensctf2026Count) els.bluehensctf2026Count.textContent = `[ ${bluehensctf2026} FILES ]`;
+  updateLevelCounts('ctf-view', 'ctf-competitions');
+  // <<CTF_SHOW_CTF_COUNTS>>
 }
 
 function showTaskView() {
@@ -274,6 +397,7 @@ function showTaskView() {
     els.sherlockCount.textContent = `[ ${sherlock} FILES ]`;
   const pfing = state.posts.filter(p => p.category === 'task' && p.level === 'pf-ing').length;
   if (els.pfingCount) els.pfingCount.textContent = `[ ${pfing} FILES ]`;
+  updateLevelCounts('task-view', 'task');
   // <<TASK_SHOW_COUNTS>>
 }
 
@@ -376,7 +500,7 @@ function renderPfing() {
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-pfing ${post.password_required ? 'post-card-locked' : ''}"
       data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${levelColor(post.level, post.slug)}" title="${post.title}">
+      style="--card-color: ${postColor(post)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
@@ -417,7 +541,7 @@ function renderPersistenceUbuntu() {
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-persistence-ubuntu ${post.password_required ? 'post-card-locked' : ''}"
       data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${levelColor(post.level, post.slug)}" title="${post.title}">
+      style="--card-color: ${postColor(post)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
@@ -457,7 +581,7 @@ function renderSherlock() {
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-sherlock ${post.password_required ? 'post-card-locked' : ''}"
       data-slug="${post.slug}" data-level="${post.level}"
-      style="--card-color: ${levelColor(post.level, post.slug)}" title="${post.title}">
+      style="--card-color: ${postColor(post)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
@@ -476,34 +600,42 @@ function renderSherlock() {
 }
 
 function renderLevel(level) {
-  state.currentCategory = 'training';
+  const category = resolveLevelCategory(level);
+  const ui = categoryUi[category] || categoryUi.training;
+
+  state.currentCategory = category;
   state.currentLevel    = level;
   state.currentPost     = null;
 
-  const items = state.posts.filter(p => p.category === 'training' && p.level === level);
+  const items = state.posts.filter(p => p.category === category && p.level === level);
+  const token = levelCssToken(level);
+
   els.listBreadcrumb.innerHTML = `
     <span class="bc-root" id="bc-list-root">[ ROOT ]</span>
     <span class="bc-sep">▶</span>
-    <span class="bc-mid" id="bc-list-training">TRAINING</span>
+    <span class="bc-mid" id="bc-list-category">${ui.label}</span>
     <span class="bc-sep">▶</span>
     <span class="bc-current">${formatLevel(level)}</span>
   `;
   document.getElementById('bc-list-root').addEventListener('click', () => navigate('#'));
-  document.getElementById('bc-list-training').addEventListener('click', () => navigate('#training'));
+  document.getElementById('bc-list-category').addEventListener('click', () => navigate(ui.hash));
 
   els.listTitle.textContent = `${formatLevel(level)} — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
-    <article class="post-card" data-slug="${post.slug}" data-level="${post.level}" style="--card-color: ${levelColor(post.level)}" title="${post.title}">
+    <article class="post-card post-card-${token} ${post.password_required ? 'post-card-locked' : ''}"
+      data-slug="${post.slug}" data-level="${post.level}"
+      style="--card-color: ${postColor(post)}" title="${post.title}">
       <div class="folder-icon">${postIcon(post)}</div>
       <div class="folder-name">${post.title}</div>
       <div class="folder-slug">${post.slug}</div>
+      ${post.password_required ? '<div class="lock-badge">🔒</div>' : ''}
     </article>
   `).join('');
 
-  els.backHome.textContent = '⬅ TRAINING';
+  els.backHome.textContent = ui.back;
   showView('list');
 
-  document.querySelectorAll('.post-card').forEach(card => {
+  els.postGrid.querySelectorAll('.post-card').forEach(card => {
     card.addEventListener('click', () => {
       navigate(`#post/${card.dataset.level}/${card.dataset.slug}`);
     });
@@ -713,7 +845,7 @@ function doPostSearch() {
     <div class="search-result-item" data-slug="${post.slug}" data-level="${post.level}">
       <span class="sri-icon">${postIcon(post)}</span>
       <span class="sri-title">${post.title}</span>
-      <span class="sri-level">${formatLevel(post.level)}</span>
+      <span class="sri-level">${formatPostBadge(post)}</span>
     </div>
   `).join('');
 
@@ -727,7 +859,7 @@ function doPostSearch() {
 }
 
 function renderPagination(level, currentSlug) {
-  const levelPosts = state.posts.filter(p => p.level === level);
+  const levelPosts = state.posts.filter(p => p.category === state.currentCategory && p.level === level);
   const currentIdx = levelPosts.findIndex(p => p.slug === currentSlug);
 
   if (levelPosts.length <= 1) {
@@ -828,7 +960,7 @@ async function renderPost(level, slug) {
     els.postBreadcrumb.innerHTML = `
       <span class="bc-root" id="bc-post-root">[ ROOT ]</span>
       <span class="bc-sep">▶</span>
-      <span class="bc-mid" id="bc-post-cat">TRAINING</span>
+      <span class="bc-mid" id="bc-post-cat">HTB</span>
       <span class="bc-sep">▶</span>
       <span class="bc-mid" id="bc-post-level">${formatLevel(level)}</span>
       <span class="bc-sep">▶</span>
@@ -840,7 +972,7 @@ async function renderPost(level, slug) {
   }
 
   els.postTitle.textContent = post.title;
-  els.postLevel.textContent = formatLevel(post.level);
+  els.postLevel.textContent = formatPostBadge(post);
   els.markdown.innerHTML    = '<p style="font-family:var(--mono-font);font-size:18px;color:var(--muted)">▮ Loading...</p>';
   els.postSearchInput.value = '';
   els.postSearchResults.classList.add('hidden');
@@ -1031,7 +1163,7 @@ function doSearch() {
     <div class="search-result-item" data-slug="${post.slug}" data-level="${post.level}">
       <span class="sri-icon">${postIcon(post)}</span>
       <span class="sri-title">${post.title}</span>
-      <span class="sri-level">${formatLevel(post.level)}</span>
+      <span class="sri-level">${formatPostBadge(post)}</span>
     </div>
   `).join('');
 
@@ -1074,6 +1206,7 @@ async function router() {
 async function init() {
   try {
     state.posts = await loadPosts();
+    ensureAllLevelButtons();
 
     history.replaceState(null, '', window.location.pathname);
     location.hash = '';

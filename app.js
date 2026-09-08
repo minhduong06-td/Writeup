@@ -71,26 +71,78 @@ const state = {
 
 marked.setOptions({ gfm: true, breaks: false, langPrefix: 'language-' });
 
-const managedLevels = {
-  // <<MANAGED_LEVELS>>
-};
+const managedLevels = {};
+
+function managedLevelKey(category, level) {
+  return `${String(category || '')}\u0000${String(level || '')}`;
+}
+
+function managedLevel(category, level) {
+  if (category) return managedLevels[managedLevelKey(category, level)] || null;
+  const suffix = `\u0000${String(level || '')}`;
+  const matches = Object.entries(managedLevels)
+    .filter(([key]) => key.endsWith(suffix))
+    .map(([, value]) => value);
+  return matches.length === 1 ? matches[0] : null;
+}
+
+function mergeManagedLevel(category, level, meta = {}) {
+  if (!category || !level || !meta || typeof meta !== 'object' || Array.isArray(meta)) return;
+  const key = managedLevelKey(category, level);
+  const current = managedLevels[key] || { category, level };
+  const next = { ...current, category, level };
+
+  if (meta.name) next.name = String(meta.name).trim();
+  if (meta.icon) next.icon = String(meta.icon).trim();
+  if (meta.color && /^#[0-9a-f]{3,8}$/i.test(String(meta.color).trim())) {
+    next.color = String(meta.color).trim();
+  }
+  if (meta.mode) {
+    const mode = String(meta.mode).trim().toLowerCase();
+    if (['list', 'direct', 'difficulty'].includes(mode)) next.mode = mode;
+  }
+  managedLevels[key] = next;
+}
 
 function hydrateManagedLevels(posts) {
   for (const post of posts || []) {
-    if (!post?.level) continue;
-    const hasMeta = post.level_name || post.level_icon || post.level_color || post.level_mode;
-    if (!hasMeta) continue;
-
-    const current = managedLevels[post.level] || {};
-    managedLevels[post.level] = {
-      ...current,
-      category: post.category || current.category,
-      name: post.level_name || current.name,
-      icon: post.level_icon || current.icon,
-      color: post.level_color || current.color,
-      mode: post.level_mode || current.mode,
-    };
+    if (!post?.category || !post?.level) continue;
+    mergeManagedLevel(post.category, post.level, {
+      name: post.level_name,
+      icon: post.level_icon,
+      color: post.level_color,
+      mode: post.level_mode,
+    });
   }
+}
+
+function levelMetadataUrl(category, level) {
+  const safeLevel = encodeURIComponent(String(level || ''));
+  if (category === 'training') return `/trainning/${safeLevel}/level.json`;
+  if (category === 'ctf-competitions') return `/ctf-competitions/${safeLevel}/event.json`;
+  if (category === 'task') return `/task/${safeLevel}/group.json`;
+  return null;
+}
+
+async function loadManagedLevelMetadata(posts) {
+  const pairs = new Map();
+  for (const post of posts || []) {
+    if (!post?.category || !post?.level) continue;
+    pairs.set(managedLevelKey(post.category, post.level), { category: post.category, level: post.level });
+  }
+
+  await Promise.all([...pairs.values()].map(async ({ category, level }) => {
+    const url = levelMetadataUrl(category, level);
+    if (!url) return;
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) return;
+      const meta = await res.json();
+      mergeManagedLevel(category, level, meta);
+    } catch (err) {
+      console.warn(`[!] Cannot load UI metadata ${url}: ${err.message}`);
+    }
+  }));
 }
 
 const categoryUi = {
@@ -129,7 +181,8 @@ function autoLevelColor(level) {
 }
 
 function levelColor(level, category = null) {
-  if (managedLevels[level]?.color) return managedLevels[level].color;
+  const meta = managedLevel(category, level);
+  if (meta?.color) return meta.color;
   if (category === 'training') {
     const semantic = difficultyColor(level);
     if (semantic) return semantic;
@@ -143,20 +196,22 @@ function postColor(post) {
   return levelColor(post?.level, post?.category);
 }
 
-function formatLevel(level) {
-  if (managedLevels[level]?.name) return managedLevels[level].name;
+function formatLevel(level, category = null) {
+  const meta = managedLevel(category, level);
+  if (meta?.name) return meta.name;
   return String(level || 'UNKNOWN')
     .replace(/[-_]+/g, ' ')
     .replace(/\bctf\b/gi, 'CTF')
     .toUpperCase();
 }
 
-function levelMode(level) {
-  return managedLevels[level]?.mode || 'list';
+function levelMode(level, category = null) {
+  return managedLevel(category, level)?.mode || 'list';
 }
 
 function levelButtonIcon(level, category = null) {
-  if (managedLevels[level]?.icon) return managedLevels[level].icon;
+  const meta = managedLevel(category, level);
+  if (meta?.icon) return meta.icon;
 
   if (category === 'training') {
     const icons = {
@@ -175,7 +230,7 @@ function levelButtonIcon(level, category = null) {
 
 function levelBackHash(level) {
   const category = resolveLevelCategory(level);
-  if (levelMode(level) === 'direct') {
+  if (levelMode(level, category) === 'direct') {
     return (categoryUi[category] || categoryUi.training).hash;
   }
   return `#level/${level}`;
@@ -184,7 +239,7 @@ function levelBackHash(level) {
 function navigateToLevel(level) {
   const category = resolveLevelCategory(level);
   const items = state.posts.filter(p => p.category === category && p.level === level);
-  if (levelMode(level) === 'direct' && items.length === 1) {
+  if (levelMode(level, category) === 'direct' && items.length === 1) {
     navigate(`#post/${items[0].level}/${items[0].slug}`);
     return;
   }
@@ -242,8 +297,8 @@ async function loadPosts() {
 function formatPostBadge(post) {
   if (!post) return '';
   const diff = normalizeDifficulty(post.difficulty);
-  if (diff) return `${formatLevel(post.level)} · ${formatLevel(diff)}`;
-  return formatLevel(post.level);
+  if (diff) return `${formatLevel(post.level, post.category)} · ${formatLevel(diff)}`;
+  return formatLevel(post.level, post.category);
 }
 
 
@@ -305,7 +360,7 @@ function ensureLevelButtons(viewId, category) {
     state.posts.filter(p => p.category === category).map(p => p.level).filter(Boolean)
   )].sort((a, b) =>
     (category === 'training' ? rank(a) - rank(b) : 0) ||
-    formatLevel(a).localeCompare(formatLevel(b))
+    formatLevel(a, category).localeCompare(formatLevel(b, category))
   );
 
   switchEl.innerHTML = '';
@@ -317,7 +372,7 @@ function ensureLevelButtons(viewId, category) {
     btn.style.setProperty('--dynamic-level-color', levelColor(level, category));
     btn.innerHTML = `
       <span class="btn-icon">${levelButtonIcon(level, category)}</span>
-      <span class="btn-label">${formatLevel(level)}</span>
+      <span class="btn-label">${formatLevel(level, category)}</span>
       <span class="btn-sub">[ — FILES ]</span>
     `;
     switchEl.appendChild(btn);
@@ -333,9 +388,6 @@ function ensureAllLevelButtons() {
 }
 
 function resolveLevelCategory(level) {
-  const configured = managedLevels[level]?.category;
-  if (configured) return configured;
-
   const categories = [...new Set(
     state.posts.filter(p => p.level === level).map(p => p.category)
   )];
@@ -465,12 +517,12 @@ function renderLevel(level) {
     <span class="bc-sep">▶</span>
     <span class="bc-mid" id="bc-list-category">${ui.label}</span>
     <span class="bc-sep">▶</span>
-    <span class="bc-current">${formatLevel(level)}</span>
+    <span class="bc-current">${formatLevel(level, category)}</span>
   `;
   document.getElementById('bc-list-root').addEventListener('click', () => navigate('#'));
   document.getElementById('bc-list-category').addEventListener('click', () => navigate(ui.hash));
 
-  els.listTitle.textContent = `${formatLevel(level)} — ${items.length} FILES`;
+  els.listTitle.textContent = `${formatLevel(level, category)} — ${items.length} FILES`;
   els.postGrid.innerHTML = items.map(post => `
     <article class="post-card post-card-${token} ${post.password_required ? 'post-card-locked' : ''}"
       data-slug="${post.slug}" data-level="${post.level}"
@@ -559,7 +611,7 @@ function renderPagination(level, currentSlug) {
     pages.push({ type: 'page', idx: pageNums[i] });
   }
 
-  const levelLabel = formatLevel(level);
+  const levelLabel = formatLevel(level, levelPosts[currentIdx]?.category || resolveLevelCategory(level));
 
   els.postPagination.innerHTML = `
     <div class="pagination-label">📄 ${levelLabel} — ${currentIdx + 1} / ${total}</div>
@@ -607,7 +659,7 @@ async function renderPost(level, slug) {
       <span class="bc-sep">▶</span>
       <span class="bc-mid" id="bc-post-task">TASK</span>
       <span class="bc-sep">▶</span>
-      <span class="bc-mid" id="bc-post-level">${formatLevel(level)}</span>
+      <span class="bc-mid" id="bc-post-level">${formatLevel(level, post.category)}</span>
       <span class="bc-sep">▶</span>
       <span class="bc-current">${post.title}</span>
     `;
@@ -620,7 +672,7 @@ async function renderPost(level, slug) {
       <span class="bc-sep">▶</span>
       <span class="bc-mid" id="bc-post-ctf">CTF-COMPETITIONS</span>
       <span class="bc-sep">▶</span>
-      <span class="bc-mid" id="bc-post-level">${formatLevel(level)}</span>
+      <span class="bc-mid" id="bc-post-level">${formatLevel(level, post.category)}</span>
       <span class="bc-sep">▶</span>
       <span class="bc-current" id="post-title-bc">${post.title}</span>
     `;
@@ -633,7 +685,7 @@ async function renderPost(level, slug) {
       <span class="bc-sep">▶</span>
       <span class="bc-mid" id="bc-post-cat">HTB</span>
       <span class="bc-sep">▶</span>
-      <span class="bc-mid" id="bc-post-level">${formatLevel(level)}</span>
+      <span class="bc-mid" id="bc-post-level">${formatLevel(level, post.category)}</span>
       <span class="bc-sep">▶</span>
       <span class="bc-current" id="post-title-bc">${post.title}</span>
     `;
@@ -869,6 +921,7 @@ async function init() {
   try {
     state.posts = await loadPosts();
     hydrateManagedLevels(state.posts);
+    await loadManagedLevelMetadata(state.posts);
     ensureAllLevelButtons();
 
     history.replaceState(null, '', window.location.pathname);
